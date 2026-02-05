@@ -5,21 +5,21 @@ import { Slot } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-all duration-200 overflow-hidden backdrop-blur-sm",
+  "inline-flex items-center justify-center rounded-full px-2.5 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-all duration-200 overflow-hidden",
   {
     variants: {
       variant: {
-        default: "bg-primary/20 text-primary border border-primary/30 [a&]:hover:bg-primary/30",
+        default: "bg-primary/15 text-primary border border-primary/25 [a&]:hover:bg-primary/25",
         secondary:
-          "bg-white/10 text-muted-foreground border border-white/10 [a&]:hover:bg-white/15",
+          "bg-muted text-muted-foreground border border-border [a&]:hover:bg-muted/80",
         destructive:
-          "bg-destructive/20 text-destructive border border-destructive/30 [a&]:hover:bg-destructive/30",
+          "bg-destructive/15 text-destructive border border-destructive/25 [a&]:hover:bg-destructive/25",
         outline:
-          "border border-white/20 text-foreground [a&]:hover:bg-white/10",
-        ghost: "[a&]:hover:bg-white/10",
+          "border border-border text-foreground [a&]:hover:bg-muted",
+        ghost: "[a&]:hover:bg-muted",
         link: "text-primary underline-offset-4 [a&]:hover:underline",
-        success: "bg-success/20 text-success border border-success/30",
-        warning: "bg-warning/20 text-warning border border-warning/30",
+        success: "bg-success/15 text-success border border-success/25",
+        warning: "bg-warning/15 text-warning border border-warning/25",
       },
     },
     defaultVariants: {

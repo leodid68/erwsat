@@ -110,10 +110,10 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
                 onClick={() => setSplitMode(option.value)}
                 disabled={isProcessing}
                 className={cn(
-                  'p-4 rounded-xl text-left transition-all duration-200 backdrop-blur-sm',
+                  'cell-3d p-4 rounded-xl text-left transition-all duration-200',
                   isSelected
-                    ? 'bg-indigo-100/60 border-2 border-indigo-400'
-                    : 'bg-white/40 border border-white/60 hover:bg-white/60 hover:border-white/80',
+                    ? 'bg-primary/10 border border-primary/30 shadow-sm'
+                    : 'bg-background border border-border hover:bg-muted hover:border-primary/20',
                   isProcessing && 'opacity-50 cursor-not-allowed'
                 )}
               >
@@ -134,16 +134,16 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
       <div
         {...getRootProps()}
         className={cn(
-          'relative overflow-hidden border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-200 backdrop-blur-sm',
+          'relative overflow-hidden border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-300',
           isDragActive
-            ? 'border-indigo-400 bg-indigo-100/40 scale-[1.01]'
-            : 'border-white/60 bg-white/30 hover:border-indigo-300 hover:bg-white/50',
+            ? 'border-primary/50 bg-primary/5 scale-[1.01] shadow-md'
+            : 'border-border bg-background hover:border-primary/30 hover:bg-muted',
           isProcessing && 'opacity-50 cursor-not-allowed'
         )}
       >
         {/* Background on drag */}
         {isDragActive && (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-100/50 via-violet-100/30 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent pointer-events-none" />
         )}
 
         <input {...getInputProps()} />
@@ -151,7 +151,7 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
         <div className="relative flex flex-col items-center gap-4">
           {isProcessing ? (
             <>
-              <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20">
                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
               </div>
               <div>
@@ -164,16 +164,21 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
           ) : (
             <>
               <div className="relative">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center border border-white/50">
+                <div className={cn(
+                  'w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-300',
+                  isDragActive
+                    ? 'bg-gradient-to-br from-amber-500 to-orange-500 border-amber-400/50 shadow-lg'
+                    : 'bg-muted border-border'
+                )}>
                   <CloudUpload className={cn(
                     'w-8 h-8 transition-all duration-300',
-                    isDragActive ? 'text-primary scale-110' : 'text-muted-foreground'
+                    isDragActive ? 'text-white scale-110' : 'text-muted-foreground'
                   )} />
                 </div>
                 {/* Subtle highlight effect */}
                 <div className={cn(
-                  'absolute inset-0 rounded-2xl bg-indigo-200 blur-xl transition-opacity duration-200',
-                  isDragActive ? 'opacity-40' : 'opacity-0'
+                  'absolute inset-0 rounded-2xl bg-primary blur-xl transition-opacity duration-200',
+                  isDragActive ? 'opacity-20' : 'opacity-0'
                 )} />
               </div>
               <div>
@@ -190,18 +195,18 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
       </div>
 
       {error && (
-        <Alert variant="destructive" className="glass border-destructive/30 bg-destructive/10">
+        <Alert variant="destructive" className="border-destructive/30 bg-destructive/10">
           <AlertCircle className="w-4 h-4" />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {acceptedFiles.length > 0 && !isProcessing && !error && (
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-white/50 backdrop-blur-sm">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
-            <FileText className="w-4 h-4 text-indigo-600" />
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-success/10 border border-success/20">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
+            <FileText className="w-4 h-4 text-white" />
           </div>
-          <span className="text-sm text-gray-900 font-medium">Sélectionné : {acceptedFiles[0].name}</span>
+          <span className="text-sm text-success font-medium">Sélectionné : {acceptedFiles[0].name}</span>
         </div>
       )}
     </div>

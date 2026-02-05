@@ -1,11 +1,10 @@
 'use client';
 
 import { Question, AnswerId, QUESTION_TYPE_LABELS, QuestionType } from '@/types/question';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AnswerChoice } from './AnswerChoice';
 import { cn } from '@/lib/utils';
-import { BookOpen, CheckCircle2, XCircle, Flag } from 'lucide-react';
+import { BookOpen, CheckCircle2, XCircle, Flag, Sparkles } from 'lucide-react';
 
 const TYPE_BADGE_CLASS: Record<QuestionType, string> = {
   // Information and Ideas
@@ -43,7 +42,7 @@ function FormattedPassage({ text }: { text: string }) {
     const parts = text.split(/(?=(?:^|\s)[A-Z][a-z]{0,15}(?:\.|:)\s)/);
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         {parts.map((part, i) => {
           const trimmed = part.trim();
           if (!trimmed) return null;
@@ -56,13 +55,13 @@ function FormattedPassage({ text }: { text: string }) {
             return (
               <p key={i} className="pl-4">
                 <span className="font-semibold text-primary">{charName}</span>{' '}
-                <span className="italic">{dialogue}</span>
+                <span className="italic text-foreground/80">{dialogue}</span>
               </p>
             );
           }
 
           return (
-            <p key={i} className="italic">{trimmed}</p>
+            <p key={i} className="italic text-foreground/80">{trimmed}</p>
           );
         })}
       </div>
@@ -71,7 +70,7 @@ function FormattedPassage({ text }: { text: string }) {
 
   // Regular prose - show as indented paragraph
   return (
-    <p className="indent-6 text-justify italic">{text}</p>
+    <p className="indent-6 text-justify italic text-foreground/80 leading-relaxed">{text}</p>
   );
 }
 
@@ -95,103 +94,121 @@ export function QuestionCard({
   isFlagged = false,
 }: QuestionCardProps) {
   return (
-    <div className="space-y-5">
+    <div className="space-y-6 animate-in">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-muted-foreground">
-            Question {questionNumber} sur {totalQuestions}
-          </span>
-          <Badge className={cn('text-xs font-medium', TYPE_BADGE_CLASS[question.type])}>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <span className="text-sm font-bold text-primary">{questionNumber}</span>
+            </div>
+            <span className="text-sm text-muted-foreground">
+              sur {totalQuestions}
+            </span>
+          </div>
+          <Badge className={cn('text-xs font-medium px-3 py-1 rounded-full', TYPE_BADGE_CLASS[question.type])}>
             {QUESTION_TYPE_LABELS[question.type]}
           </Badge>
         </div>
         {isFlagged && (
-          <Badge variant="outline" className="text-xs border-accent text-accent">
-            <Flag className="w-3 h-3 mr-1" />
+          <Badge variant="warning" className="text-xs rounded-full">
+            <Flag className="w-3 h-3 mr-1.5" />
             Marqué
           </Badge>
         )}
       </div>
 
-      {/* Passage */}
-      <Card className="border-l-4 border-l-primary bg-muted/30">
-        <CardContent className="py-4">
-          <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-3">
-            <BookOpen className="w-4 h-4" />
-            Lisez le passage
+      {/* Passage - Glass Card */}
+      <div className="glass-passage p-5 animate-in animate-delay-1">
+        <div className="flex items-center gap-2 text-xs font-medium text-primary mb-4">
+          <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+            <BookOpen className="w-3.5 h-3.5" />
           </div>
-          <div className="text-sm leading-relaxed text-foreground">
-            <FormattedPassage text={question.passage} />
-          </div>
-        </CardContent>
-      </Card>
+          <span className="uppercase tracking-wider">Lisez le passage</span>
+        </div>
+        <div className="text-sm leading-relaxed">
+          <FormattedPassage text={question.passage} />
+        </div>
+      </div>
 
-      {/* Question */}
-      <Card>
-        <CardContent className="py-5">
-          <p className="font-medium text-foreground mb-5">{question.questionText}</p>
+      {/* Question - Main Glass Card */}
+      <div className="glass-cosmic p-6 animate-in animate-delay-2">
+        <p className="font-medium text-foreground mb-6 text-lg leading-relaxed">
+          {question.questionText}
+        </p>
 
-          {/* Answer Choices */}
-          <div className="space-y-2">
-            {question.choices.map((choice) => {
-              const isSelected = selectedAnswer === choice.id;
-              const isCorrect = choice.id === question.correctAnswer;
+        {/* Answer Choices */}
+        <div className="space-y-3">
+          {question.choices.map((choice, index) => {
+            const isSelected = selectedAnswer === choice.id;
+            const isCorrect = choice.id === question.correctAnswer;
 
-              let status: 'default' | 'selected' | 'correct' | 'incorrect' = 'default';
-              if (showResult) {
-                if (isCorrect) {
-                  status = 'correct';
-                } else if (isSelected && !isCorrect) {
-                  status = 'incorrect';
-                }
-              } else if (isSelected) {
-                status = 'selected';
+            let status: 'default' | 'selected' | 'correct' | 'incorrect' = 'default';
+            if (showResult) {
+              if (isCorrect) {
+                status = 'correct';
+              } else if (isSelected && !isCorrect) {
+                status = 'incorrect';
               }
+            } else if (isSelected) {
+              status = 'selected';
+            }
 
-              return (
+            return (
+              <div
+                key={choice.id}
+                className="animate-in"
+                style={{ animationDelay: `${0.3 + index * 0.1}s` }}
+              >
                 <AnswerChoice
-                  key={choice.id}
                   id={choice.id}
                   text={choice.text}
                   status={status}
                   onClick={() => !showResult && onSelectAnswer(choice.id)}
                   disabled={showResult}
                 />
-              );
-            })}
-          </div>
-
-          {/* Explanation */}
-          {showResult && (
-            <div
-              className={cn(
-                'mt-5 p-4 rounded-lg border',
-                selectedAnswer === question.correctAnswer
-                  ? 'bg-success-soft border-success/30'
-                  : 'bg-destructive-soft border-destructive/30'
-              )}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                {selectedAnswer === question.correctAnswer ? (
-                  <CheckCircle2 className="w-5 h-5 text-success" />
-                ) : (
-                  <XCircle className="w-5 h-5 text-destructive" />
-                )}
-                <p className={cn(
-                  'font-semibold text-sm',
-                  selectedAnswer === question.correctAnswer ? 'text-success' : 'text-destructive'
-                )}>
-                  {selectedAnswer === question.correctAnswer
-                    ? 'Correct !'
-                    : `Incorrect. La réponse est ${question.correctAnswer}.`}
-                </p>
               </div>
-              <p className="text-sm text-muted-foreground">{question.explanation}</p>
+            );
+          })}
+        </div>
+
+        {/* Explanation */}
+        {showResult && (
+          <div
+            className={cn(
+              'mt-6 p-5 rounded-2xl border animate-in animate-delay-5',
+              selectedAnswer === question.correctAnswer
+                ? 'bg-success/10 border-success/30'
+                : 'bg-destructive/10 border-destructive/30'
+            )}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              {selectedAnswer === question.correctAnswer ? (
+                <>
+                  <div className="w-8 h-8 rounded-xl bg-success/15 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-success" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-success">Correct !</p>
+                    <p className="text-xs text-success/70">Excellente réponse</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="w-8 h-8 rounded-xl bg-destructive/15 flex items-center justify-center">
+                    <XCircle className="w-5 h-5 text-destructive" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-destructive">Incorrect</p>
+                    <p className="text-xs text-destructive/70">La réponse correcte est {question.correctAnswer}</p>
+                  </div>
+                </>
+              )}
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <p className="text-sm text-muted-foreground leading-relaxed">{question.explanation}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -92,9 +92,9 @@ export function GutenbergImport({ onBookFetched }: GutenbergImportProps) {
   return (
     <div className="space-y-5">
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-50/80 to-teal-50/60 border border-emerald-200/50 backdrop-blur-sm">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-50/80 to-green-50/60 border border-emerald-200/50 backdrop-blur-sm">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shrink-0">
             <BookOpen className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -119,7 +119,7 @@ export function GutenbergImport({ onBookFetched }: GutenbergImportProps) {
         <Button
           onClick={handleSearch}
           disabled={isSearching || isFetching || query.trim().length < 2}
-          className="h-11 px-5 bg-gradient-to-br from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+          className="h-11 px-5 bg-gradient-to-br from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600"
         >
           {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
         </Button>

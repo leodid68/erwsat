@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuizStore } from '@/stores/quiz-store';
 import { QuestionCard } from '@/components/quiz/QuestionCard';
 import { QuizNavigation } from '@/components/quiz/QuizNavigation';
+import { ExamTimer } from '@/components/quiz/ExamTimer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -37,11 +38,15 @@ export default function QuizPage() {
     currentQuestionIndex,
     answers,
     flaggedQuestions,
+    startTime,
+    examMode,
+    timeLimit,
   } = useQuizStore();
 
   const [showConfirmSubmit, setShowConfirmSubmit] = useState(false);
   const [quizStarted, setQuizStarted] = useState(false);
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
+  const [timeExpired, setTimeExpired] = useState(false);
 
   const quiz = getQuiz(quizId);
 
@@ -162,6 +167,17 @@ export default function QuizPage() {
     }
   };
 
+  const handleTimeUp = useCallback(() => {
+    if (!timeExpired) {
+      setTimeExpired(true);
+      // Auto-submit when time is up
+      const attempt = submitQuiz();
+      if (attempt) {
+        router.push(`/results/${quizId}?attemptId=${attempt.id}&timeUp=true`);
+      }
+    }
+  }, [timeExpired, submitQuiz, router, quizId]);
+
   if (!currentQuestion) {
     return null;
   }
@@ -176,14 +192,22 @@ export default function QuizPage() {
             <p className="text-sm text-muted-foreground">{quiz.description}</p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {/* Timer */}
+          {startTime && (
+            <ExamTimer
+              startTime={startTime}
+              timeLimit={timeLimit}
+              onTimeUp={handleTimeUp}
+            />
+          )}
           <button
             onClick={() => setShowKeyboardHelp(prev => !prev)}
             className={cn(
-              "p-2 rounded-lg transition-colors",
+              "p-2 rounded-lg transition-all duration-200",
               showKeyboardHelp
-                ? "bg-violet-100 text-violet-600"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+                : "text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent"
             )}
             title="Raccourcis clavier (?)"
           >
@@ -200,13 +224,13 @@ export default function QuizPage() {
 
       {/* Keyboard Shortcuts Help */}
       {showKeyboardHelp && (
-        <Card className="bg-violet-50/80 border-violet-200/50">
+        <Card className="glass-cosmic border-purple-500/20">
           <CardContent className="py-3 px-4">
-            <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs">
-              <span><kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">→</kbd> Navigation</span>
-              <span><kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">A</kbd>-<kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">D</kbd> ou <kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">1</kbd>-<kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">4</kbd> Répondre</span>
-              <span><kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">F</kbd> Marquer</span>
-              <span><kbd className="px-1.5 py-0.5 rounded bg-white border text-[10px] font-mono">?</kbd> Aide</span>
+            <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-400">
+              <span><kbd className="kbd-cosmic">←</kbd> <kbd className="kbd-cosmic">→</kbd> Navigation</span>
+              <span><kbd className="kbd-cosmic">A</kbd>-<kbd className="kbd-cosmic">D</kbd> ou <kbd className="kbd-cosmic">1</kbd>-<kbd className="kbd-cosmic">4</kbd> Répondre</span>
+              <span><kbd className="kbd-cosmic">F</kbd> Marquer</span>
+              <span><kbd className="kbd-cosmic">?</kbd> Aide</span>
             </div>
           </CardContent>
         </Card>

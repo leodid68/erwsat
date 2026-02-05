@@ -1,5 +1,7 @@
 import { QuestionType } from './question';
 import { QuizAttempt } from './quiz';
+import { SRSItem } from './srs';
+import { UnlockedBadge, WeeklyChallenge, UserGoal } from './gamification';
 
 export interface UserProgress {
   totalQuizzesTaken: number;
@@ -10,6 +12,12 @@ export interface UserProgress {
   studyStreak: number; // Consecutive days
   lastStudyDate: string; // ISO date string
   quizHistory: QuizAttempt[];
+  srsQueue: SRSItem[]; // Spaced repetition queue
+  // Gamification
+  unlockedBadges: UnlockedBadge[];
+  weeklyChallenge: WeeklyChallenge | null;
+  goals: UserGoal[];
+  srsReviewCount: number; // Total SRS reviews completed
 }
 
 export interface DailyStats {
@@ -50,4 +58,10 @@ export const createInitialProgress = (): UserProgress => ({
   studyStreak: 0,
   lastStudyDate: '',
   quizHistory: [],
+  srsQueue: [],
+  // Gamification
+  unlockedBadges: [],
+  weeklyChallenge: null,
+  goals: [],
+  srsReviewCount: 0,
 });

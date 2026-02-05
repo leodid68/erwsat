@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { QuestionCard } from '@/components/quiz/QuestionCard';
+import { SATScoreDisplay } from '@/components/quiz/SATScoreDisplay';
 import { QUESTION_TYPE_LABELS } from '@/types/question';
 import {
   Trophy,
@@ -41,8 +42,40 @@ export default function ResultsPage() {
   const [expandedQuestion, setExpandedQuestion] = useState<string | null>(null);
 
   // Find the attempt in progress history
-  const attempt = progress.quizHistory.find((a) => a.id === attemptId);
+  const quizHistory = progress?.quizHistory || [];
+  const attempt = quizHistory.find((a) => a.id === attemptId);
 
+  // Calculate scores (with safe defaults for when attempt is null)
+  const scorePercent = attempt ? Math.round((attempt.score / attempt.totalQuestions) * 100) : 0;
+  const timeMinutes = attempt ? Math.floor(attempt.timeSpent / 60) : 0;
+  const timeSeconds = attempt ? attempt.timeSpent % 60 : 0;
+
+  // Performance analysis - must be called before any early returns (Rules of Hooks)
+  const performanceAnalysis = useMemo(() => {
+    const previousAttempts = quizHistory.filter((a) => a.id !== attemptId);
+    const previousScores = previousAttempts.map((a) => (a.score / a.totalQuestions) * 100);
+    const avgPreviousScore = previousScores.length > 0
+      ? previousScores.reduce((a, b) => a + b, 0) / previousScores.length
+      : null;
+    const bestPreviousScore = previousScores.length > 0 ? Math.max(...previousScores) : null;
+    const isPersonalBest = bestPreviousScore === null || scorePercent > bestPreviousScore;
+    const isAboveAverage = avgPreviousScore === null || scorePercent > avgPreviousScore;
+
+    let feedback: { message: string; type: 'excellent' | 'good' | 'average' | 'needsWork' };
+    if (scorePercent >= 90) {
+      feedback = { message: 'Excellent ! Vous maîtrisez parfaitement ce contenu.', type: 'excellent' };
+    } else if (scorePercent >= 75) {
+      feedback = { message: 'Très bien ! Continuez sur cette lancée.', type: 'good' };
+    } else if (scorePercent >= 60) {
+      feedback = { message: 'Correct. Revoyez les questions manquées pour progresser.', type: 'average' };
+    } else {
+      feedback = { message: 'Continuez à pratiquer. Chaque erreur est une opportunité d\'apprendre.', type: 'needsWork' };
+    }
+
+    return { isPersonalBest, isAboveAverage, avgPreviousScore, feedback };
+  }, [quizHistory, attemptId, scorePercent]);
+
+  // Early return AFTER all hooks have been called
   if (!quiz || !attempt) {
     return (
       <div className="max-w-4xl mx-auto">
@@ -66,35 +99,6 @@ export default function ResultsPage() {
     );
   }
 
-  const scorePercent = Math.round((attempt.score / attempt.totalQuestions) * 100);
-  const timeMinutes = Math.floor(attempt.timeSpent / 60);
-  const timeSeconds = attempt.timeSpent % 60;
-
-  // Performance analysis
-  const performanceAnalysis = useMemo(() => {
-    const previousAttempts = progress.quizHistory.filter((a) => a.id !== attemptId);
-    const previousScores = previousAttempts.map((a) => (a.score / a.totalQuestions) * 100);
-    const avgPreviousScore = previousScores.length > 0
-      ? previousScores.reduce((a, b) => a + b, 0) / previousScores.length
-      : null;
-    const bestPreviousScore = previousScores.length > 0 ? Math.max(...previousScores) : null;
-    const isPersonalBest = bestPreviousScore === null || scorePercent > bestPreviousScore;
-    const isAboveAverage = avgPreviousScore === null || scorePercent > avgPreviousScore;
-
-    let feedback: { message: string; type: 'excellent' | 'good' | 'average' | 'needsWork' };
-    if (scorePercent >= 90) {
-      feedback = { message: 'Excellent ! Vous maîtrisez parfaitement ce contenu.', type: 'excellent' };
-    } else if (scorePercent >= 75) {
-      feedback = { message: 'Très bien ! Continuez sur cette lancée.', type: 'good' };
-    } else if (scorePercent >= 60) {
-      feedback = { message: 'Correct. Revoyez les questions manquées pour progresser.', type: 'average' };
-    } else {
-      feedback = { message: 'Continuez à pratiquer. Chaque erreur est une opportunité d\'apprendre.', type: 'needsWork' };
-    }
-
-    return { isPersonalBest, isAboveAverage, avgPreviousScore, feedback };
-  }, [progress.quizHistory, attemptId, scorePercent]);
-
   // Group results by question type
   const resultsByType: Record<string, { correct: number; total: number }> = {};
   quiz.questions.forEach((q) => {
@@ -107,6 +111,18 @@ export default function ResultsPage() {
       resultsByType[q.type].correct += 1;
     }
   });
+
+  // Calculate difficulty breakdown for SAT score adjustment
+  const difficultyBreakdown = useMemo(() => {
+    const breakdown = { easy: 0, medium: 0, hard: 0 };
+    quiz.questions.forEach((q) => {
+      const result = attempt.questionResults.find((r) => r.questionId === q.id);
+      if (result?.isCorrect) {
+        breakdown[q.difficulty]++;
+      }
+    });
+    return breakdown;
+  }, [quiz.questions, attempt.questionResults]);
 
   const handleRetake = () => {
     resetQuizSession();
@@ -184,6 +200,13 @@ export default function ResultsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* SAT Score Estimate */}
+      <SATScoreDisplay
+        correctAnswers={attempt.score}
+        totalQuestions={attempt.totalQuestions}
+        difficultyBreakdown={difficultyBreakdown}
+      />
 
       {/* Performance Feedback */}
       <Card className={cn(

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FileDropzone } from '@/components/upload/FileDropzone';
 import { PassageSelector } from '@/components/upload/PassageSelector';
@@ -14,16 +14,20 @@ import { useQuizStore } from '@/stores/quiz-store';
 import { Passage, ExtractedDocument } from '@/types/quiz';
 import { GutenbergBook, GuardianArticle, TextChunk } from '@/lib/text-sources';
 import { TextCategory } from '@/lib/text-library';
+import { CATEGORY_TO_GENRE } from '@/types/passage-library';
+import { detectGenre } from '@/lib/question-selection';
 import { FileText, Check, Upload, Sparkles, BookOpen, Globe, Newspaper, Library, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type Tab = 'file' | 'gutenberg' | 'wikipedia' | 'guardian' | 'library';
 type Step = 'upload' | 'select';
 
-export default function UploadPage() {
+// Wrapper component for suspense boundary
+function UploadPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const addDocument = useQuizStore((state) => state.addDocument);
+  const addPassagesToLibrary = useQuizStore((state) => state.addPassagesToLibrary);
 
   const [tab, setTab] = useState<Tab>('file');
   const [step, setStep] = useState<Step>('upload');
@@ -71,8 +75,10 @@ export default function UploadPage() {
       category: TextCategory;
       provider: 'gutenberg' | 'wikipedia' | 'guardian';
       providerId: string | number;
+      saveToLibrary?: boolean;
     }>;
     chunks: TextChunk[];
+    saveToLibrary: boolean;
   } | null>(null);
   const [isLoadingLibrary, setIsLoadingLibrary] = useState(false);
   const [useSmartSelection, setUseSmartSelection] = useState(true); // AI-powered by default
@@ -224,8 +230,12 @@ export default function UploadPage() {
     category: TextCategory;
     provider: 'gutenberg' | 'wikipedia' | 'guardian';
     providerId: string | number;
+    saveToLibrary?: boolean;
   }>) => {
     setIsLoadingLibrary(true);
+    // Check if any item has saveToLibrary flag
+    const shouldSaveToLibrary = items.some(item => item.saveToLibrary);
+
     try {
       const allChunks: TextChunk[] = [];
       const endpoint = useSmartSelection ? '/api/library/fetch-smart' : '/api/library/fetch';
@@ -249,13 +259,19 @@ export default function UploadPage() {
               ...chunk,
               id: `${item.id}-${chunk.id}`,
               source: item.title,
+              // Add metadata for saving to library
+              itemTitle: item.title,
+              itemAuthor: item.author,
+              itemCategory: item.category,
+              itemProvider: item.provider,
+              itemProviderId: item.providerId, // For re-fetching later
             }));
             allChunks.push(...chunksWithSource);
           }
         }
       }
 
-      setLibraryData({ items, chunks: allChunks });
+      setLibraryData({ items, chunks: allChunks, saveToLibrary: shouldSaveToLibrary });
       setStep('select');
     } catch (err) {
       console.error('Failed to fetch library items:', err);
@@ -290,6 +306,37 @@ export default function UploadPage() {
         passages,
         uploadedAt: new Date(),
       };
+
+      // Save full text to library if enabled
+      if (libraryData.saveToLibrary && selectedChunks.length > 0) {
+        // Type for chunks with metadata
+        type ChunkWithMeta = TextChunk & {
+          itemTitle?: string;
+          itemAuthor?: string;
+          itemCategory?: TextCategory;
+          itemProvider?: string;
+          itemProviderId?: string | number;
+        };
+
+        const passagesToSave = selectedChunks.map((chunk) => {
+          const chunkMeta = chunk as ChunkWithMeta;
+          const category = chunkMeta.itemCategory || 'literature';
+          return {
+            title: chunkMeta.itemTitle || chunk.name || 'Passage',
+            author: chunkMeta.itemAuthor,
+            source: chunkMeta.itemTitle || 'Bibliothèque',
+            provider: (chunkMeta.itemProvider || 'file') as 'gutenberg' | 'wikipedia' | 'guardian' | 'file',
+            providerId: chunkMeta.itemProviderId, // For re-fetching later
+            category: category,
+            genre: CATEGORY_TO_GENRE[category] || detectGenre(chunk.text),
+            text: chunk.text, // Full text!
+            wordCount: chunk.wordCount,
+            tags: [category, chunkMeta.itemProvider || 'file'],
+          };
+        });
+
+        addPassagesToLibrary(passagesToSave);
+      }
 
       addDocument(doc);
       router.push('/generate');
@@ -331,15 +378,15 @@ export default function UploadPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1.5 rounded-xl bg-white/40 border border-white/60 backdrop-blur-sm w-fit">
+      <div className="flex gap-2 p-1.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm w-fit">
         <button
           onClick={() => handleTabChange('file')}
           disabled={isSelectStep}
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'file'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-white/50',
+              ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-purple-300 shadow-[0_0_15px_rgba(139,92,246,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -352,8 +399,8 @@ export default function UploadPage() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'gutenberg'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-white/50',
+              ? 'bg-gradient-to-r from-emerald-500/20 to-green-500/20 border border-emerald-500/30 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -366,8 +413,8 @@ export default function UploadPage() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'wikipedia'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-white/50',
+              ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -380,8 +427,8 @@ export default function UploadPage() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'guardian'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-white/50',
+              ? 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -394,8 +441,8 @@ export default function UploadPage() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'library'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-white/50',
+              ? 'bg-gradient-to-r from-violet-500/20 to-purple-500/20 border border-violet-500/30 text-violet-300 shadow-[0_0_15px_rgba(139,92,246,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-white/5',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -519,7 +566,7 @@ export default function UploadPage() {
               <div className="absolute -right-10 -top-10 w-40 h-40 orb orb-emerald opacity-30" />
               <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/25">
                     <BookOpen className="w-5 h-5 text-white" />
                   </div>
                   Project Gutenberg
@@ -692,26 +739,26 @@ export default function UploadPage() {
                 ) : (
                   <div className="space-y-4">
                     {/* AI Selection Toggle */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-indigo-50/80 to-violet-50/60 border border-indigo-200/50">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20">
                       <div className="flex items-center gap-3">
                         <div className={cn(
                           'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
                           useSmartSelection
-                            ? 'bg-gradient-to-br from-indigo-500 to-violet-500 text-white'
-                            : 'bg-gray-200 text-gray-500'
+                            ? 'bg-gradient-to-br from-violet-500 to-purple-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]'
+                            : 'bg-white/5 border border-white/10 text-slate-500'
                         )}>
                           <Sparkles className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">Sélection IA</p>
-                          <p className="text-xs text-gray-500">Claude analyse et sélectionne les meilleurs passages</p>
+                          <p className="text-sm font-medium text-slate-200">Sélection IA</p>
+                          <p className="text-xs text-slate-500">Claude analyse et sélectionne les meilleurs passages</p>
                         </div>
                       </div>
                       <button
                         onClick={() => setUseSmartSelection(!useSmartSelection)}
                         className={cn(
                           'relative w-12 h-6 rounded-full transition-colors',
-                          useSmartSelection ? 'bg-violet-500' : 'bg-gray-300'
+                          useSmartSelection ? 'bg-violet-500' : 'bg-white/10'
                         )}
                       >
                         <div className={cn(
@@ -759,5 +806,17 @@ export default function UploadPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function UploadPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-3xl mx-auto flex items-center justify-center py-12">
+        <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+      </div>
+    }>
+      <UploadPageContent />
+    </Suspense>
   );
 }

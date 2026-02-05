@@ -16,6 +16,42 @@ export type QuestionType =
 
 export type AnswerId = 'A' | 'B' | 'C' | 'D';
 
+// Text genres for SAT passages
+export type TextGenre =
+  | 'literature'      // Fiction, novels, short stories
+  | 'poetry'          // Poems, verse
+  | 'history'         // Historical documents, speeches
+  | 'science'         // Scientific articles, studies
+  | 'social-science'  // Psychology, sociology, economics
+  | 'journalism'      // News articles, editorials
+  | 'humanities'      // Art, philosophy, culture
+  | 'memoir'          // Personal essays, autobiographies
+  | 'other';
+
+export const TEXT_GENRE_LABELS: Record<TextGenre, string> = {
+  'literature': 'Littérature',
+  'poetry': 'Poésie',
+  'history': 'Histoire',
+  'science': 'Sciences',
+  'social-science': 'Sciences sociales',
+  'journalism': 'Journalisme',
+  'humanities': 'Humanités',
+  'memoir': 'Mémoires',
+  'other': 'Autre',
+};
+
+export const TEXT_GENRE_ICONS: Record<TextGenre, string> = {
+  'literature': 'BookOpen',
+  'poetry': 'Feather',
+  'history': 'Landmark',
+  'science': 'Flask',
+  'social-science': 'Users',
+  'journalism': 'Newspaper',
+  'humanities': 'Palette',
+  'memoir': 'PenTool',
+  'other': 'FileText',
+};
+
 export interface AnswerChoice {
   id: AnswerId;
   text: string;
@@ -32,6 +68,8 @@ export interface Question {
   type: QuestionType;
   passage: string;
   passageSource?: string;
+  passageId?: string;       // Groups questions from same passage
+  genre?: TextGenre;        // Text genre for diversity
   questionText: string;
   choices: AnswerChoice[];
   correctAnswer: AnswerId;

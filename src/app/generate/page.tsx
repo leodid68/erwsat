@@ -61,10 +61,10 @@ const ALL_QUESTION_TYPES: QuestionType[] = [
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 
-const DIFFICULTY_OPTIONS: { value: Difficulty; label: string; icon: typeof Zap; color: string; bgSelected: string; borderSelected: string }[] = [
-  { value: 'easy', label: 'Facile', icon: Zap, color: 'text-emerald-500', bgSelected: 'bg-emerald-50', borderSelected: 'border-emerald-400' },
-  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-amber-500', bgSelected: 'bg-amber-50', borderSelected: 'border-amber-400' },
-  { value: 'hard', label: 'Difficile', icon: Brain, color: 'text-rose-500', bgSelected: 'bg-rose-50', borderSelected: 'border-rose-400' },
+const DIFFICULTY_OPTIONS: { value: Difficulty; label: string; icon: typeof Zap; color: string; bgSelected: string; borderSelected: string; glowColor: string }[] = [
+  { value: 'easy', label: 'Facile', icon: Zap, color: 'text-emerald-400', bgSelected: 'bg-emerald-500/15', borderSelected: 'border-emerald-500/50', glowColor: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]' },
+  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-amber-400', bgSelected: 'bg-amber-500/15', borderSelected: 'border-amber-500/50', glowColor: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
+  { value: 'hard', label: 'Difficile', icon: Brain, color: 'text-rose-400', bgSelected: 'bg-rose-500/15', borderSelected: 'border-rose-500/50', glowColor: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]' },
 ];
 
 type ModelOption = 'sat-finetuned' | 'claude-sonnet';
@@ -322,46 +322,50 @@ export default function GeneratePage() {
                   {documents.length} disponible{documents.length > 1 ? 's' : ''}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <ScrollArea className="h-[180px]">
-                  <div className="space-y-2">
+              <CardContent className="overflow-visible">
+                <ScrollArea className="h-[180px] overflow-visible">
+                  <div className="space-y-3 p-1">
                     {documents.map((doc) => (
                       <div
                         key={doc.id}
                         onClick={() => setSelectedDocId(doc.id)}
                         className={cn(
-                          'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all',
+                          'cell-3d p-3 rounded-xl border cursor-pointer transition-all',
                           selectedDocId === doc.id
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/50 hover:bg-muted/50'
+                            ? 'border-primary/40 bg-primary/10 shadow-sm'
+                            : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
                         )}
                       >
-                        <div className={cn(
-                          'w-9 h-9 rounded-lg flex items-center justify-center shrink-0',
-                          selectedDocId === doc.id ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                        )}>
-                          <FileText className="w-4 h-4" />
+                        <div className="flex items-start gap-3">
+                          <div className={cn(
+                            'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
+                            selectedDocId === doc.id
+                              ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
+                              : 'bg-muted border border-border text-muted-foreground'
+                          )}>
+                            <FileText className="w-5 h-5" />
+                          </div>
+                          <div className="flex-1 min-w-0 pt-0.5">
+                            <p className={cn('font-medium text-sm break-words leading-tight', selectedDocId === doc.id ? 'text-primary' : 'text-foreground')}>{doc.filename}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {doc.passages.length} passages
+                            </p>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="shrink-0 h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeDocument(doc.id);
+                              if (selectedDocId === doc.id) {
+                                setSelectedDocId(documents.find(d => d.id !== doc.id)?.id || null);
+                              }
+                            }}
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </Button>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm text-foreground truncate">{doc.filename}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {doc.passages.length} passages
-                          </p>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="shrink-0 h-7 w-7 text-muted-foreground hover:text-destructive"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeDocument(doc.id);
-                            if (selectedDocId === doc.id) {
-                              setSelectedDocId(documents.find(d => d.id !== doc.id)?.id || null);
-                            }
-                          }}
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </Button>
                       </div>
                     ))}
                   </div>
@@ -380,32 +384,34 @@ export default function GeneratePage() {
                   {selectedPassages.length}/{selectedDocument?.passages.length || 0} sélectionné{selectedPassages.length > 1 ? 's' : ''}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-visible">
                 {selectedDocument ? (
-                  <ScrollArea className="h-[180px]">
-                    <div className="space-y-2">
+                  <ScrollArea className="h-[180px] overflow-visible">
+                    <div className="space-y-3 p-1">
                       {selectedDocument.passages.map((passage, index) => (
                         <button
                           key={passage.id}
                           onClick={() => togglePassageSelection(passage.id)}
                           className={cn(
-                            'w-full p-3 rounded-lg border text-left transition-all',
+                            'cell-3d w-full p-3 rounded-xl border text-left transition-all',
                             passage.selected
-                              ? 'border-success bg-success/5'
-                              : 'border-border hover:border-success/50 hover:bg-muted/50'
+                              ? 'border-success/40 bg-success/10 shadow-sm'
+                              : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
                           )}
                         >
                           <div className="flex items-center gap-2 mb-1">
                             <div className={cn(
-                              'w-5 h-5 rounded flex items-center justify-center text-xs font-medium shrink-0',
-                              passage.selected ? 'bg-success text-white' : 'bg-muted text-muted-foreground'
+                              'w-6 h-6 rounded-lg flex items-center justify-center text-xs font-medium shrink-0 transition-all duration-300',
+                              passage.selected
+                                ? 'bg-gradient-to-br from-emerald-500 to-green-500 text-white'
+                                : 'bg-muted border border-border text-muted-foreground'
                             )}>
-                              {passage.selected ? <Check className="w-3 h-3" /> : index + 1}
+                              {passage.selected ? <Check className="w-3.5 h-3.5" /> : index + 1}
                             </div>
-                            <span className="font-medium text-sm text-foreground">Passage {index + 1}</span>
+                            <span className={cn('font-medium text-sm', passage.selected ? 'text-success' : 'text-foreground')}>Passage {index + 1}</span>
                             <Badge variant="outline" className="text-[10px] ml-auto">{passage.wordCount} mots</Badge>
                           </div>
-                          <p className="text-xs text-muted-foreground line-clamp-1 pl-7">
+                          <p className="text-xs text-muted-foreground line-clamp-1 pl-8">
                             {passage.text}
                           </p>
                         </button>
@@ -427,11 +433,11 @@ export default function GeneratePage() {
               <CardTitle className="text-base">Types de questions</CardTitle>
               <CardDescription>{selectedTypes.length}/10 sélectionné{selectedTypes.length > 1 ? 's' : ''}</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 overflow-visible">
               {Object.entries(QUESTION_TYPE_DOMAINS).map(([domainKey, domain]) => (
-                <div key={domainKey}>
-                  <p className="text-xs font-medium text-muted-foreground mb-2">{domain.label}</p>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div key={domainKey} className="overflow-visible">
+                  <p className="text-xs font-medium text-muted-foreground mb-3">{domain.label}</p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-1 -m-1">
                     {domain.types.map((type) => {
                       const isSelected = selectedTypes.includes(type);
                       return (
@@ -439,19 +445,21 @@ export default function GeneratePage() {
                           key={type}
                           onClick={() => toggleQuestionType(type)}
                           className={cn(
-                            'p-2.5 rounded-lg border text-left transition-all flex items-center gap-2',
+                            'cell-3d p-3 rounded-xl border text-left transition-all flex items-center gap-3',
                             isSelected
-                              ? 'border-primary bg-primary/5'
-                              : 'border-border hover:border-primary/50'
+                              ? 'border-primary/40 bg-primary/10 shadow-sm'
+                              : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
                           )}
                         >
                           <div className={cn(
-                            'w-6 h-6 rounded flex items-center justify-center shrink-0',
-                            isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300',
+                            isSelected
+                              ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
+                              : 'bg-muted border border-border text-muted-foreground'
                           )}>
-                            {isSelected ? <Check className="w-3.5 h-3.5" /> : <span className="text-[9px] font-bold">{QUESTION_TYPE_LABELS[type].slice(0, 2).toUpperCase()}</span>}
+                            {isSelected ? <Check className="w-4 h-4" /> : <span className="text-[9px] font-bold">{QUESTION_TYPE_LABELS[type].slice(0, 2).toUpperCase()}</span>}
                           </div>
-                          <span className="text-xs font-medium text-foreground truncate">{QUESTION_TYPE_LABELS[type]}</span>
+                          <span className={cn('text-sm font-medium truncate', isSelected ? 'text-primary' : 'text-muted-foreground')}>{QUESTION_TYPE_LABELS[type]}</span>
                         </button>
                       );
                     })}
@@ -469,8 +477,8 @@ export default function GeneratePage() {
                 <CardTitle className="text-base">Difficultés</CardTitle>
                 <CardDescription>Multi-sélection possible</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-2">
+              <CardContent className="overflow-visible">
+                <div className="grid grid-cols-3 gap-3 p-1 -m-1">
                   {DIFFICULTY_OPTIONS.map((option) => {
                     const Icon = option.icon;
                     const isSelected = selectedDifficulties.includes(option.value);
@@ -479,18 +487,25 @@ export default function GeneratePage() {
                         key={option.value}
                         onClick={() => toggleDifficulty(option.value)}
                         className={cn(
-                          'p-3 rounded-lg border text-center transition-all',
+                          'cell-3d p-4 rounded-xl border text-center transition-all duration-300',
                           isSelected
                             ? `${option.borderSelected} ${option.bgSelected}`
-                            : 'border-border hover:border-border-hover'
+                            : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
                         )}
                       >
-                        <Icon className={cn('w-5 h-5 mx-auto mb-1', isSelected ? option.color : 'text-muted-foreground')} />
-                        <p className={cn('text-xs font-medium', isSelected ? 'text-foreground' : 'text-muted-foreground')}>
+                        <div className={cn(
+                          'w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-all duration-300',
+                          isSelected
+                            ? `bg-gradient-to-br ${option.value === 'easy' ? 'from-emerald-500 to-green-500' : option.value === 'medium' ? 'from-amber-500 to-orange-500' : 'from-rose-500 to-pink-500'}`
+                            : 'bg-muted border border-border'
+                        )}>
+                          <Icon className={cn('w-5 h-5', isSelected ? 'text-white' : 'text-muted-foreground')} />
+                        </div>
+                        <p className={cn('text-sm font-medium', isSelected ? option.color : 'text-muted-foreground')}>
                           {option.label}
                         </p>
                         {isSelected && (
-                          <Check className={cn('w-3 h-3 mx-auto mt-1', option.color)} />
+                          <Check className={cn('w-4 h-4 mx-auto mt-2', option.color)} />
                         )}
                       </button>
                     );
@@ -505,8 +520,8 @@ export default function GeneratePage() {
                 <CardTitle className="text-base">Modèle IA</CardTitle>
                 <CardDescription>Moteur de génération</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
+              <CardContent className="overflow-visible">
+                <div className="space-y-3 p-1 -m-1">
                   {MODEL_OPTIONS.map((option) => {
                     const Icon = option.icon;
                     const isSelected = model === option.value;
@@ -517,26 +532,28 @@ export default function GeneratePage() {
                         onClick={() => !isDisabled && setModel(option.value)}
                         disabled={isDisabled}
                         className={cn(
-                          'w-full p-3 rounded-lg border text-left transition-all flex items-center gap-3',
+                          'cell-3d w-full p-3 rounded-xl border text-left transition-all flex items-center gap-3',
                           isSelected
-                            ? 'border-primary bg-primary/5'
-                            : 'border-border hover:border-primary/50',
+                            ? 'border-accent/40 bg-accent/10 shadow-sm'
+                            : 'border-border bg-background hover:border-primary/20 hover:bg-muted',
                           isDisabled && 'opacity-50 cursor-not-allowed'
                         )}
                       >
                         <div className={cn(
-                          'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
-                          isSelected ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                          'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
+                          isSelected
+                            ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white'
+                            : 'bg-muted border border-border text-muted-foreground'
                         )}>
-                          <Icon className="w-4 h-4" />
+                          <Icon className="w-5 h-5" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm text-foreground">{option.label}</p>
+                          <p className={cn('font-medium text-sm', isSelected ? 'text-accent' : 'text-foreground')}>{option.label}</p>
                           <p className="text-xs text-muted-foreground truncate">
                             {isDisabled ? 'API non configurée' : option.description}
                           </p>
                         </div>
-                        {isSelected && <Check className="w-4 h-4 text-primary shrink-0" />}
+                        {isSelected && <Check className="w-4 h-4 text-accent shrink-0" />}
                       </button>
                     );
                   })}

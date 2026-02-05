@@ -72,7 +72,7 @@ export default function Home() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                 <Target className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -174,7 +174,7 @@ export default function Home() {
           <Link href="/quiz" className="block">
             <div className="liquid-glass-emerald h-full cursor-pointer p-5">
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center mb-3 shadow-lg shadow-emerald-500/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center mb-3 shadow-lg shadow-emerald-500/25">
                   <Play className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1">S'entraîner</h3>

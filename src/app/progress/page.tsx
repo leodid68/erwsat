@@ -8,6 +8,7 @@ import { QUESTION_TYPE_LABELS, QuestionType } from '@/types/question';
 import { StudyCalendar } from '@/components/progress/StudyCalendar';
 import { WeakAreasCard } from '@/components/progress/WeakAreasCard';
 import { PerformanceTrend } from '@/components/progress/PerformanceTrend';
+import { estimateSATScore, getScoreColor, getPerformanceLevelLabel } from '@/lib/sat-scoring';
 import {
   BarChart3,
   Target,
@@ -16,7 +17,11 @@ import {
   Sparkles,
   Calendar,
   Trophy,
+  GraduationCap,
+  Trash2,
+  AlertTriangle,
 } from 'lucide-react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   LineChart,
@@ -31,7 +36,13 @@ import {
 } from 'recharts';
 
 export default function ProgressPage() {
-  const { progress, quizzes } = useQuizStore();
+  const { progress, quizzes, resetProgress } = useQuizStore();
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+
+  const handleReset = () => {
+    resetProgress();
+    setShowResetConfirm(false);
+  };
 
   const recentScoresData = progress.recentScores
     .slice()
@@ -48,6 +59,11 @@ export default function ProgressPage() {
       accuracy: stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0,
       total: stats.total,
     }));
+
+  // Calculate estimated SAT score
+  const totalCorrect = Object.values(progress.accuracyByType).reduce((sum, cat) => sum + cat.correct, 0);
+  const totalAnswered = Object.values(progress.accuracyByType).reduce((sum, cat) => sum + cat.total, 0);
+  const satEstimate = totalAnswered > 0 ? estimateSATScore(totalCorrect, totalAnswered) : null;
 
   const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899'];
 
@@ -157,6 +173,47 @@ export default function ProgressPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* SAT Score Estimate */}
+      {satEstimate && (
+        <Card className="glass-cosmic border-primary/20">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg">
+                  <GraduationCap className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Score SAT Estimé</p>
+                  <p className={`text-4xl font-bold ${getScoreColor(satEstimate.scaledScore)}`}>
+                    {satEstimate.scaledScore}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-muted-foreground">Percentile</p>
+                <p className="text-2xl font-bold text-foreground">{satEstimate.percentile}%</p>
+                <p className={`text-xs ${getScoreColor(satEstimate.scaledScore)}`}>
+                  {getPerformanceLevelLabel(satEstimate.performanceLevel)}
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full"
+                  style={{ width: `${((satEstimate.scaledScore - 200) / 600) * 100}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>200</span>
+                <span>500</span>
+                <span>800</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Study Calendar & Trends */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -376,6 +433,65 @@ export default function ProgressPage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Reset Progress Section */}
+      <Card className="border-destructive/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base text-destructive flex items-center gap-2">
+            <Trash2 className="w-4 h-4" />
+            Réinitialiser les statistiques
+          </CardTitle>
+          <CardDescription>
+            Effacer tout l'historique et recommencer à zéro
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {!showResetConfirm ? (
+            <Button
+              variant="outline"
+              className="border-destructive/30 text-destructive hover:bg-destructive/10"
+              onClick={() => setShowResetConfirm(true)}
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Réinitialiser tout
+            </Button>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+                <AlertTriangle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-destructive">Êtes-vous sûr ?</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Cette action effacera définitivement :
+                  </p>
+                  <ul className="text-sm text-muted-foreground mt-2 space-y-1 list-disc list-inside">
+                    <li>{progress.totalQuizzesTaken} quiz complétés</li>
+                    <li>{progress.totalQuestionsAnswered} questions répondues</li>
+                    <li>Votre série de {progress.studyStreak} jour(s)</li>
+                    <li>Tous les badges débloqués</li>
+                    <li>La file de révision SRS</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setShowResetConfirm(false)}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleReset}
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Confirmer la réinitialisation
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

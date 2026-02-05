@@ -20,6 +20,7 @@ interface MLXResponse {
   success: boolean;
   question?: MLXQuestion;
   error?: string;
+  status?: string; // For health check response
 }
 
 /**

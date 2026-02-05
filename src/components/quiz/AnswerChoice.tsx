@@ -24,28 +24,71 @@ export function AnswerChoice({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        'w-full flex items-start gap-3 p-3 rounded-lg border text-left transition-all duration-150',
+        // Base glass styling
+        'w-full flex items-start gap-4 p-4 rounded-2xl text-left',
+        'transition-all duration-300 ease-out',
+        'relative overflow-hidden group',
         disabled && 'cursor-default',
-        status === 'default' && 'border-white/60 bg-white/40 backdrop-blur-sm hover:border-white/80 hover:bg-white/60',
-        status === 'selected' && 'border-indigo-400 bg-indigo-100/50 backdrop-blur-sm',
-        status === 'correct' && 'border-emerald-400 bg-emerald-100/50 backdrop-blur-sm',
-        status === 'incorrect' && 'border-red-400 bg-red-100/50 backdrop-blur-sm'
+
+        // Default state - Dark glass
+        status === 'default' && [
+          'glass-choice',
+          !disabled && 'hover:scale-[1.01] active:scale-[0.99]',
+        ],
+
+        // Selected state - Purple neon glow
+        status === 'selected' && 'glass-choice-selected',
+
+        // Correct state - Emerald glow
+        status === 'correct' && 'glass-choice-correct',
+
+        // Incorrect state - Red glow
+        status === 'incorrect' && 'glass-choice-incorrect'
       )}
     >
+      {/* Hover glow effect for default state */}
+      {status === 'default' && !disabled && (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-accent/5" />
+        </div>
+      )}
+
       {/* Answer Bubble */}
       <div
         className={cn(
-          'w-8 h-8 rounded-lg flex items-center justify-center text-sm font-semibold shrink-0 transition-all duration-150',
-          status === 'default' && 'bg-black/5 text-gray-500',
-          status === 'selected' && 'bg-indigo-500 text-white',
-          status === 'correct' && 'bg-emerald-500 text-white',
-          status === 'incorrect' && 'bg-red-500 text-white'
+          'w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0',
+          'transition-all duration-300 ease-out',
+          'border',
+
+          // Default - Subtle
+          status === 'default' && [
+            'bg-muted border-border text-muted-foreground',
+            'group-hover:bg-primary/10 group-hover:border-primary/30 group-hover:text-primary',
+          ],
+
+          // Selected - Primary gradient
+          status === 'selected' && [
+            'bg-gradient-to-br from-amber-500 to-orange-500 border-amber-400/50 text-white',
+            'shadow-[0_0_20px_rgba(217,119,6,0.4)]',
+          ],
+
+          // Correct - Success gradient
+          status === 'correct' && [
+            'bg-gradient-to-br from-emerald-500 to-green-500 border-emerald-400/50 text-white',
+            'shadow-[0_0_20px_rgba(16,185,129,0.4)]',
+          ],
+
+          // Incorrect - Destructive gradient
+          status === 'incorrect' && [
+            'bg-gradient-to-br from-red-500 to-rose-500 border-red-400/50 text-white',
+            'shadow-[0_0_20px_rgba(220,38,38,0.4)]',
+          ]
         )}
       >
         {status === 'correct' ? (
-          <Check className="w-4 h-4" />
+          <Check className="w-5 h-5" strokeWidth={3} />
         ) : status === 'incorrect' ? (
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5" strokeWidth={3} />
         ) : (
           id
         )}
@@ -54,15 +97,22 @@ export function AnswerChoice({
       {/* Answer Text */}
       <p
         className={cn(
-          'flex-1 text-sm leading-relaxed pt-1',
-          status === 'default' && 'text-gray-700',
-          status === 'selected' && 'text-gray-900 font-medium',
-          status === 'correct' && 'text-emerald-600 font-medium',
-          status === 'incorrect' && 'text-red-600'
+          'flex-1 text-sm leading-relaxed pt-2',
+          'transition-colors duration-300',
+
+          status === 'default' && 'text-muted-foreground group-hover:text-foreground',
+          status === 'selected' && 'text-foreground font-medium',
+          status === 'correct' && 'text-success font-medium',
+          status === 'incorrect' && 'text-destructive'
         )}
       >
         {text}
       </p>
+
+      {/* Selected indicator line */}
+      {status === 'selected' && (
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 animate-pulse" />
+      )}
     </button>
   );
 }

@@ -9,6 +9,11 @@ import {
 } from '@/types/quiz';
 import { AnswerId, Question, QuestionType } from '@/types/question';
 import { UserProgress, createInitialProgress } from '@/types/progress';
+import { SRSItem, SRSGrade, DEFAULT_EASE_FACTOR, calculateNextInterval } from '@/types/srs';
+import { AVAILABLE_BADGES, UnlockedBadge, UserGoal, generateWeeklyChallenge, getCurrentWeek } from '@/types/gamification';
+import { SavedPassage, CATEGORY_TO_GENRE } from '@/types/passage-library';
+import { TextCategory } from '@/lib/text-library';
+import { detectGenre } from '@/lib/question-selection';
 
 // Migration map for old question types to new ones
 const QUESTION_TYPE_MIGRATION: Record<string, QuestionType> = {
@@ -28,6 +33,50 @@ const QUESTION_TYPE_MIGRATION: Record<string, QuestionType> = {
   'boundaries': 'boundaries',
   'form-structure-sense': 'form-structure-sense',
 };
+
+// Check and unlock badges based on current progress
+function checkAndUnlockBadges(
+  progress: UserProgress,
+  isPerfectQuiz: boolean
+): UnlockedBadge[] {
+  const today = new Date().toISOString().split('T')[0];
+  const alreadyUnlocked = new Set(progress.unlockedBadges.map((b) => b.badgeId));
+  const newlyUnlocked: UnlockedBadge[] = [];
+
+  for (const badge of AVAILABLE_BADGES) {
+    if (alreadyUnlocked.has(badge.id)) continue;
+
+    let unlocked = false;
+    const condition = badge.condition;
+
+    switch (condition.type) {
+      case 'quizzes_completed':
+        unlocked = progress.totalQuizzesTaken >= condition.count;
+        break;
+      case 'streak_days':
+        unlocked = progress.studyStreak >= condition.count;
+        break;
+      case 'accuracy_percent':
+        unlocked = progress.overallAccuracy >= condition.value && progress.totalQuestionsAnswered >= 10;
+        break;
+      case 'questions_answered':
+        unlocked = progress.totalQuestionsAnswered >= condition.count;
+        break;
+      case 'perfect_quiz':
+        unlocked = isPerfectQuiz;
+        break;
+      case 'srs_reviews':
+        unlocked = progress.srsReviewCount >= condition.count;
+        break;
+    }
+
+    if (unlocked) {
+      newlyUnlocked.push({ badgeId: badge.id, unlockedAt: today });
+    }
+  }
+
+  return newlyUnlocked;
+}
 
 // Valid question types set for quick lookup
 const VALID_QUESTION_TYPES = new Set<QuestionType>([
@@ -55,6 +104,11 @@ function migrateProgress(oldProgress: UserProgress): UserProgress {
   newProgress.studyStreak = oldProgress.studyStreak || 0;
   newProgress.lastStudyDate = oldProgress.lastStudyDate || '';
   newProgress.quizHistory = oldProgress.quizHistory || [];
+  newProgress.srsQueue = oldProgress.srsQueue || [];
+  newProgress.unlockedBadges = oldProgress.unlockedBadges || [];
+  newProgress.weeklyChallenge = oldProgress.weeklyChallenge || null;
+  newProgress.goals = oldProgress.goals || [];
+  newProgress.srsReviewCount = oldProgress.srsReviewCount || 0;
 
   // Migrate accuracyByType
   if (oldProgress.accuracyByType) {
@@ -89,8 +143,11 @@ interface QuizStore {
   answers: Record<string, AnswerId>;
   flaggedQuestions: string[];
   startTime: number | null;
+  examMode: boolean;
+  timeLimit: number | null; // in seconds, null = no limit
 
   startQuiz: (quizId: string) => void;
+  startQuizWithTimer: (quizId: string, timeLimit: number | null) => void;
   setAnswer: (questionId: string, answer: AnswerId) => void;
   toggleFlagged: (questionId: string) => void;
   nextQuestion: () => void;
@@ -103,6 +160,27 @@ interface QuizStore {
   progress: UserProgress;
   updateProgress: (attempt: QuizAttempt, questions: Question[]) => void;
   resetProgress: () => void;
+
+  // SRS (Spaced Repetition)
+  addToSRS: (questionId: string, quizId: string) => void;
+  reviewSRS: (questionId: string, grade: SRSGrade) => void;
+  getSRSDueToday: () => SRSItem[];
+  removeFromSRS: (questionId: string) => void;
+
+  // Gamification
+  addGoal: (goal: Omit<UserGoal, 'id' | 'current' | 'completed'>) => void;
+  removeGoal: (goalId: string) => void;
+  getUnlockedBadgeIds: () => string[];
+
+  // Passage Library
+  passageLibrary: SavedPassage[];
+  addPassageToLibrary: (passage: Omit<SavedPassage, 'id' | 'timesUsed' | 'questionsGenerated' | 'savedAt'>) => void;
+  addPassagesToLibrary: (passages: Array<Omit<SavedPassage, 'id' | 'timesUsed' | 'questionsGenerated' | 'savedAt'>>) => void;
+  removePassageFromLibrary: (passageId: string) => void;
+  markPassageUsed: (passageId: string, questionId?: string) => void;
+  getPassageById: (passageId: string) => SavedPassage | undefined;
+  getUnusedPassages: () => SavedPassage[];
+  clearPassageLibrary: () => void;
 }
 
 export const useQuizStore = create<QuizStore>()(
@@ -146,6 +224,8 @@ export const useQuizStore = create<QuizStore>()(
       answers: {},
       flaggedQuestions: [],
       startTime: null,
+      examMode: false,
+      timeLimit: null,
 
       startQuiz: (quizId) =>
         set({
@@ -154,6 +234,19 @@ export const useQuizStore = create<QuizStore>()(
           answers: {},
           flaggedQuestions: [],
           startTime: Date.now(),
+          examMode: false,
+          timeLimit: null,
+        }),
+
+      startQuizWithTimer: (quizId, timeLimit) =>
+        set({
+          activeQuizId: quizId,
+          currentQuestionIndex: 0,
+          answers: {},
+          flaggedQuestions: [],
+          startTime: Date.now(),
+          examMode: timeLimit !== null,
+          timeLimit,
         }),
 
       setAnswer: (questionId, answer) =>
@@ -225,6 +318,8 @@ export const useQuizStore = create<QuizStore>()(
           answers: {},
           flaggedQuestions: [],
           startTime: null,
+          examMode: false,
+          timeLimit: null,
         }),
 
       // Progress
@@ -299,24 +394,291 @@ export const useQuizStore = create<QuizStore>()(
             ...newProgress.quizHistory.slice(0, 49),
           ];
 
+          // Auto-add incorrect questions to SRS queue
+          questions.forEach((q) => {
+            const result = attempt.questionResults.find((r) => r.questionId === q.id);
+            if (result && !result.isCorrect) {
+              // Check if not already in queue
+              if (!newProgress.srsQueue.find((item) => item.questionId === q.id)) {
+                newProgress.srsQueue.push({
+                  questionId: q.id,
+                  quizId: attempt.quizId,
+                  interval: 1,
+                  easeFactor: DEFAULT_EASE_FACTOR,
+                  repetitions: 0,
+                  nextReview: today,
+                  lastReview: today,
+                });
+              }
+            }
+          });
+
+          // Check for perfect quiz
+          const isPerfectQuiz = attempt.score === attempt.totalQuestions;
+
+          // Check and unlock badges
+          const newBadges = checkAndUnlockBadges(newProgress, isPerfectQuiz);
+          if (newBadges.length > 0) {
+            newProgress.unlockedBadges = [...newProgress.unlockedBadges, ...newBadges];
+          }
+
+          // Update weekly challenge if exists
+          if (newProgress.weeklyChallenge) {
+            const challenge = newProgress.weeklyChallenge;
+            const currentWeek = getCurrentWeek();
+
+            // Reset if new week
+            if (challenge.week !== currentWeek) {
+              newProgress.weeklyChallenge = generateWeeklyChallenge();
+            } else if (!challenge.completed) {
+              // Update progress based on challenge type
+              switch (challenge.type) {
+                case 'quizzes':
+                  challenge.current += 1;
+                  break;
+                case 'questions':
+                  challenge.current += attempt.totalQuestions;
+                  break;
+              }
+
+              if (challenge.current >= challenge.target) {
+                challenge.completed = true;
+              }
+            }
+          } else {
+            // Initialize weekly challenge
+            newProgress.weeklyChallenge = generateWeeklyChallenge();
+          }
+
+          // Update goals
+          newProgress.goals = newProgress.goals.map((goal) => {
+            if (goal.completed) return goal;
+
+            let newCurrent = goal.current;
+            switch (goal.type) {
+              case 'quizzes':
+                newCurrent += 1;
+                break;
+              case 'score':
+                newCurrent = Math.max(newCurrent, scorePercent);
+                break;
+              case 'streak':
+                newCurrent = newProgress.studyStreak;
+                break;
+            }
+
+            return {
+              ...goal,
+              current: newCurrent,
+              completed: newCurrent >= goal.target,
+            };
+          });
+
           return { progress: newProgress };
         }),
 
       resetProgress: () => set({ progress: createInitialProgress() }),
+
+      // SRS Methods
+      addToSRS: (questionId, quizId) =>
+        set((state) => {
+          // Check if already in queue
+          if (state.progress.srsQueue.find((item) => item.questionId === questionId)) {
+            return state;
+          }
+
+          const today = new Date().toISOString().split('T')[0];
+          const newItem: SRSItem = {
+            questionId,
+            quizId,
+            interval: 1,
+            easeFactor: DEFAULT_EASE_FACTOR,
+            repetitions: 0,
+            nextReview: today, // Due immediately
+            lastReview: today,
+          };
+
+          return {
+            progress: {
+              ...state.progress,
+              srsQueue: [...state.progress.srsQueue, newItem],
+            },
+          };
+        }),
+
+      reviewSRS: (questionId, grade) =>
+        set((state) => {
+          const item = state.progress.srsQueue.find((i) => i.questionId === questionId);
+          if (!item) return state;
+
+          const { interval, easeFactor, repetitions } = calculateNextInterval(
+            item.interval,
+            item.easeFactor,
+            grade,
+            item.repetitions
+          );
+
+          const today = new Date();
+          const nextReview = new Date(today);
+          nextReview.setDate(nextReview.getDate() + interval);
+
+          const updatedItem: SRSItem = {
+            ...item,
+            interval,
+            easeFactor,
+            repetitions,
+            nextReview: nextReview.toISOString().split('T')[0],
+            lastReview: today.toISOString().split('T')[0],
+          };
+
+          const newSrsReviewCount = state.progress.srsReviewCount + 1;
+
+          // Check for SRS badges
+          const newBadges = checkAndUnlockBadges(
+            { ...state.progress, srsReviewCount: newSrsReviewCount },
+            false
+          );
+
+          return {
+            progress: {
+              ...state.progress,
+              srsQueue: state.progress.srsQueue.map((i) =>
+                i.questionId === questionId ? updatedItem : i
+              ),
+              srsReviewCount: newSrsReviewCount,
+              unlockedBadges: newBadges.length > 0
+                ? [...state.progress.unlockedBadges, ...newBadges]
+                : state.progress.unlockedBadges,
+            },
+          };
+        }),
+
+      getSRSDueToday: () => {
+        const state = get();
+        const today = new Date().toISOString().split('T')[0];
+        return state.progress.srsQueue.filter((item) => item.nextReview <= today);
+      },
+
+      removeFromSRS: (questionId) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            srsQueue: state.progress.srsQueue.filter((i) => i.questionId !== questionId),
+          },
+        })),
+
+      // Gamification Methods
+      addGoal: (goal) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            goals: [
+              ...state.progress.goals,
+              {
+                ...goal,
+                id: `goal-${Date.now()}`,
+                current: 0,
+                completed: false,
+              },
+            ],
+          },
+        })),
+
+      removeGoal: (goalId) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            goals: state.progress.goals.filter((g) => g.id !== goalId),
+          },
+        })),
+
+      getUnlockedBadgeIds: () => {
+        return get().progress.unlockedBadges.map((b) => b.badgeId);
+      },
+
+      // Passage Library Methods
+      passageLibrary: [],
+
+      addPassageToLibrary: (passage) =>
+        set((state) => {
+          const today = new Date().toISOString().split('T')[0];
+          const newPassage: SavedPassage = {
+            ...passage,
+            id: `passage-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            timesUsed: 0,
+            questionsGenerated: [],
+            savedAt: today,
+          };
+          return {
+            passageLibrary: [...state.passageLibrary, newPassage],
+          };
+        }),
+
+      addPassagesToLibrary: (passages) =>
+        set((state) => {
+          const today = new Date().toISOString().split('T')[0];
+          const newPassages: SavedPassage[] = passages.map((passage, index) => ({
+            ...passage,
+            id: `passage-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+            timesUsed: 0,
+            questionsGenerated: [],
+            savedAt: today,
+          }));
+          return {
+            passageLibrary: [...state.passageLibrary, ...newPassages],
+          };
+        }),
+
+      removePassageFromLibrary: (passageId) =>
+        set((state) => ({
+          passageLibrary: state.passageLibrary.filter((p) => p.id !== passageId),
+        })),
+
+      markPassageUsed: (passageId, questionId) =>
+        set((state) => {
+          const today = new Date().toISOString().split('T')[0];
+          return {
+            passageLibrary: state.passageLibrary.map((p) =>
+              p.id === passageId
+                ? {
+                    ...p,
+                    timesUsed: p.timesUsed + 1,
+                    questionsGenerated: questionId
+                      ? [...p.questionsGenerated, questionId]
+                      : p.questionsGenerated,
+                    lastUsedAt: today,
+                  }
+                : p
+            ),
+          };
+        }),
+
+      getPassageById: (passageId) => {
+        return get().passageLibrary.find((p) => p.id === passageId);
+      },
+
+      getUnusedPassages: () => {
+        return get().passageLibrary.filter((p) => p.timesUsed === 0);
+      },
+
+      clearPassageLibrary: () => set({ passageLibrary: [] }),
     }),
     {
       name: 'sat-erw-storage',
-      version: 2, // Increment version to trigger migration
+      version: 4, // Increment version to trigger migration
       partialize: (state) => ({
         documents: state.documents,
         quizzes: state.quizzes,
         progress: state.progress,
+        passageLibrary: state.passageLibrary,
         // Session state - allows resuming after page reload
         activeQuizId: state.activeQuizId,
         currentQuestionIndex: state.currentQuestionIndex,
         answers: state.answers,
         flaggedQuestions: state.flaggedQuestions,
         startTime: state.startTime,
+        examMode: state.examMode,
+        timeLimit: state.timeLimit,
       }),
       // Migrate old data on version change
       migrate: (persistedState: unknown, version: number) => {
@@ -325,6 +687,23 @@ export const useQuizStore = create<QuizStore>()(
         if (version < 2 && state.progress) {
           // Migrate from v1 (old question types) to v2 (new question types)
           state.progress = migrateProgress(state.progress);
+        }
+
+        if (version < 3 && state.progress) {
+          // Migrate to v3: add SRS and gamification fields
+          state.progress = {
+            ...state.progress,
+            srsQueue: state.progress.srsQueue || [],
+            unlockedBadges: state.progress.unlockedBadges || [],
+            weeklyChallenge: state.progress.weeklyChallenge || null,
+            goals: state.progress.goals || [],
+            srsReviewCount: state.progress.srsReviewCount || 0,
+          };
+        }
+
+        if (version < 4) {
+          // Migrate to v4: add passage library
+          state.passageLibrary = state.passageLibrary || [];
         }
 
         return state as QuizStore;

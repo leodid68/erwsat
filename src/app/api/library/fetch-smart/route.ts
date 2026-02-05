@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
         }
         const result = await fetchGuardianArticleRaw(String(providerId), env.GUARDIAN_API_KEY);
         fullText = result.fullText;
-        title = result.title;
+        title = result.article.title;
         break;
       }
       default:
