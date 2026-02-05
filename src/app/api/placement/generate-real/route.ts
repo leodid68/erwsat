@@ -15,7 +15,7 @@ import { getAnthropicApiKey } from '@/lib/env-loader';
 const MODEL = 'claude-sonnet-4-20250514';
 
 // Curated sources for SAT-style texts
-export const CURATED_SOURCES = {
+const CURATED_SOURCES = {
   literature: [
     { provider: 'gutenberg', id: 1342, title: 'Pride and Prejudice', author: 'Jane Austen' },
     { provider: 'gutenberg', id: 98, title: 'A Tale of Two Cities', author: 'Charles Dickens' },
