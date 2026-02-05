@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/stores/quiz-store';
-import { useSettingsStore } from '@/stores/settings-store';
+import { useSettingsStore, AI_PROVIDERS, AIProvider } from '@/stores/settings-store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +39,9 @@ import {
   Play,
   Download,
   Settings,
+  ChevronDown,
+  Minus,
+  Key,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -69,20 +72,32 @@ const DIFFICULTY_OPTIONS: { value: Difficulty; label: string; icon: typeof Zap; 
   { value: 'hard', label: 'Difficile', icon: Brain, color: 'text-rose-400', bgSelected: 'bg-rose-500/15', borderSelected: 'border-rose-500/50', glowColor: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]' },
 ];
 
-type ModelOption = 'sat-finetuned' | 'claude-sonnet';
+type ModelOption = 'local' | 'api';
 
-const MODEL_OPTIONS: { value: ModelOption; label: string; description: string; icon: typeof Cpu }[] = [
-  { value: 'sat-finetuned', label: 'Fine-tuned (Local)', description: 'Qwen3-8B optimisé SAT', icon: Cpu },
-  { value: 'claude-sonnet', label: 'Claude Sonnet (API)', description: 'Anthropic - meilleure qualité', icon: Cloud },
-];
+// Map provider to model identifier for API
+const getModelIdentifier = (provider: AIProvider, model: string): string => {
+  if (provider === 'anthropic') return 'claude-sonnet';
+  return model;
+};
 
 export default function GeneratePage() {
   const router = useRouter();
   const { documents, addQuiz, updatePassageSelection, removeDocument } = useQuizStore();
 
-  // Get API key from settings store
-  const anthropicApiKey = useSettingsStore((state) => state.anthropicApiKey);
-  const isApiConfigured = useSettingsStore((state) => state.isAnthropicConfigured);
+  // Get API key and provider from settings store
+  const {
+    selectedProvider,
+    selectedModel,
+    apiKeys,
+    setSelectedProvider,
+    setSelectedModel,
+    isProviderConfigured,
+    getActiveProvider,
+    getActiveApiKey,
+  } = useSettingsStore();
+
+  const activeProvider = getActiveProvider();
+  const hasApiKey = isProviderConfigured(selectedProvider);
 
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<QuestionType[]>([
@@ -91,7 +106,8 @@ export default function GeneratePage() {
     'boundaries',
   ]);
   const [selectedDifficulties, setSelectedDifficulties] = useState<Difficulty[]>(['medium']);
-  const [model, setModel] = useState<ModelOption>('sat-finetuned');
+  const [useLocalModel, setUseLocalModel] = useState(false);
+  const [isProviderDropdownOpen, setIsProviderDropdownOpen] = useState(false);
   const [quizTitle, setQuizTitle] = useState('Quiz SAT');
   const [questionsPerPassage, setQuestionsPerPassage] = useState(1);
 
@@ -114,6 +130,38 @@ export default function GeneratePage() {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
+  };
+
+  // Toggle all types in a domain
+  const toggleDomain = (domainKey: string) => {
+    const domain = QUESTION_TYPE_DOMAINS[domainKey as keyof typeof QUESTION_TYPE_DOMAINS];
+    if (!domain) return;
+
+    const domainTypes = domain.types;
+    const allSelected = domainTypes.every((type) => selectedTypes.includes(type));
+
+    if (allSelected) {
+      // Deselect all types in this domain
+      setSelectedTypes((prev) => prev.filter((t) => !domainTypes.includes(t)));
+    } else {
+      // Select all types in this domain
+      setSelectedTypes((prev) => [...new Set([...prev, ...domainTypes])]);
+    }
+  };
+
+  // Check if all types in a domain are selected
+  const isDomainFullySelected = (domainKey: string) => {
+    const domain = QUESTION_TYPE_DOMAINS[domainKey as keyof typeof QUESTION_TYPE_DOMAINS];
+    if (!domain) return false;
+    return domain.types.every((type) => selectedTypes.includes(type));
+  };
+
+  // Check if some (but not all) types in a domain are selected
+  const isDomainPartiallySelected = (domainKey: string) => {
+    const domain = QUESTION_TYPE_DOMAINS[domainKey as keyof typeof QUESTION_TYPE_DOMAINS];
+    if (!domain) return false;
+    const selectedCount = domain.types.filter((type) => selectedTypes.includes(type)).length;
+    return selectedCount > 0 && selectedCount < domain.types.length;
   };
 
   const toggleDifficulty = (diff: Difficulty) => {
@@ -144,11 +192,41 @@ export default function GeneratePage() {
     setGeneratedQuestions([]);
 
     try {
-      // Build headers with optional API key
+      // Build headers with API key for selected provider
       const headers: HeadersInit = { 'Content-Type': 'application/json' };
-      if (model === 'claude-sonnet' && anthropicApiKey) {
-        headers['X-Anthropic-Key'] = anthropicApiKey;
+      const apiKey = getActiveApiKey();
+
+      if (!useLocalModel && apiKey) {
+        // Add provider-specific header
+        switch (selectedProvider) {
+          case 'anthropic':
+            headers['X-Anthropic-Key'] = apiKey;
+            break;
+          case 'openai':
+            headers['X-OpenAI-Key'] = apiKey;
+            break;
+          case 'mistral':
+            headers['X-Mistral-Key'] = apiKey;
+            break;
+          case 'deepseek':
+            headers['X-DeepSeek-Key'] = apiKey;
+            break;
+          case 'groq':
+            headers['X-Groq-Key'] = apiKey;
+            break;
+          case 'grok':
+            headers['X-Grok-Key'] = apiKey;
+            break;
+          case 'qwen':
+            headers['X-Qwen-Key'] = apiKey;
+            break;
+        }
+        headers['X-AI-Provider'] = selectedProvider;
+        headers['X-AI-Model'] = selectedModel;
       }
+
+      // Determine model to use
+      const modelToUse = useLocalModel ? 'sat-finetuned' : getModelIdentifier(selectedProvider, selectedModel);
 
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -158,7 +236,7 @@ export default function GeneratePage() {
           questionTypes: selectedTypes,
           questionsPerPassage,
           difficulty: selectedDifficulties,
-          model,
+          model: modelToUse,
         }),
       });
 
@@ -438,38 +516,77 @@ export default function GeneratePage() {
               <CardDescription>{selectedTypes.length}/10 sélectionné{selectedTypes.length > 1 ? 's' : ''}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4 overflow-visible">
-              {Object.entries(QUESTION_TYPE_DOMAINS).map(([domainKey, domain]) => (
-                <div key={domainKey} className="overflow-visible">
-                  <p className="text-xs font-medium text-muted-foreground mb-3">{domain.label}</p>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-1 -m-1">
-                    {domain.types.map((type) => {
-                      const isSelected = selectedTypes.includes(type);
-                      return (
-                        <button
-                          key={type}
-                          onClick={() => toggleQuestionType(type)}
-                          className={cn(
-                            'cell-3d p-3 rounded-xl border text-left transition-all flex items-center gap-3',
-                            isSelected
-                              ? 'border-primary/40 bg-primary/10 shadow-sm'
-                              : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
-                          )}
-                        >
-                          <div className={cn(
-                            'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300',
-                            isSelected
-                              ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
-                              : 'bg-muted border border-border text-muted-foreground'
-                          )}>
-                            {isSelected ? <Check className="w-4 h-4" /> : <span className="text-[9px] font-bold">{QUESTION_TYPE_LABELS[type].slice(0, 2).toUpperCase()}</span>}
-                          </div>
-                          <span className={cn('text-sm font-medium truncate', isSelected ? 'text-primary' : 'text-muted-foreground')}>{QUESTION_TYPE_LABELS[type]}</span>
-                        </button>
-                      );
-                    })}
+              {Object.entries(QUESTION_TYPE_DOMAINS).map(([domainKey, domain]) => {
+                const isFullySelected = isDomainFullySelected(domainKey);
+                const isPartiallySelected = isDomainPartiallySelected(domainKey);
+
+                return (
+                  <div key={domainKey} className="overflow-visible">
+                    {/* Domain Header with Checkbox */}
+                    <button
+                      onClick={() => toggleDomain(domainKey)}
+                      className={cn(
+                        'w-full flex items-center gap-3 p-2 rounded-lg mb-3 transition-all',
+                        isFullySelected
+                          ? 'bg-primary/10 hover:bg-primary/15'
+                          : isPartiallySelected
+                          ? 'bg-muted/50 hover:bg-muted'
+                          : 'hover:bg-muted/50'
+                      )}
+                    >
+                      <div className={cn(
+                        'w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-all',
+                        isFullySelected
+                          ? 'bg-primary border-primary text-white'
+                          : isPartiallySelected
+                          ? 'border-primary bg-primary/20'
+                          : 'border-muted-foreground/30'
+                      )}>
+                        {isFullySelected && <Check className="w-3 h-3" />}
+                        {isPartiallySelected && <Minus className="w-3 h-3 text-primary" />}
+                      </div>
+                      <span className={cn(
+                        'text-sm font-semibold',
+                        (isFullySelected || isPartiallySelected) ? 'text-primary' : 'text-muted-foreground'
+                      )}>
+                        {domain.label}
+                      </span>
+                      <span className="text-xs text-muted-foreground ml-auto">
+                        {domain.types.filter(t => selectedTypes.includes(t)).length}/{domain.types.length}
+                      </span>
+                    </button>
+
+                    {/* Types Grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-1 -m-1">
+                      {domain.types.map((type) => {
+                        const isSelected = selectedTypes.includes(type);
+                        return (
+                          <button
+                            key={type}
+                            onClick={() => toggleQuestionType(type)}
+                            className={cn(
+                              'cell-3d p-3 rounded-xl border text-left transition-all flex items-center gap-3',
+                              isSelected
+                                ? 'border-primary/40 bg-primary/10 shadow-sm'
+                                : 'border-border bg-background hover:border-primary/20 hover:bg-muted'
+                            )}
+                          >
+                            <div className={cn(
+                              'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300',
+                              isSelected
+                                ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
+                                : 'bg-muted border border-border text-muted-foreground'
+                            )}>
+                              {isSelected ? <Check className="w-4 h-4" /> : <span className="text-[9px] font-bold">{QUESTION_TYPE_LABELS[type].slice(0, 2).toUpperCase()}</span>}
+                            </div>
+                            <span className={cn('text-sm font-medium truncate', isSelected ? 'text-primary' : 'text-muted-foreground')}>{QUESTION_TYPE_LABELS[type]}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </CardContent>
           </Card>
 
@@ -518,55 +635,150 @@ export default function GeneratePage() {
               </CardContent>
             </Card>
 
-            {/* Model */}
+            {/* Model / Provider */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Modèle IA</CardTitle>
-                <CardDescription>Moteur de génération</CardDescription>
+                <CardDescription>Fournisseur de génération</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible">
-                <div className="space-y-3 p-1 -m-1">
-                  {MODEL_OPTIONS.map((option) => {
-                    const Icon = option.icon;
-                    const isSelected = model === option.value;
-                    const isDisabled = option.value === 'claude-sonnet' && !isApiConfigured();
-                    return (
-                      <button
-                        key={option.value}
-                        onClick={() => !isDisabled && setModel(option.value)}
-                        disabled={isDisabled}
-                        className={cn(
-                          'cell-3d w-full p-3 rounded-xl border text-left transition-all flex items-center gap-3',
-                          isSelected
-                            ? 'border-accent/40 bg-accent/10 shadow-sm'
-                            : 'border-border bg-background hover:border-primary/20 hover:bg-muted',
-                          isDisabled && 'opacity-50 cursor-not-allowed'
-                        )}
-                      >
-                        <div className={cn(
-                          'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
-                          isSelected
-                            ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white'
-                            : 'bg-muted border border-border text-muted-foreground'
-                        )}>
-                          <Icon className="w-5 h-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={cn('font-medium text-sm', isSelected ? 'text-accent' : 'text-foreground')}>{option.label}</p>
-                          {isDisabled ? (
-                            <Link href="/settings" className="text-xs text-amber-500 hover:text-amber-400 flex items-center gap-1">
-                              <Settings className="w-3 h-3" />
-                              Configurer clé API
-                            </Link>
-                          ) : (
-                            <p className="text-xs text-muted-foreground truncate">{option.description}</p>
-                          )}
-                        </div>
-                        {isSelected && <Check className="w-4 h-4 text-accent shrink-0" />}
-                      </button>
-                    );
-                  })}
+              <CardContent className="space-y-4 overflow-visible">
+                {/* Local vs API Toggle */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setUseLocalModel(true)}
+                    className={cn(
+                      'flex-1 p-2.5 rounded-lg border text-sm font-medium transition-all',
+                      useLocalModel
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border hover:border-primary/30 text-muted-foreground'
+                    )}
+                  >
+                    <Cpu className="w-4 h-4 inline mr-2" />
+                    Local
+                  </button>
+                  <button
+                    onClick={() => setUseLocalModel(false)}
+                    className={cn(
+                      'flex-1 p-2.5 rounded-lg border text-sm font-medium transition-all',
+                      !useLocalModel
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border hover:border-primary/30 text-muted-foreground'
+                    )}
+                  >
+                    <Cloud className="w-4 h-4 inline mr-2" />
+                    API Cloud
+                  </button>
                 </div>
+
+                {useLocalModel ? (
+                  /* Local Model Info */
+                  <div className="p-3 rounded-xl border border-border bg-muted/30">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+                        <Cpu className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">Qwen3-8B Fine-tuné</p>
+                        <p className="text-xs text-muted-foreground">Modèle local optimisé SAT</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Provider Dropdown */
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsProviderDropdownOpen(!isProviderDropdownOpen)}
+                      className={cn(
+                        'w-full flex items-center justify-between px-3 py-3 rounded-xl border bg-background transition-all',
+                        isProviderDropdownOpen && 'border-primary ring-2 ring-primary/20',
+                        !hasApiKey && 'border-amber-500/50'
+                      )}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={cn(
+                          'w-10 h-10 rounded-xl flex items-center justify-center',
+                          hasApiKey
+                            ? 'bg-gradient-to-br from-violet-500 to-purple-600 text-white'
+                            : 'bg-amber-500/20 text-amber-500'
+                        )}>
+                          {hasApiKey ? <Cloud className="w-5 h-5" /> : <Key className="w-5 h-5" />}
+                        </div>
+                        <div className="text-left">
+                          <p className="font-medium text-sm">{activeProvider.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {hasApiKey ? selectedModel : 'Clé API requise'}
+                          </p>
+                        </div>
+                      </div>
+                      <ChevronDown className={cn(
+                        'w-5 h-5 text-muted-foreground transition-transform',
+                        isProviderDropdownOpen && 'rotate-180'
+                      )} />
+                    </button>
+
+                    {/* Provider Dropdown */}
+                    {isProviderDropdownOpen && (
+                      <div className="absolute z-50 w-full mt-2 py-2 rounded-xl border bg-background shadow-lg max-h-[300px] overflow-y-auto">
+                        {AI_PROVIDERS.map((provider) => {
+                          const providerConfigured = isProviderConfigured(provider.id);
+                          const isActive = selectedProvider === provider.id;
+                          return (
+                            <button
+                              key={provider.id}
+                              onClick={() => {
+                                setSelectedProvider(provider.id);
+                                setIsProviderDropdownOpen(false);
+                              }}
+                              className={cn(
+                                'w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/50 transition-colors',
+                                isActive && 'bg-primary/10'
+                              )}
+                            >
+                              <div className={cn(
+                                'w-8 h-8 rounded-lg flex items-center justify-center shrink-0',
+                                providerConfigured
+                                  ? 'bg-emerald-500/20 text-emerald-500'
+                                  : 'bg-muted text-muted-foreground'
+                              )}>
+                                {providerConfigured ? <Check className="w-4 h-4" /> : <Key className="w-4 h-4" />}
+                              </div>
+                              <div className="flex-1 text-left">
+                                <p className="font-medium text-sm">{provider.name}</p>
+                                <p className="text-xs text-muted-foreground">{provider.inputPrice} / {provider.outputPrice}</p>
+                              </div>
+                              {!providerConfigured && (
+                                <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-500">
+                                  Non configuré
+                                </Badge>
+                              )}
+                            </button>
+                          );
+                        })}
+                        <div className="border-t border-border mt-2 pt-2 px-3">
+                          <Link
+                            href="/settings"
+                            className="flex items-center gap-2 text-xs text-primary hover:underline"
+                            onClick={() => setIsProviderDropdownOpen(false)}
+                          >
+                            <Settings className="w-3 h-3" />
+                            Gérer les clés API
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* API Key Warning */}
+                    {!hasApiKey && (
+                      <Link
+                        href="/settings"
+                        className="mt-2 flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-500 hover:bg-amber-500/15 transition-colors"
+                      >
+                        <AlertTriangle className="w-4 h-4 shrink-0" />
+                        <span>Configurez votre clé API {activeProvider.name} dans les paramètres</span>
+                      </Link>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -667,7 +879,7 @@ export default function GeneratePage() {
 
               <Button
                 onClick={handleGenerate}
-                disabled={isGenerating || selectedPassages.length === 0 || selectedTypes.length === 0 || selectedDifficulties.length === 0}
+                disabled={isGenerating || selectedPassages.length === 0 || selectedTypes.length === 0 || selectedDifficulties.length === 0 || (!useLocalModel && !hasApiKey)}
                 className="w-full"
                 size="lg"
               >
@@ -685,7 +897,7 @@ export default function GeneratePage() {
               </Button>
 
               <p className="text-[10px] text-muted-foreground text-center">
-                {model === 'claude-sonnet' ? 'Claude Sonnet API' : 'Qwen3-8B fine-tuné'}
+                {useLocalModel ? 'Qwen3-8B fine-tuné' : `${activeProvider.name} - ${selectedModel}`}
               </p>
             </CardContent>
           </Card>
