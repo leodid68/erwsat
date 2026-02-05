@@ -21,6 +21,7 @@ import {
   PieChart,
   Settings,
 } from 'lucide-react';
+import { AuthButton } from '@/components/auth';
 
 interface NavItem {
   name: string;
@@ -136,8 +137,8 @@ export function Sidebar() {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 w-72 glass-sidebar flex flex-col">
-      {/* Logo */}
-      <div className="h-20 flex items-center px-6 border-b border-border">
+      {/* Logo and Auth */}
+      <div className="h-20 flex items-center justify-between px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="relative">
             {/* Glow effect */}
@@ -151,6 +152,7 @@ export function Sidebar() {
             <p className="text-xs text-muted-foreground">Lecture & Écriture</p>
           </div>
         </Link>
+        <AuthButton />
       </div>
 
       {/* Navigation */}

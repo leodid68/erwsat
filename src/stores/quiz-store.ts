@@ -181,6 +181,12 @@ interface QuizStore {
   getPassageById: (passageId: string) => SavedPassage | undefined;
   getUnusedPassages: () => SavedPassage[];
   clearPassageLibrary: () => void;
+
+  // Sync setters (for cloud sync)
+  setDocuments: (documents: ExtractedDocument[]) => void;
+  setQuizzes: (quizzes: Quiz[]) => void;
+  setUserProgress: (progress: UserProgress) => void;
+  setPassageLibrary: (passages: SavedPassage[]) => void;
 }
 
 export const useQuizStore = create<QuizStore>()(
@@ -662,6 +668,12 @@ export const useQuizStore = create<QuizStore>()(
       },
 
       clearPassageLibrary: () => set({ passageLibrary: [] }),
+
+      // Sync setters
+      setDocuments: (documents) => set({ documents }),
+      setQuizzes: (quizzes) => set({ quizzes }),
+      setUserProgress: (progress) => set({ progress }),
+      setPassageLibrary: (passageLibrary) => set({ passageLibrary }),
     }),
     {
       name: 'sat-erw-storage',
