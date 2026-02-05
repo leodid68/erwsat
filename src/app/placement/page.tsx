@@ -21,19 +21,44 @@ import {
   BookOpen,
   ArrowRight,
   RotateCcw,
-  Timer,
+  Download,
+  Loader2,
+  Sparkles,
+  FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SAT_PLACEMENT_TEST_01 } from '@/data/sat-placement-test';
-import {
-  PlacementQuestion,
-  PlacementModule,
-  calculateEstimatedScore,
-} from '@/types/placement-test';
 import { AnswerId } from '@/types/question';
 import { ExamTimer } from '@/components/quiz/ExamTimer';
+import { calculateEstimatedScore } from '@/types/placement-test';
 
-type TestPhase = 'intro' | 'module1' | 'transition' | 'module2' | 'results';
+type TestPhase = 'intro' | 'generating' | 'module1' | 'transition' | 'module2' | 'results';
+type TestMode = 'dynamic' | 'static';
+
+interface GeneratedQuestion {
+  id: string;
+  passage: string;
+  passageSource: string;
+  questionStem: string;
+  choices: { A: string; B: string; C: string; D: string };
+  correctAnswer: AnswerId;
+  explanation: string;
+  domain: string;
+  skill: string;
+}
+
+interface GeneratedModule {
+  moduleId: 1 | 2;
+  difficulty: 'Medium' | 'Hard';
+  questions: GeneratedQuestion[];
+}
+
+interface StoredPassage {
+  id: string;
+  source: string;
+  text: string;
+  moduleId: number;
+  questionId: string;
+}
 
 interface ModuleResult {
   score: number;
@@ -45,45 +70,81 @@ interface ModuleResult {
 export default function PlacementTestPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<TestPhase>('intro');
-  const [currentModule, setCurrentModule] = useState<PlacementModule | null>(null);
+  const [testMode, setTestMode] = useState<TestMode>('dynamic');
+  const [currentModule, setCurrentModule] = useState<GeneratedModule | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerId>>({});
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
   const [startTime, setStartTime] = useState<number | null>(null);
-  const [showExplanation, setShowExplanation] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerId | null>(null);
+
+  // Generated test data
+  const [generatedModules, setGeneratedModules] = useState<GeneratedModule[]>([]);
+  const [allPassages, setAllPassages] = useState<StoredPassage[]>([]);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [generationError, setGenerationError] = useState<string | null>(null);
+  const [testName, setTestName] = useState<string>('');
 
   // Results
   const [module1Result, setModule1Result] = useState<ModuleResult | null>(null);
   const [module2Result, setModule2Result] = useState<ModuleResult | null>(null);
 
-  const test = SAT_PLACEMENT_TEST_01;
+  // Generate test via API
+  const generateTest = async () => {
+    setPhase('generating');
+    setGenerationError(null);
+    setGenerationProgress(0);
 
-  // Start Module 1
-  const startModule1 = () => {
-    setCurrentModule(test.modules[0]);
-    setCurrentQuestionIndex(0);
-    setAnswers({});
-    setFlaggedQuestions(new Set());
-    setStartTime(Date.now());
-    setPhase('module1');
+    try {
+      // Simulate progress during API call
+      const progressInterval = setInterval(() => {
+        setGenerationProgress(prev => Math.min(prev + 2, 90));
+      }, 1000);
+
+      const response = await fetch('/api/placement/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ questionsPerModule: 27 }),
+      });
+
+      clearInterval(progressInterval);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur de génération');
+      }
+
+      setGeneratedModules(data.test.modules);
+      setAllPassages(data.test.allPassages);
+      setTestName(data.test.testName);
+      setGenerationProgress(100);
+
+      // Start Module 1
+      setTimeout(() => {
+        startModuleFromGenerated(data.test.modules[0]);
+      }, 500);
+    } catch (error) {
+      setGenerationError(error instanceof Error ? error.message : 'Erreur inconnue');
+      setPhase('intro');
+    }
   };
 
-  // Start Module 2
-  const startModule2 = () => {
-    setCurrentModule(test.modules[1]);
+  // Start module from generated data
+  const startModuleFromGenerated = (module: GeneratedModule) => {
+    setCurrentModule(module);
     setCurrentQuestionIndex(0);
     setAnswers({});
     setFlaggedQuestions(new Set());
     setStartTime(Date.now());
-    setPhase('module2');
+    setPhase(module.moduleId === 1 ? 'module1' : 'module2');
   };
 
   // Calculate module score
-  const calculateModuleScore = useCallback((module: PlacementModule, moduleAnswers: Record<string, AnswerId>): number => {
+  const calculateModuleScore = useCallback((module: GeneratedModule, moduleAnswers: Record<string, AnswerId>): number => {
     let correct = 0;
     module.questions.forEach(q => {
-      if (moduleAnswers[q.id] === q.correct_answer) {
+      if (moduleAnswers[q.id] === q.correctAnswer) {
         correct++;
       }
     });
@@ -113,6 +174,14 @@ export default function PlacementTestPage() {
     }
   };
 
+  // Start Module 2 from transition
+  const startModule2 = () => {
+    const module2 = generatedModules.find(m => m.moduleId === 2);
+    if (module2) {
+      startModuleFromGenerated(module2);
+    }
+  };
+
   // Handle answer selection
   const handleSelectAnswer = (answerId: AnswerId) => {
     if (!currentModule) return;
@@ -127,7 +196,6 @@ export default function PlacementTestPage() {
     if (index >= 0 && index < currentModule.questions.length) {
       setCurrentQuestionIndex(index);
       setSelectedAnswer(answers[currentModule.questions[index].id] || null);
-      setShowExplanation(false);
     }
   };
 
@@ -154,6 +222,35 @@ export default function PlacementTestPage() {
     completeModule();
   };
 
+  // Export passages as TXT
+  const exportPassages = async (format: 'txt' | 'json' = 'txt') => {
+    try {
+      const response = await fetch('/api/placement/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          passages: allPassages,
+          testName,
+          format,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Export failed');
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${testName}_passages.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export error:', error);
+    }
+  };
+
   // Current question
   const currentQuestion = currentModule?.questions[currentQuestionIndex];
   const answeredCount = currentModule ? Object.keys(answers).length : 0;
@@ -168,6 +265,52 @@ export default function PlacementTestPage() {
         module2Result?.total
       )
     : 0;
+
+  // Generating Phase
+  if (phase === 'generating') {
+    return (
+      <div className="max-w-2xl mx-auto space-y-8">
+        <Card className="glass-cosmic">
+          <CardContent className="p-8 text-center space-y-6">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+              <Sparkles className="w-10 h-10 text-white animate-pulse" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground mb-2">
+                Génération du test en cours...
+              </h2>
+              <p className="text-muted-foreground">
+                Claude génère 54 textes uniques et questions personnalisées
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Progress value={generationProgress} className="h-3" />
+              <p className="text-sm text-muted-foreground">
+                {generationProgress < 100
+                  ? `${Math.round(generationProgress)}% - Création des passages et questions...`
+                  : 'Terminé ! Démarrage du test...'}
+              </p>
+            </div>
+
+            {generationError && (
+              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20">
+                <p className="text-destructive text-sm">{generationError}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setPhase('intro')}
+                  className="mt-2"
+                >
+                  Retour
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   // Intro Phase
   if (phase === 'intro') {
@@ -184,6 +327,77 @@ export default function PlacementTestPage() {
             et estime votre score SAT (200-800).
           </p>
         </div>
+
+        {/* Test Mode Selection */}
+        <Card className="glass-cosmic">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary" />
+              Mode de génération
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <button
+                onClick={() => setTestMode('dynamic')}
+                className={cn(
+                  'p-4 rounded-xl border text-left transition-all',
+                  testMode === 'dynamic'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border hover:border-primary/30'
+                )}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center',
+                    testMode === 'dynamic'
+                      ? 'bg-gradient-to-br from-amber-500 to-orange-500'
+                      : 'bg-muted'
+                  )}>
+                    <Sparkles className={cn('w-5 h-5', testMode === 'dynamic' ? 'text-white' : 'text-muted-foreground')} />
+                  </div>
+                  <div>
+                    <p className="font-medium">Génération IA</p>
+                    <p className="text-xs text-muted-foreground">Recommandé</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  54 textes uniques générés par Claude, adaptés au style SAT officiel.
+                  Les passages sont sauvegardés et exportables.
+                </p>
+              </button>
+
+              <button
+                onClick={() => setTestMode('static')}
+                className={cn(
+                  'p-4 rounded-xl border text-left transition-all',
+                  testMode === 'static'
+                    ? 'border-primary bg-primary/10'
+                    : 'border-border hover:border-primary/30'
+                )}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center',
+                    testMode === 'static'
+                      ? 'bg-gradient-to-br from-blue-500 to-cyan-500'
+                      : 'bg-muted'
+                  )}>
+                    <FileText className={cn('w-5 h-5', testMode === 'static' ? 'text-white' : 'text-muted-foreground')} />
+                  </div>
+                  <div>
+                    <p className="font-medium">Test pré-généré</p>
+                    <p className="text-xs text-muted-foreground">Instantané</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  54 questions prêtes avec des extraits de Dickens, Austen, Hawthorne.
+                  Démarrage immédiat sans génération.
+                </p>
+              </button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Test Structure */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,8 +417,7 @@ export default function PlacementTestPage() {
                 <span>32 minutes</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Test vos compétences fondamentales. Les questions sont accessibles
-                mais exigent rigueur et attention.
+                Teste vos compétences fondamentales. Questions accessibles mais rigoureuses.
               </p>
               <div className="flex flex-wrap gap-2 mt-3">
                 <Badge variant="outline">Craft & Structure ~28%</Badge>
@@ -231,48 +444,39 @@ export default function PlacementTestPage() {
                 <span>32 minutes</span>
               </div>
               <p className="text-sm text-muted-foreground">
-                Discrimine les élèves du top 10%. Textes plus denses, distracteurs
-                vicieux ("True but Irrelevant", "Scope Error").
+                Discrimine le top 10%. Textes denses, distracteurs vicieux.
               </p>
               <div className="flex flex-wrap gap-2 mt-3">
-                <Badge variant="outline" className="border-red-500/30 text-red-500">Syntaxe victorienne</Badge>
-                <Badge variant="outline" className="border-red-500/30 text-red-500">Arguments abstraits</Badge>
+                <Badge variant="outline" className="border-red-500/30 text-red-500">True but Irrelevant</Badge>
+                <Badge variant="outline" className="border-red-500/30 text-red-500">Scope Error</Badge>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Sources */}
-        <Card className="glass-cosmic">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-primary" />
-              Corpus de textes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {['Charles Dickens', 'Jane Austen', 'Nathaniel Hawthorne', 'The Federalist Papers', 'The Guardian Science'].map((source) => (
-                <div key={source} className="text-center p-3 rounded-xl bg-muted">
-                  <p className="text-sm font-medium text-foreground">{source}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Start Button */}
         <div className="text-center space-y-4">
           <Button
             size="lg"
-            onClick={startModule1}
+            onClick={testMode === 'dynamic' ? generateTest : () => router.push('/placement/static')}
             className="btn-cosmic text-lg px-8 py-6"
           >
-            Commencer le test
-            <ArrowRight className="w-5 h-5 ml-2" />
+            {testMode === 'dynamic' ? (
+              <>
+                <Sparkles className="w-5 h-5 mr-2" />
+                Générer et commencer
+              </>
+            ) : (
+              <>
+                Commencer le test
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </>
+            )}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Durée totale estimée : 64 minutes
+            {testMode === 'dynamic'
+              ? 'Génération: ~2-3 minutes • Test: 64 minutes'
+              : 'Durée totale: 64 minutes'}
           </p>
         </div>
       </div>
@@ -323,8 +527,7 @@ export default function PlacementTestPage() {
                   <p className="font-medium text-amber-600">Module 2 : Difficulté accrue</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Les textes sont plus denses et les distracteurs plus subtils.
-                    Lisez attentivement chaque passage et méfiez-vous des réponses
-                    "vraies mais hors-sujet".
+                    Méfiez-vous des réponses "vraies mais hors-sujet".
                   </p>
                 </div>
               </div>
@@ -459,6 +662,33 @@ export default function PlacementTestPage() {
           )}
         </div>
 
+        {/* Export & Actions */}
+        {allPassages.length > 0 && (
+          <Card className="glass-cosmic">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Download className="w-5 h-5 text-primary" />
+                Exporter les passages
+              </CardTitle>
+              <CardDescription>
+                {allPassages.length} textes générés disponibles pour export
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => exportPassages('txt')} className="flex-1">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Export TXT
+                </Button>
+                <Button variant="outline" onClick={() => exportPassages('json')} className="flex-1">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export JSON
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Actions */}
         <div className="flex gap-4 justify-center">
           <Button variant="outline" onClick={() => router.push('/progress')}>
@@ -469,9 +699,11 @@ export default function PlacementTestPage() {
             setPhase('intro');
             setModule1Result(null);
             setModule2Result(null);
+            setGeneratedModules([]);
+            setAllPassages([]);
           }} className="btn-cosmic">
             <RotateCcw className="w-4 h-4 mr-2" />
-            Refaire le test
+            Nouveau test
           </Button>
         </div>
       </div>
@@ -488,7 +720,7 @@ export default function PlacementTestPage() {
             <Badge variant="outline" className={cn(
               phase === 'module1' ? 'border-blue-500/30 text-blue-500' : 'border-red-500/30 text-red-500'
             )}>
-              Module {currentModule.module_id} - {currentModule.difficulty}
+              Module {currentModule.moduleId} - {currentModule.difficulty}
             </Badge>
             <Badge variant="outline">
               {currentQuestion.domain}
@@ -500,7 +732,7 @@ export default function PlacementTestPage() {
           {startTime && (
             <ExamTimer
               startTime={startTime}
-              timeLimit={currentModule.time_limit_minutes * 60}
+              timeLimit={32 * 60}
               onTimeUp={handleTimeUp}
             />
           )}
@@ -517,7 +749,7 @@ export default function PlacementTestPage() {
                     Question {currentQuestionIndex + 1} / {currentModule.questions.length}
                   </CardTitle>
                   <span className="text-xs text-muted-foreground italic">
-                    {currentQuestion.text_source}
+                    {currentQuestion.passageSource}
                   </span>
                 </div>
               </CardHeader>
@@ -531,7 +763,7 @@ export default function PlacementTestPage() {
 
                 {/* Question Stem */}
                 <p className="font-medium text-foreground">
-                  {currentQuestion.question_stem}
+                  {currentQuestion.questionStem}
                 </p>
 
                 {/* Choices */}
@@ -664,7 +896,7 @@ export default function PlacementTestPage() {
                 disabled={answeredCount < currentModule.questions.length}
                 className="w-full btn-cosmic"
               >
-                Terminer le Module {currentModule.module_id}
+                Terminer le Module {currentModule.moduleId}
               </Button>
 
               {answeredCount < currentModule.questions.length && (
