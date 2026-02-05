@@ -22,13 +22,15 @@ export const AI_PROVIDERS: AIProviderConfig[] = [
   {
     id: 'anthropic',
     name: 'Anthropic (Claude)',
-    description: 'Claude Sonnet 4 - Meilleure qualité pour SAT',
+    description: 'Claude Sonnet 4.5 - Meilleure qualité pour SAT',
     keyPrefix: 'sk-ant-',
     keyPlaceholder: 'sk-ant-api03-...',
     consoleUrl: 'https://console.anthropic.com/settings/keys',
     models: [
-      { id: 'claude-sonnet-4-20250514', name: 'Claude Sonnet 4', description: 'Recommandé - Excellent pour SAT' },
-      { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku', description: 'Plus rapide, moins cher' },
+      { id: 'claude-sonnet-4-5-20241022', name: 'Claude Sonnet 4.5', description: 'Recommandé - Le meilleur pour SAT' },
+      { id: 'claude-sonnet-4-20250514', name: 'Claude Sonnet 4', description: 'Très bon rapport qualité/prix' },
+      { id: 'claude-opus-4-5-20251101', name: 'Claude Opus 4.5', description: 'Maximum qualité (5x plus cher)' },
+      { id: 'claude-3-5-haiku-20241022', name: 'Claude 3.5 Haiku', description: 'Rapide et économique' },
     ],
     inputPrice: '$3',
     outputPrice: '$15',
@@ -162,7 +164,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set, get) => ({
       apiKeys: { ...initialApiKeys },
       selectedProvider: 'anthropic',
-      selectedModel: 'claude-sonnet-4-20250514',
+      selectedModel: 'claude-sonnet-4-5-20241022',
       guardianApiKey: null,
 
       setApiKey: (provider, key) =>
@@ -232,7 +234,7 @@ export const useSettingsStore = create<SettingsState>()(
               anthropic: oldState.anthropicApiKey || null,
             },
             selectedProvider: 'anthropic',
-            selectedModel: 'claude-sonnet-4-20250514',
+            selectedModel: 'claude-sonnet-4-5-20241022',
             guardianApiKey: oldState.guardianApiKey || null,
           };
         }

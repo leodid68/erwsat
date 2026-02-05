@@ -27,7 +27,7 @@ function getAnthropicClient(apiKey?: string): Anthropic {
   return client;
 }
 
-const MODEL = 'claude-sonnet-4-20250514';
+const MODEL = 'claude-sonnet-4-5-20241022';
 
 /**
  * Select best passages from text using Claude Sonnet
