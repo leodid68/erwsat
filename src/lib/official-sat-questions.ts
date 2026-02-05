@@ -195,6 +195,33 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 /**
+ * Map official SAT skill to app's QuestionType
+ */
+export function mapSkillToQuestionType(skill: string): string {
+  const mapping: Record<string, string> = {
+    // Information and Ideas
+    'Central Ideas and Details': 'central-ideas',
+    'Central Ideas': 'central-ideas',
+    'Inferences': 'inferences',
+    'Command of Evidence': 'command-of-evidence',
+    'Command of Evidence (Textual)': 'command-of-evidence',
+    'Command of Evidence (Quantitative)': 'command-of-evidence',
+    // Craft and Structure
+    'Words in Context': 'words-in-context',
+    'Text Structure and Purpose': 'text-structure-purpose',
+    'Cross-Text Connections': 'cross-text-connections',
+    // Expression of Ideas
+    'Rhetorical Synthesis': 'rhetorical-synthesis',
+    'Transitions': 'transitions',
+    // Standard English Conventions
+    'Boundaries': 'boundaries',
+    'Form, Structure, and Sense': 'form-structure-sense',
+  };
+
+  return mapping[skill] || 'inferences'; // default fallback
+}
+
+/**
  * Convert official question format to app format
  */
 export function convertToAppFormat(question: OfficialSATQuestion): {

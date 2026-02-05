@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { WeakAreaSelector } from '@/components/practice/WeakAreaSelector';
-import { QuestionType, QUESTION_TYPE_LABELS, AnswerId } from '@/types/question';
-import { Question } from '@/types/question';
+import { QuestionType, QUESTION_TYPE_LABELS, AnswerId, Question } from '@/types/question';
+import { mapSkillToQuestionType } from '@/lib/official-sat-questions';
 import {
   Target,
   Dumbbell,
@@ -83,6 +83,10 @@ export default function PracticePage() {
   const [showExplanation, setShowExplanation] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerId | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [startTime, setStartTime] = useState<number | null>(null);
+
+  // Get updateProgress from store
+  const updateProgress = useQuizStore((state) => state.updateProgress);
 
   // Load official stats on mount
   useEffect(() => {
@@ -187,6 +191,7 @@ export default function PracticePage() {
       setAnswers({});
       setShowExplanation(false);
       setSelectedAnswer(null);
+      setStartTime(Date.now());
       setPhase('quiz');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erreur inconnue');
@@ -206,12 +211,62 @@ export default function PracticePage() {
     setShowExplanation(true);
   };
 
+  // Save progress for official questions
+  const saveOfficialProgress = () => {
+    if (!startTime || officialQuestions.length === 0) return;
+
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+    // Convert official questions to Question format for progress tracking
+    const questions: Question[] = officialQuestions.map(q => ({
+      id: q.id,
+      type: mapSkillToQuestionType(q.skill) as QuestionType,
+      passage: q.passage,
+      passageSource: q.passageSource,
+      questionText: q.questionStem,
+      choices: [
+        { id: 'A' as AnswerId, text: q.choices.A },
+        { id: 'B' as AnswerId, text: q.choices.B },
+        { id: 'C' as AnswerId, text: q.choices.C },
+        { id: 'D' as AnswerId, text: q.choices.D },
+      ],
+      correctAnswer: q.correctAnswer,
+      explanation: q.explanation,
+      difficulty: 'medium' as const,
+      createdAt: new Date(),
+    }));
+
+    // Create quiz attempt
+    const questionResults = officialQuestions.map(q => ({
+      questionId: q.id,
+      selectedAnswer: answers[q.id] || null,
+      isCorrect: answers[q.id] === q.correctAnswer,
+      timeSpent: Math.floor(timeSpent / officialQuestions.length),
+    }));
+
+    const attempt = {
+      id: `practice_official_${Date.now()}`,
+      quizId: `official_practice_${Date.now()}`,
+      answers,
+      score: officialQuestions.filter(q => answers[q.id] === q.correctAnswer).length,
+      totalQuestions: officialQuestions.length,
+      timeSpent,
+      completedAt: new Date(),
+      questionResults,
+    };
+
+    // Update progress in store
+    updateProgress(attempt, questions);
+  };
+
   const handleNext = () => {
     if (currentIndex < officialQuestions.length - 1) {
       setCurrentIndex(prev => prev + 1);
       setShowExplanation(false);
       setSelectedAnswer(null);
     } else {
+      // Save progress before showing results
+      saveOfficialProgress();
       setPhase('results');
     }
   };
@@ -232,6 +287,7 @@ export default function PracticePage() {
     setCurrentIndex(0);
     setShowExplanation(false);
     setSelectedAnswer(null);
+    setStartTime(null);
   };
 
   const hasCustomQuestions = allQuestions.length > 0;

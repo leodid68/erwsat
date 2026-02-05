@@ -28,9 +28,11 @@ import {
   Award,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { AnswerId } from '@/types/question';
+import { AnswerId, QuestionType, Question } from '@/types/question';
 import { ExamTimer } from '@/components/quiz/ExamTimer';
 import { calculateEstimatedScore } from '@/types/placement-test';
+import { useQuizStore } from '@/stores/quiz-store';
+import { mapSkillToQuestionType } from '@/lib/official-sat-questions';
 
 type TestPhase = 'intro' | 'generating' | 'module1' | 'transition' | 'module2' | 'results';
 type TestMode = 'official' | 'real' | 'synthetic' | 'static';
@@ -70,6 +72,8 @@ interface ModuleResult {
 
 export default function PlacementTestPage() {
   const router = useRouter();
+  const updateProgress = useQuizStore((state) => state.updateProgress);
+
   const [phase, setPhase] = useState<TestPhase>('intro');
   const [testMode, setTestMode] = useState<TestMode>('official');
   const [currentModule, setCurrentModule] = useState<GeneratedModule | null>(null);
@@ -78,6 +82,7 @@ export default function PlacementTestPage() {
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<string>>(new Set());
   const [startTime, setStartTime] = useState<number | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<AnswerId | null>(null);
+  const [totalTestStartTime, setTotalTestStartTime] = useState<number | null>(null);
 
   // Generated test data
   const [generatedModules, setGeneratedModules] = useState<GeneratedModule[]>([]);
@@ -90,6 +95,60 @@ export default function PlacementTestPage() {
   // Results
   const [module1Result, setModule1Result] = useState<ModuleResult | null>(null);
   const [module2Result, setModule2Result] = useState<ModuleResult | null>(null);
+
+  // Save placement test progress to store
+  const savePlacementProgress = useCallback((
+    modules: GeneratedModule[],
+    m1Result: ModuleResult,
+    m2Result: ModuleResult
+  ) => {
+    // Combine all questions from both modules
+    const allQuestions: Question[] = [];
+    const allAnswers: Record<string, AnswerId> = { ...m1Result.answers, ...m2Result.answers };
+
+    for (const module of modules) {
+      for (const q of module.questions) {
+        allQuestions.push({
+          id: q.id,
+          type: mapSkillToQuestionType(q.skill) as QuestionType,
+          passage: q.passage,
+          passageSource: q.passageSource,
+          questionText: q.questionStem,
+          choices: [
+            { id: 'A' as AnswerId, text: q.choices.A },
+            { id: 'B' as AnswerId, text: q.choices.B },
+            { id: 'C' as AnswerId, text: q.choices.C },
+            { id: 'D' as AnswerId, text: q.choices.D },
+          ],
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation,
+          difficulty: module.difficulty === 'Medium' ? 'medium' : 'hard',
+          createdAt: new Date(),
+        });
+      }
+    }
+
+    // Create quiz attempt
+    const questionResults = allQuestions.map(q => ({
+      questionId: q.id,
+      selectedAnswer: allAnswers[q.id] || null,
+      isCorrect: allAnswers[q.id] === q.correctAnswer,
+      timeSpent: Math.floor((m1Result.timeSpent + m2Result.timeSpent) / allQuestions.length),
+    }));
+
+    const attempt = {
+      id: `placement_${Date.now()}`,
+      quizId: `placement_test_${Date.now()}`,
+      answers: allAnswers,
+      score: m1Result.score + m2Result.score,
+      totalQuestions: m1Result.total + m2Result.total,
+      timeSpent: m1Result.timeSpent + m2Result.timeSpent,
+      completedAt: new Date(),
+      questionResults,
+    };
+
+    updateProgress(attempt, allQuestions);
+  }, [updateProgress]);
 
   // Generate test via API
   const generateTest = async (mode: 'official' | 'real' | 'synthetic') => {
@@ -184,6 +243,10 @@ export default function PlacementTestPage() {
       setPhase('transition');
     } else if (phase === 'module2') {
       setModule2Result(result);
+      // Save progress to track strengths/weaknesses
+      if (module1Result) {
+        savePlacementProgress(generatedModules, module1Result, result);
+      }
       setPhase('results');
     }
   };
