@@ -77,14 +77,14 @@ export const AI_PROVIDERS: AIProviderConfig[] = [
   },
   {
     id: 'groq',
-    name: 'Groq',
-    description: 'Llama 3.3 70B - Ultra rapide',
+    name: 'Groq (Meta Llama)',
+    description: 'Llama 3.3 70B de Meta - Ultra rapide',
     keyPrefix: 'gsk_',
     keyPlaceholder: 'gsk_...',
     consoleUrl: 'https://console.groq.com/keys',
     models: [
-      { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B', description: 'Rapide et performant' },
-      { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B', description: 'Très rapide' },
+      { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B', description: 'Meta - Rapide et performant' },
+      { id: 'llama-3.1-8b-instant', name: 'Llama 3.1 8B', description: 'Meta - Très rapide' },
     ],
     inputPrice: '$0.59',
     outputPrice: '$0.79',
