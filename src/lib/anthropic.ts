@@ -37,18 +37,27 @@ export async function selectPassagesWithSonnet(
         role: 'user',
         content: `Select ${maxPassages} passages from this text for SAT reading comprehension practice.
 
-CRITERIA:
+CRITERIA FOR PROSE:
 - 125-200 words each
 - Self-contained, clear narrative flow
 - Good for inference and vocabulary questions
 - Avoid dialogue-heavy or list sections
+
+SPECIAL RULES FOR POETRY:
+- ALWAYS keep poems WHOLE if under 200 words - never excerpt a poem
+- For longer poems, select complete stanzas (never break mid-stanza)
+- Poetry can be shorter than prose (even 50-100 words is acceptable for a complete short poem)
+- Include the poem's title if present
+- Preserve line breaks and stanza structure exactly
+
+DETECTION: If text contains verse structure (short lines, stanzas, rhyme patterns, or is explicitly labeled as poetry), apply poetry rules.
 
 <source_text>
 ${textToAnalyze}
 </source_text>
 
 Return a JSON array only, no markdown or explanation:
-[{"text": "passage text", "reason": "one sentence explanation"}]`,
+[{"text": "passage text (preserve line breaks with \\n)", "reason": "one sentence explanation"}]`,
       },
     ],
   });
