@@ -3,9 +3,11 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { cn } from '@/lib/utils';
-import { Upload, FileText, Loader2, AlertCircle, Scissors, FileStack, File, CloudUpload, Sparkles, Brain } from 'lucide-react';
+import { Upload, FileText, Loader2, AlertCircle, Scissors, FileStack, File, CloudUpload, Sparkles, Brain, Settings } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
+import { useSettingsStore } from '@/stores/settings-store';
+import Link from 'next/link';
 
 type SplitMode = 'sat' | 'medium' | 'full';
 type SelectionMode = 'manual' | 'ai';
@@ -53,6 +55,10 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
   const [splitMode, setSplitMode] = useState<SplitMode>('medium');
   const [selectionMode, setSelectionMode] = useState<SelectionMode>('ai'); // AI by default
 
+  // Get API key from settings store
+  const anthropicApiKey = useSettingsStore((state) => state.anthropicApiKey);
+  const isApiConfigured = useSettingsStore((state) => state.isAnthropicConfigured);
+
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
@@ -82,9 +88,14 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
 
           // Step 2: Send to AI for smart selection
           setProcessingStep('Analyse IA des passages...');
+          const headers: HeadersInit = { 'Content-Type': 'application/json' };
+          if (anthropicApiKey) {
+            headers['X-Anthropic-Key'] = anthropicApiKey;
+          }
+
           const smartResponse = await fetch('/api/upload/smart', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers,
             body: JSON.stringify({
               extractedText: extractData.extractedText,
               filename: file.name,
@@ -179,6 +190,20 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
           )} />
         </button>
       </div>
+
+      {/* Warning when AI mode selected but no API key */}
+      {selectionMode === 'ai' && !isApiConfigured() && (
+        <Alert className="border-amber-500/30 bg-amber-500/10">
+          <Settings className="w-4 h-4 text-amber-500" />
+          <AlertDescription className="text-amber-200">
+            <span className="font-medium">Clé API requise.</span>{' '}
+            <Link href="/settings" className="underline hover:text-amber-100">
+              Ajoutez votre clé Anthropic dans les paramètres
+            </Link>{' '}
+            pour utiliser la sélection IA.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Split Mode Selection - Only show in manual mode */}
       {selectionMode === 'manual' && (

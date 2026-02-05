@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateWithOllama } from '@/lib/ollama';
 import { generateWithMLX, shouldUseMLX } from '@/lib/mlx-inference';
-import { generateQuestionWithSonnet, isAnthropicConfigured } from '@/lib/anthropic';
+import { generateQuestionWithSonnet } from '@/lib/anthropic';
+import { getApiKeyFromRequest } from '@/lib/env-loader';
 import {
   buildQuestionPrompt,
   buildBatchQuestionPrompt,
@@ -108,11 +109,14 @@ export async function POST(request: NextRequest) {
 
     const useSonnet = parsed.model === 'claude-sonnet';
 
-    // Check if Sonnet is requested but not configured
-    if (useSonnet && !isAnthropicConfigured()) {
+    // Get API key from request header or env
+    const apiKey = getApiKeyFromRequest(request);
+
+    // Check if Sonnet is requested but no API key available
+    if (useSonnet && !apiKey) {
       return NextResponse.json(
-        { error: 'Claude Sonnet requested but ANTHROPIC_API_KEY not configured in .env.local' },
-        { status: 500 }
+        { error: 'Clé API Anthropic requise. Ajoutez-la dans Paramètres.' },
+        { status: 401 }
       );
     }
 
@@ -147,7 +151,8 @@ export async function POST(request: NextRequest) {
           const questionData = await generateQuestionWithSonnet(
             task.passageText,
             task.questionType,
-            task.difficulty
+            task.difficulty,
+            apiKey!
           );
           const validated = QuestionSchema.parse(questionData);
           return {

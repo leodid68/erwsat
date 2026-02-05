@@ -2,18 +2,29 @@ import Anthropic from '@anthropic-ai/sdk';
 import { QuestionType, Question, AnswerId } from '@/types/question';
 import { getAnthropicApiKey, isAnthropicConfigured as checkConfigured } from './env-loader';
 
-// Create client lazily to allow env loading
-let anthropicClient: Anthropic | null = null;
+// Cache clients by API key to reuse connections
+const clientCache = new Map<string, Anthropic>();
 
-function getAnthropicClient(): Anthropic {
-  if (!anthropicClient) {
-    anthropicClient = new Anthropic({
-      apiKey: getAnthropicApiKey(),
-      baseURL: 'https://api.anthropic.com', // Force Anthropic URL (ignore ANTHROPIC_BASE_URL env var)
-      timeout: 120000, // 2 minute timeout
-    });
+function getAnthropicClient(apiKey?: string): Anthropic {
+  const key = apiKey || getAnthropicApiKey();
+  if (!key) {
+    throw new Error('No Anthropic API key provided');
   }
-  return anthropicClient;
+
+  // Return cached client if available
+  if (clientCache.has(key)) {
+    return clientCache.get(key)!;
+  }
+
+  // Create new client
+  const client = new Anthropic({
+    apiKey: key,
+    baseURL: 'https://api.anthropic.com',
+    timeout: 120000,
+  });
+
+  clientCache.set(key, client);
+  return client;
 }
 
 const MODEL = 'claude-sonnet-4-20250514';
@@ -24,11 +35,12 @@ const MODEL = 'claude-sonnet-4-20250514';
  */
 export async function selectPassagesWithSonnet(
   fullText: string,
-  maxPassages: number = 5
+  maxPassages: number = 5,
+  apiKey?: string
 ): Promise<Array<{ text: string; reason: string }>> {
   const textToAnalyze = fullText.slice(0, 15000);
 
-  const response = await getAnthropicClient().messages.create({
+  const response = await getAnthropicClient(apiKey).messages.create({
     model: MODEL,
     max_tokens: 4000,
     system: `You are an expert SAT reading comprehension passage selector. You analyze texts and extract the best passages for standardized test preparation. Always respond with valid JSON only.`,
@@ -92,14 +104,15 @@ Return a JSON array only, no markdown or explanation:
 export async function generateQuestionWithSonnet(
   passage: string,
   questionType: QuestionType,
-  difficulty: 'easy' | 'medium' | 'hard'
+  difficulty: 'easy' | 'medium' | 'hard',
+  apiKey?: string
 ): Promise<Omit<Question, 'id' | 'passageSource' | 'createdAt'>> {
   // Import the same prompts used by fine-tuned model
   const { buildQuestionPrompt } = await import('./prompts/sat-question-prompts');
 
   const prompt = buildQuestionPrompt(passage, questionType, difficulty);
 
-  const response = await getAnthropicClient().messages.create({
+  const response = await getAnthropicClient(apiKey).messages.create({
     model: MODEL,
     max_tokens: 2000,
     messages: [
@@ -164,7 +177,8 @@ const TEXT_SOURCES = {
 
 export async function generatePlacementQuestionWithPassage(
   spec: PlacementQuestionSpec,
-  questionIndex: number
+  questionIndex: number,
+  apiKey?: string
 ): Promise<GeneratedPlacementQuestion> {
   // Select appropriate text source based on domain
   let sourceCandidates: string[];
@@ -256,7 +270,7 @@ OUTPUT FORMAT - Return ONLY valid JSON:
   "skill": "${spec.skill}"
 }`;
 
-  const response = await getAnthropicClient().messages.create({
+  const response = await getAnthropicClient(apiKey).messages.create({
     model: MODEL,
     max_tokens: 2500,
     temperature: 0.8, // Higher temperature for more variety

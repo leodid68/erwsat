@@ -54,3 +54,30 @@ export function getGuardianApiKey(): string | undefined {
 export function isAnthropicConfigured(): boolean {
   return !!getAnthropicApiKey();
 }
+
+/**
+ * Get API key from request headers (client-provided) or fall back to env
+ * Priority: 1. Request header, 2. Environment variable
+ */
+export function getApiKeyFromRequest(request: Request): string | null {
+  // First check request header (user's personal key)
+  const headerKey = request.headers.get('X-Anthropic-Key');
+  if (headerKey && headerKey.startsWith('sk-ant-')) {
+    return headerKey;
+  }
+
+  // Fall back to environment variable
+  const envKey = getAnthropicApiKey();
+  if (envKey) {
+    return envKey;
+  }
+
+  return null;
+}
+
+/**
+ * Check if API is available (either from request or env)
+ */
+export function isApiAvailable(request: Request): boolean {
+  return !!getApiKeyFromRequest(request);
+}

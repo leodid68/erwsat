@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuizStore } from '@/stores/quiz-store';
+import { useSettingsStore } from '@/stores/settings-store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,6 +38,7 @@ import {
   BookOpen,
   Play,
   Download,
+  Settings,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -78,6 +80,10 @@ export default function GeneratePage() {
   const router = useRouter();
   const { documents, addQuiz, updatePassageSelection, removeDocument } = useQuizStore();
 
+  // Get API key from settings store
+  const anthropicApiKey = useSettingsStore((state) => state.anthropicApiKey);
+  const isApiConfigured = useSettingsStore((state) => state.isAnthropicConfigured);
+
   const [selectedDocId, setSelectedDocId] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState<QuestionType[]>([
     'central-ideas',
@@ -94,20 +100,12 @@ export default function GeneratePage() {
   const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
-  const [anthropicConfigured, setAnthropicConfigured] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (documents.length > 0 && !selectedDocId) {
       setSelectedDocId(documents[0].id);
     }
   }, [documents, selectedDocId]);
-
-  useEffect(() => {
-    fetch('/api/anthropic/status')
-      .then(res => res.json())
-      .then(data => setAnthropicConfigured(data.configured))
-      .catch(() => setAnthropicConfigured(false));
-  }, []);
 
   const selectedDocument = documents.find((d) => d.id === selectedDocId);
   const selectedPassages = selectedDocument?.passages.filter((p) => p.selected) || [];
@@ -146,9 +144,15 @@ export default function GeneratePage() {
     setGeneratedQuestions([]);
 
     try {
+      // Build headers with optional API key
+      const headers: HeadersInit = { 'Content-Type': 'application/json' };
+      if (model === 'claude-sonnet' && anthropicApiKey) {
+        headers['X-Anthropic-Key'] = anthropicApiKey;
+      }
+
       const response = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           passages: selectedPassages,
           questionTypes: selectedTypes,
@@ -525,7 +529,7 @@ export default function GeneratePage() {
                   {MODEL_OPTIONS.map((option) => {
                     const Icon = option.icon;
                     const isSelected = model === option.value;
-                    const isDisabled = option.value === 'claude-sonnet' && anthropicConfigured === false;
+                    const isDisabled = option.value === 'claude-sonnet' && !isApiConfigured();
                     return (
                       <button
                         key={option.value}
@@ -549,9 +553,14 @@ export default function GeneratePage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className={cn('font-medium text-sm', isSelected ? 'text-accent' : 'text-foreground')}>{option.label}</p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {isDisabled ? 'API non configurée' : option.description}
-                          </p>
+                          {isDisabled ? (
+                            <Link href="/settings" className="text-xs text-amber-500 hover:text-amber-400 flex items-center gap-1">
+                              <Settings className="w-3 h-3" />
+                              Configurer clé API
+                            </Link>
+                          ) : (
+                            <p className="text-xs text-muted-foreground truncate">{option.description}</p>
+                          )}
                         </div>
                         {isSelected && <Check className="w-4 h-4 text-accent shrink-0" />}
                       </button>

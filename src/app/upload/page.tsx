@@ -11,6 +11,7 @@ import { LibraryImport } from '@/components/upload/LibraryImport';
 import { ChunkSelector } from '@/components/upload/ChunkSelector';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useQuizStore } from '@/stores/quiz-store';
+import { useSettingsStore } from '@/stores/settings-store';
 import { Passage, ExtractedDocument } from '@/types/quiz';
 import { GutenbergBook, GuardianArticle, TextChunk } from '@/lib/text-sources';
 import { TextCategory } from '@/lib/text-library';
@@ -28,6 +29,7 @@ function UploadPageContent() {
   const searchParams = useSearchParams();
   const addDocument = useQuizStore((state) => state.addDocument);
   const addPassagesToLibrary = useQuizStore((state) => state.addPassagesToLibrary);
+  const anthropicApiKey = useSettingsStore((state) => state.anthropicApiKey);
 
   const [tab, setTab] = useState<Tab>('file');
   const [step, setStep] = useState<Step>('upload');
@@ -241,9 +243,15 @@ function UploadPageContent() {
       const endpoint = useSmartSelection ? '/api/library/fetch-smart' : '/api/library/fetch';
 
       for (const item of items) {
+        // Build headers with optional API key for smart selection
+        const headers: HeadersInit = { 'Content-Type': 'application/json' };
+        if (useSmartSelection && anthropicApiKey) {
+          headers['X-Anthropic-Key'] = anthropicApiKey;
+        }
+
         const response = await fetch(endpoint, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({
             provider: item.provider,
             providerId: item.providerId,

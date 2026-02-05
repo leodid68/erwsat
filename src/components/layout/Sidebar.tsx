@@ -19,6 +19,7 @@ import {
   Database,
   FileCheck,
   PieChart,
+  Settings,
 } from 'lucide-react';
 
 interface NavItem {
@@ -119,6 +120,13 @@ const navigation: NavItem[] = [
     href: '/history',
     icon: History,
     gradient: 'from-slate-500 to-zinc-400',
+    glowColor: 'rgba(100, 116, 139, 0.5)',
+  },
+  {
+    name: 'Paramètres',
+    href: '/settings',
+    icon: Settings,
+    gradient: 'from-gray-500 to-slate-400',
     glowColor: 'rgba(100, 116, 139, 0.5)',
   },
 ];

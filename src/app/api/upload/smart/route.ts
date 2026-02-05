@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { selectPassagesWithSonnet, isAnthropicConfigured } from '@/lib/anthropic';
+import { selectPassagesWithSonnet } from '@/lib/anthropic';
+import { getApiKeyFromRequest } from '@/lib/env-loader';
 
 /**
  * Smart upload endpoint that uses Claude Sonnet to intelligently select
@@ -7,6 +8,15 @@ import { selectPassagesWithSonnet, isAnthropicConfigured } from '@/lib/anthropic
  */
 export async function POST(request: NextRequest) {
   try {
+    // Get API key from request header or env
+    const apiKey = getApiKeyFromRequest(request);
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: 'Clé API Anthropic requise. Ajoutez-la dans Paramètres.' },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { extractedText, filename, maxPassages = 5 } = body;
 
@@ -14,13 +24,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'No text provided' },
         { status: 400 }
-      );
-    }
-
-    if (!isAnthropicConfigured()) {
-      return NextResponse.json(
-        { error: 'Anthropic API key not configured' },
-        { status: 500 }
       );
     }
 
@@ -32,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use Sonnet to intelligently select best passages
-    const selectedPassages = await selectPassagesWithSonnet(extractedText, maxPassages);
+    const selectedPassages = await selectPassagesWithSonnet(extractedText, maxPassages, apiKey);
 
     // Convert to passages format compatible with the app
     const passages = selectedPassages.map((passage, index) => ({
@@ -40,7 +43,7 @@ export async function POST(request: NextRequest) {
       text: passage.text,
       wordCount: passage.text.split(/\s+/).filter((w: string) => w.length > 0).length,
       selected: true,
-      reason: passage.reason, // Keep the AI's explanation
+      reason: passage.reason,
     }));
 
     return NextResponse.json({
