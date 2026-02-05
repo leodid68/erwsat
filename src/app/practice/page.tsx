@@ -20,11 +20,14 @@ import {
   BookOpen,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   CheckCircle2,
   XCircle,
   RotateCcw,
   Loader2,
   Zap,
+  Check,
+  Minus,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -45,11 +48,50 @@ interface OfficialQuestion {
   skill: string;
 }
 
-const OFFICIAL_DOMAINS = [
-  { id: 'Craft and Structure', label: 'Craft & Structure', color: 'blue' },
-  { id: 'Information and Ideas', label: 'Info & Ideas', color: 'emerald' },
-  { id: 'Standard English Conventions', label: 'Conventions', color: 'amber' },
-  { id: 'Expression of Ideas', label: 'Expression', color: 'purple' },
+// SAT ERW Domain Structure with Skills
+const SAT_DOMAINS = [
+  {
+    id: 'Information and Ideas',
+    label: 'Information and Ideas',
+    color: 'emerald',
+    icon: '📖',
+    skills: [
+      { id: 'Central Ideas and Details', label: 'Central Ideas and Details' },
+      { id: 'Inferences', label: 'Inferences' },
+      { id: 'Command of Evidence', label: 'Command of Evidence' },
+    ],
+  },
+  {
+    id: 'Craft and Structure',
+    label: 'Craft and Structure',
+    color: 'blue',
+    icon: '🔧',
+    skills: [
+      { id: 'Words in Context', label: 'Words in Context' },
+      { id: 'Text Structure and Purpose', label: 'Text Structure and Purpose' },
+      { id: 'Cross-Text Connections', label: 'Cross-Text Connections' },
+    ],
+  },
+  {
+    id: 'Expression of Ideas',
+    label: 'Expression of Ideas',
+    color: 'purple',
+    icon: '✍️',
+    skills: [
+      { id: 'Rhetorical Synthesis', label: 'Rhetorical Synthesis' },
+      { id: 'Transitions', label: 'Transitions' },
+    ],
+  },
+  {
+    id: 'Standard English Conventions',
+    label: 'Standard English Conventions',
+    color: 'amber',
+    icon: '📝',
+    skills: [
+      { id: 'Boundaries', label: 'Boundaries' },
+      { id: 'Form, Structure, and Sense', label: 'Form, Structure, and Sense' },
+    ],
+  },
 ];
 
 const DIFFICULTIES = [
@@ -73,6 +115,8 @@ export default function PracticePage() {
 
   // Official mode state
   const [officialDomains, setOfficialDomains] = useState<string[]>([]);
+  const [officialSkills, setOfficialSkills] = useState<string[]>([]);
+  const [expandedDomains, setExpandedDomains] = useState<string[]>([]);
   const [officialDifficulty, setOfficialDifficulty] = useState('mixed');
   const [officialStats, setOfficialStats] = useState<{ totalQuestions: number } | null>(null);
 
@@ -136,12 +180,53 @@ export default function PracticePage() {
     );
   };
 
-  const toggleOfficialDomain = (domain: string) => {
-    setOfficialDomains(prev =>
-      prev.includes(domain)
-        ? prev.filter(d => d !== domain)
-        : [...prev, domain]
+  const toggleExpandDomain = (domainId: string) => {
+    setExpandedDomains(prev =>
+      prev.includes(domainId)
+        ? prev.filter(d => d !== domainId)
+        : [...prev, domainId]
     );
+  };
+
+  const toggleOfficialDomain = (domainId: string) => {
+    const domain = SAT_DOMAINS.find(d => d.id === domainId);
+    if (!domain) return;
+
+    const domainSkillIds = domain.skills.map(s => s.id);
+    const allSkillsSelected = domainSkillIds.every(s => officialSkills.includes(s));
+
+    if (allSkillsSelected) {
+      // Deselect all skills in this domain
+      setOfficialSkills(prev => prev.filter(s => !domainSkillIds.includes(s)));
+      setOfficialDomains(prev => prev.filter(d => d !== domainId));
+    } else {
+      // Select all skills in this domain
+      setOfficialSkills(prev => [...new Set([...prev, ...domainSkillIds])]);
+      setOfficialDomains(prev => [...new Set([...prev, domainId])]);
+    }
+  };
+
+  const toggleOfficialSkill = (skillId: string, domainId: string) => {
+    const domain = SAT_DOMAINS.find(d => d.id === domainId);
+    if (!domain) return;
+
+    const domainSkillIds = domain.skills.map(s => s.id);
+
+    setOfficialSkills(prev => {
+      const newSkills = prev.includes(skillId)
+        ? prev.filter(s => s !== skillId)
+        : [...prev, skillId];
+
+      // Update domain selection based on skills
+      const selectedSkillsInDomain = newSkills.filter(s => domainSkillIds.includes(s));
+      if (selectedSkillsInDomain.length === 0) {
+        setOfficialDomains(d => d.filter(dom => dom !== domainId));
+      } else {
+        setOfficialDomains(d => [...new Set([...d, domainId])]);
+      }
+
+      return newSkills;
+    });
   };
 
   // Start custom practice
@@ -176,6 +261,7 @@ export default function PracticePage() {
         body: JSON.stringify({
           count: questionCount,
           domains: officialDomains.length > 0 ? officialDomains : undefined,
+          skills: officialSkills.length > 0 ? officialSkills : undefined,
           difficulty: officialDifficulty === 'mixed' ? undefined : officialDifficulty,
         }),
       });
@@ -597,32 +683,163 @@ export default function PracticePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Target className="w-5 h-5 text-primary" />
-                Domaines (optionnel)
+                Sections et compétences SAT
               </CardTitle>
-              <CardDescription>Laissez vide pour tous les domaines</CardDescription>
+              <CardDescription>
+                Sélectionnez des sections entières ou des compétences spécifiques. Laissez vide pour tout inclure.
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {OFFICIAL_DOMAINS.map(domain => (
-                  <button
-                    key={domain.id}
-                    onClick={() => toggleOfficialDomain(domain.id)}
-                    className={cn(
-                      'p-3 rounded-xl border text-center transition-all',
-                      officialDomains.includes(domain.id)
-                        ? 'border-primary bg-primary/10'
-                        : 'border-border hover:border-primary/30'
-                    )}
-                  >
-                    <p className={cn(
-                      'font-medium text-sm',
-                      officialDomains.includes(domain.id) ? 'text-foreground' : 'text-muted-foreground'
+            <CardContent className="space-y-3">
+              {SAT_DOMAINS.map(domain => {
+                const domainSkillIds = domain.skills.map(s => s.id);
+                const selectedSkillsCount = domainSkillIds.filter(s => officialSkills.includes(s)).length;
+                const allSelected = selectedSkillsCount === domainSkillIds.length;
+                const someSelected = selectedSkillsCount > 0 && !allSelected;
+                const isExpanded = expandedDomains.includes(domain.id);
+
+                const colorClasses = {
+                  emerald: {
+                    bg: 'bg-emerald-500/10',
+                    border: 'border-emerald-500/30',
+                    text: 'text-emerald-500',
+                    hover: 'hover:border-emerald-500/50',
+                  },
+                  blue: {
+                    bg: 'bg-blue-500/10',
+                    border: 'border-blue-500/30',
+                    text: 'text-blue-500',
+                    hover: 'hover:border-blue-500/50',
+                  },
+                  purple: {
+                    bg: 'bg-purple-500/10',
+                    border: 'border-purple-500/30',
+                    text: 'text-purple-500',
+                    hover: 'hover:border-purple-500/50',
+                  },
+                  amber: {
+                    bg: 'bg-amber-500/10',
+                    border: 'border-amber-500/30',
+                    text: 'text-amber-500',
+                    hover: 'hover:border-amber-500/50',
+                  },
+                }[domain.color] || { bg: 'bg-muted', border: 'border-border', text: 'text-foreground', hover: '' };
+
+                return (
+                  <div key={domain.id} className="rounded-xl border border-border overflow-hidden">
+                    {/* Domain Header */}
+                    <div className={cn(
+                      'flex items-center gap-3 p-4 transition-all cursor-pointer',
+                      (allSelected || someSelected) ? colorClasses.bg : 'bg-muted/30',
+                      (allSelected || someSelected) ? colorClasses.border : '',
+                      colorClasses.hover
                     )}>
-                      {domain.label}
-                    </p>
+                      {/* Checkbox */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleOfficialDomain(domain.id);
+                        }}
+                        className={cn(
+                          'w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all shrink-0',
+                          allSelected
+                            ? `${colorClasses.border} ${colorClasses.bg} ${colorClasses.text}`
+                            : someSelected
+                            ? `${colorClasses.border} ${colorClasses.bg}`
+                            : 'border-muted-foreground/30 hover:border-muted-foreground/50'
+                        )}
+                      >
+                        {allSelected && <Check className="w-4 h-4" />}
+                        {someSelected && <Minus className="w-4 h-4" />}
+                      </button>
+
+                      {/* Domain Info */}
+                      <div
+                        className="flex-1 flex items-center gap-3"
+                        onClick={() => toggleExpandDomain(domain.id)}
+                      >
+                        <span className="text-xl">{domain.icon}</span>
+                        <div className="flex-1">
+                          <p className={cn(
+                            'font-semibold',
+                            (allSelected || someSelected) ? colorClasses.text : 'text-foreground'
+                          )}>
+                            {domain.label}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {domain.skills.length} compétences
+                            {selectedSkillsCount > 0 && ` • ${selectedSkillsCount} sélectionnée${selectedSkillsCount > 1 ? 's' : ''}`}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Expand Button */}
+                      <button
+                        onClick={() => toggleExpandDomain(domain.id)}
+                        className="p-1 rounded-lg hover:bg-white/10 transition-colors"
+                      >
+                        <ChevronDown className={cn(
+                          'w-5 h-5 text-muted-foreground transition-transform',
+                          isExpanded && 'rotate-180'
+                        )} />
+                      </button>
+                    </div>
+
+                    {/* Skills List (Expandable) */}
+                    {isExpanded && (
+                      <div className="border-t border-border bg-background/50 p-3 space-y-2">
+                        {domain.skills.map(skill => {
+                          const isSelected = officialSkills.includes(skill.id);
+                          return (
+                            <button
+                              key={skill.id}
+                              onClick={() => toggleOfficialSkill(skill.id, domain.id)}
+                              className={cn(
+                                'w-full flex items-center gap-3 p-3 rounded-lg border transition-all text-left',
+                                isSelected
+                                  ? `${colorClasses.bg} ${colorClasses.border}`
+                                  : 'border-transparent hover:bg-muted/50'
+                              )}
+                            >
+                              <div className={cn(
+                                'w-5 h-5 rounded border-2 flex items-center justify-center shrink-0',
+                                isSelected
+                                  ? `${colorClasses.border} ${colorClasses.text}`
+                                  : 'border-muted-foreground/30'
+                              )}>
+                                {isSelected && <Check className="w-3 h-3" />}
+                              </div>
+                              <span className={cn(
+                                'text-sm',
+                                isSelected ? 'text-foreground font-medium' : 'text-muted-foreground'
+                              )}>
+                                {skill.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Selection Summary */}
+              {officialSkills.length > 0 && (
+                <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20">
+                  <span className="text-sm text-primary">
+                    {officialSkills.length} compétence{officialSkills.length > 1 ? 's' : ''} sélectionnée{officialSkills.length > 1 ? 's' : ''}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setOfficialSkills([]);
+                      setOfficialDomains([]);
+                    }}
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Tout désélectionner
                   </button>
-                ))}
-              </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
