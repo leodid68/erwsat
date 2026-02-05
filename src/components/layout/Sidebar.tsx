@@ -18,6 +18,7 @@ import {
   Trophy,
   Database,
   FileCheck,
+  PieChart,
 } from 'lucide-react';
 
 interface NavItem {
@@ -84,6 +85,13 @@ const navigation: NavItem[] = [
     icon: BarChart3,
     gradient: 'from-emerald-500 to-green-400',
     glowColor: 'rgba(16, 185, 129, 0.5)',
+  },
+  {
+    name: 'Analyse',
+    href: '/analytics',
+    icon: PieChart,
+    gradient: 'from-violet-500 to-purple-400',
+    glowColor: 'rgba(139, 92, 246, 0.5)',
   },
   {
     name: 'Entraînement',
