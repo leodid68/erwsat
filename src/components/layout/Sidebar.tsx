@@ -17,6 +17,7 @@ import {
   Brain,
   Trophy,
   Database,
+  FileCheck,
 } from 'lucide-react';
 
 interface NavItem {
@@ -69,6 +70,13 @@ const navigation: NavItem[] = [
     icon: GraduationCap,
     gradient: 'from-indigo-500 to-purple-400',
     glowColor: 'rgba(99, 102, 241, 0.5)',
+  },
+  {
+    name: 'Test Placement',
+    href: '/placement',
+    icon: FileCheck,
+    gradient: 'from-cyan-500 to-blue-500',
+    glowColor: 'rgba(6, 182, 212, 0.5)',
   },
   {
     name: 'Progrès',
