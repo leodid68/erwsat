@@ -137,8 +137,8 @@ export function Sidebar() {
 
   return (
     <aside className="fixed inset-y-0 left-0 z-50 w-72 glass-sidebar flex flex-col">
-      {/* Logo and Auth */}
-      <div className="h-20 flex items-center justify-between px-6 border-b border-border">
+      {/* Logo */}
+      <div className="h-20 flex items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center gap-4 group">
           <div className="relative">
             {/* Glow effect */}
@@ -152,7 +152,6 @@ export function Sidebar() {
             <p className="text-xs text-muted-foreground">Lecture & Écriture</p>
           </div>
         </Link>
-        <AuthButton />
       </div>
 
       {/* Navigation */}
@@ -205,8 +204,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Footer - Pro Tip Card */}
-      <div className="p-4">
+      {/* Footer */}
+      <div className="p-4 space-y-3">
+        {/* Auth Button */}
+        <div className="flex justify-center">
+          <AuthButton />
+        </div>
+
+        {/* Pro Tip Card */}
         <div className="glass-cosmic p-4">
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
