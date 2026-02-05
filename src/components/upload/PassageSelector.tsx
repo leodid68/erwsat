@@ -15,11 +15,17 @@ import {
   Square,
   ChevronDown,
   ChevronUp,
+  Sparkles,
 } from 'lucide-react';
 
+// Extended passage type with AI reason
+interface PassageWithReason extends Passage {
+  reason?: string;
+}
+
 interface PassageSelectorProps {
-  passages: Passage[];
-  onPassagesChange: (passages: Passage[]) => void;
+  passages: PassageWithReason[];
+  onPassagesChange: (passages: PassageWithReason[]) => void;
   onContinue: () => void;
 }
 
@@ -64,6 +70,12 @@ export function PassageSelector({
           <Badge variant="outline" className="text-sm">
             ~{totalWords} mots
           </Badge>
+          {passages.some(p => p.reason) && (
+            <Badge className="text-sm bg-violet-500/20 text-violet-400 border-violet-500/30">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Sélection IA
+            </Badge>
+          )}
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={selectAll}>
@@ -109,9 +121,17 @@ export function PassageSelector({
                       )}
                     </button>
                     <div>
-                      <CardTitle className="text-sm font-medium">
-                        Passage {index + 1}
-                      </CardTitle>
+                      <div className="flex items-center gap-2">
+                        <CardTitle className="text-sm font-medium">
+                          Passage {index + 1}
+                        </CardTitle>
+                        {passage.reason && (
+                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/10 text-violet-500 border-violet-500/20">
+                            <Sparkles className="w-2.5 h-2.5 mr-1" />
+                            IA
+                          </Badge>
+                        )}
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         {passage.wordCount} mots
                       </p>
@@ -134,7 +154,15 @@ export function PassageSelector({
               {expandedId === passage.id && (
                 <>
                   <Separator />
-                  <CardContent className="py-3 px-4">
+                  <CardContent className="py-3 px-4 space-y-3">
+                    {passage.reason && (
+                      <div className="flex items-start gap-2 p-2 rounded-lg bg-violet-500/10 border border-violet-500/20">
+                        <Sparkles className="w-4 h-4 text-violet-500 mt-0.5 shrink-0" />
+                        <p className="text-xs text-violet-400 italic">
+                          {passage.reason}
+                        </p>
+                      </div>
+                    )}
                     <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
                       {passage.text}
                     </p>
