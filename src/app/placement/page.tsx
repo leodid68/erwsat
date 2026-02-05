@@ -25,6 +25,7 @@ import {
   Loader2,
   Sparkles,
   FileText,
+  Award,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { AnswerId } from '@/types/question';
@@ -32,7 +33,7 @@ import { ExamTimer } from '@/components/quiz/ExamTimer';
 import { calculateEstimatedScore } from '@/types/placement-test';
 
 type TestPhase = 'intro' | 'generating' | 'module1' | 'transition' | 'module2' | 'results';
-type TestMode = 'real' | 'synthetic' | 'static';
+type TestMode = 'official' | 'real' | 'synthetic' | 'static';
 
 interface GeneratedQuestion {
   id: string;
@@ -70,7 +71,7 @@ interface ModuleResult {
 export default function PlacementTestPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<TestPhase>('intro');
-  const [testMode, setTestMode] = useState<TestMode>('real');
+  const [testMode, setTestMode] = useState<TestMode>('official');
   const [currentModule, setCurrentModule] = useState<GeneratedModule | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerId>>({});
@@ -91,19 +92,22 @@ export default function PlacementTestPage() {
   const [module2Result, setModule2Result] = useState<ModuleResult | null>(null);
 
   // Generate test via API
-  const generateTest = async (mode: 'real' | 'synthetic') => {
+  const generateTest = async (mode: 'official' | 'real' | 'synthetic') => {
     setPhase('generating');
     setGenerationError(null);
     setGenerationProgress(0);
 
     try {
-      // Simulate progress during API call
+      // Simulate progress during API call (faster for official since no generation needed)
+      const progressSpeed = mode === 'official' ? 20 : 2;
       const progressInterval = setInterval(() => {
-        setGenerationProgress(prev => Math.min(prev + 2, 90));
-      }, 1000);
+        setGenerationProgress(prev => Math.min(prev + progressSpeed, 90));
+      }, mode === 'official' ? 100 : 1000);
 
       // Use different endpoint based on mode
-      const endpoint = mode === 'real'
+      const endpoint = mode === 'official'
+        ? '/api/placement/official'
+        : mode === 'real'
         ? '/api/placement/generate-real'
         : '/api/placement/generate';
 
@@ -278,36 +282,57 @@ export default function PlacementTestPage() {
 
   // Generating Phase
   if (phase === 'generating') {
+    const getIcon = () => {
+      if (testMode === 'official') return <Award className="w-10 h-10 text-white animate-pulse" />;
+      if (testMode === 'real') return <BookOpen className="w-10 h-10 text-white animate-pulse" />;
+      return <Sparkles className="w-10 h-10 text-white animate-pulse" />;
+    };
+
+    const getGradient = () => {
+      if (testMode === 'official') return 'from-violet-500 to-purple-600';
+      if (testMode === 'real') return 'from-emerald-500 to-green-500';
+      return 'from-amber-500 to-orange-500';
+    };
+
+    const getTitle = () => {
+      if (testMode === 'official') return 'Chargement des questions officielles...';
+      if (testMode === 'real') return 'Extraction des textes réels...';
+      return 'Génération du test en cours...';
+    };
+
+    const getDescription = () => {
+      if (testMode === 'official') return 'Sélection aléatoire parmi 2193 questions SAT authentiques';
+      if (testMode === 'real') return 'Claude extrait 54 passages de Dickens, Austen, Wikipedia, Guardian...';
+      return 'Claude génère 54 textes uniques et questions personnalisées';
+    };
+
+    const getProgressText = () => {
+      if (generationProgress >= 100) return 'Terminé ! Démarrage du test...';
+      if (testMode === 'official') return `${Math.round(generationProgress)}% - Préparation du test...`;
+      if (testMode === 'real') return `${Math.round(generationProgress)}% - Récupération et analyse des sources...`;
+      return `${Math.round(generationProgress)}% - Création des passages et questions...`;
+    };
+
     return (
       <div className="max-w-2xl mx-auto space-y-8">
         <Card className="glass-cosmic">
           <CardContent className="p-8 text-center space-y-6">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-              {testMode === 'real' ? (
-                <BookOpen className="w-10 h-10 text-white animate-pulse" />
-              ) : (
-                <Sparkles className="w-10 h-10 text-white animate-pulse" />
-              )}
+            <div className={cn('w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br flex items-center justify-center', getGradient())}>
+              {getIcon()}
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground mb-2">
-                {testMode === 'real' ? 'Extraction des textes réels...' : 'Génération du test en cours...'}
+                {getTitle()}
               </h2>
               <p className="text-muted-foreground">
-                {testMode === 'real'
-                  ? 'Claude extrait 54 passages de Dickens, Austen, Wikipedia, Guardian...'
-                  : 'Claude génère 54 textes uniques et questions personnalisées'}
+                {getDescription()}
               </p>
             </div>
 
             <div className="space-y-2">
               <Progress value={generationProgress} className="h-3" />
               <p className="text-sm text-muted-foreground">
-                {generationProgress < 100
-                  ? testMode === 'real'
-                    ? `${Math.round(generationProgress)}% - Récupération et analyse des sources...`
-                    : `${Math.round(generationProgress)}% - Création des passages et questions...`
-                  : 'Terminé ! Démarrage du test...'}
+                {getProgressText()}
               </p>
             </div>
 
@@ -351,12 +376,42 @@ export default function PlacementTestPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-primary" />
-              Source des textes
+              Source des questions
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {/* Real texts - RECOMMENDED */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Official SAT - RECOMMENDED */}
+              <button
+                onClick={() => setTestMode('official')}
+                className={cn(
+                  'p-4 rounded-xl border text-left transition-all',
+                  testMode === 'official'
+                    ? 'border-violet-500 bg-violet-500/10 ring-2 ring-violet-500/20'
+                    : 'border-border hover:border-violet-500/30'
+                )}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center',
+                    testMode === 'official'
+                      ? 'bg-gradient-to-br from-violet-500 to-purple-600'
+                      : 'bg-muted'
+                  )}>
+                    <Award className={cn('w-5 h-5', testMode === 'official' ? 'text-white' : 'text-muted-foreground')} />
+                  </div>
+                  <div>
+                    <p className="font-medium">Questions SAT officielles</p>
+                    <p className="text-xs text-violet-500">Recommandé • 2193 questions</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Vraies questions du College Board avec passages,
+                  réponses et explications officielles.
+                </p>
+              </button>
+
+              {/* Real texts */}
               <button
                 onClick={() => setTestMode('real')}
                 className={cn(
@@ -376,13 +431,13 @@ export default function PlacementTestPage() {
                     <BookOpen className={cn('w-5 h-5', testMode === 'real' ? 'text-white' : 'text-muted-foreground')} />
                   </div>
                   <div>
-                    <p className="font-medium">Textes réels</p>
-                    <p className="text-xs text-emerald-500">Recommandé</p>
+                    <p className="font-medium">Textes réels + IA</p>
+                    <p className="text-xs text-muted-foreground">Génération ~3-5 min</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Vrais extraits de Dickens, Austen, Wikipedia, Guardian.
-                  Claude découpe intelligemment et crée les questions.
+                  Vrais extraits (Dickens, Wikipedia...) avec
+                  questions générées par Claude.
                 </p>
               </button>
 
@@ -406,13 +461,13 @@ export default function PlacementTestPage() {
                     <Sparkles className={cn('w-5 h-5', testMode === 'synthetic' ? 'text-white' : 'text-muted-foreground')} />
                   </div>
                   <div>
-                    <p className="font-medium">Textes IA</p>
-                    <p className="text-xs text-muted-foreground">Synthétiques</p>
+                    <p className="font-medium">100% IA</p>
+                    <p className="text-xs text-muted-foreground">Génération ~2-3 min</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  54 textes générés par Claude dans le style SAT.
-                  Contenu original mais non authentique.
+                  Textes et questions entièrement générés par Claude.
+                  Style SAT mais contenu synthétique.
                 </p>
               </button>
 
@@ -441,8 +496,8 @@ export default function PlacementTestPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  54 questions prêtes à l'emploi.
-                  Démarrage immédiat sans attente.
+                  54 questions fixes prêtes à l'emploi.
+                  Toujours le même test.
                 </p>
               </button>
             </div>
@@ -511,16 +566,23 @@ export default function PlacementTestPage() {
             onClick={
               testMode === 'static'
                 ? () => router.push('/placement/static')
-                : () => generateTest(testMode as 'real' | 'synthetic')
+                : () => generateTest(testMode as 'official' | 'real' | 'synthetic')
             }
             className={cn(
               'text-lg px-8 py-6',
-              testMode === 'real'
+              testMode === 'official'
+                ? 'bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700'
+                : testMode === 'real'
                 ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600'
                 : 'btn-cosmic'
             )}
           >
-            {testMode === 'real' ? (
+            {testMode === 'official' ? (
+              <>
+                <Award className="w-5 h-5 mr-2" />
+                Commencer (questions officielles)
+              </>
+            ) : testMode === 'real' ? (
               <>
                 <BookOpen className="w-5 h-5 mr-2" />
                 Extraire et commencer
@@ -538,7 +600,9 @@ export default function PlacementTestPage() {
             )}
           </Button>
           <p className="text-xs text-muted-foreground">
-            {testMode === 'real'
+            {testMode === 'official'
+              ? 'Chargement instantané • Test: 64 minutes'
+              : testMode === 'real'
               ? 'Extraction: ~3-5 minutes • Test: 64 minutes'
               : testMode === 'synthetic'
               ? 'Génération: ~2-3 minutes • Test: 64 minutes'
