@@ -32,7 +32,13 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
+  ExternalLink,
+  BookOpen,
+  Video,
+  FileText,
+  GraduationCap,
 } from 'lucide-react';
+import { SKILL_RESOURCES, LearningResource } from '@/lib/learning-resources';
 import { cn } from '@/lib/utils';
 import {
   LineChart,
@@ -612,6 +618,18 @@ export default function AnalyticsPage() {
                           ? Math.round((skillData.correct / skillData.total) * 100)
                           : 0;
 
+                        const skillResources = SKILL_RESOURCES[skill];
+                        const showResources = skillData?.total > 0 && skillAccuracy < 70 && skillResources;
+
+                        const getResourceIcon = (type: LearningResource['type']) => {
+                          switch (type) {
+                            case 'video': return <Video className="w-3 h-3" />;
+                            case 'practice': return <GraduationCap className="w-3 h-3" />;
+                            case 'guide': return <BookOpen className="w-3 h-3" />;
+                            default: return <FileText className="w-3 h-3" />;
+                          }
+                        };
+
                         return (
                           <div key={skill} className="space-y-2">
                             <div className="flex justify-between items-center">
@@ -660,6 +678,44 @@ export default function AnalyticsPage() {
                                   : '[&>div]:bg-red-500'
                               )}
                             />
+                            {/* Learning resources for weak skills */}
+                            {showResources && (
+                              <div className="mt-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                                <p className="text-xs font-medium text-blue-400 mb-2 flex items-center gap-1.5">
+                                  <BookOpen className="w-3.5 h-3.5" />
+                                  Ressources pour progresser
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  {skillResources.resources.slice(0, 4).map((resource, idx) => (
+                                    <a
+                                      key={idx}
+                                      href={resource.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className={cn(
+                                        'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors',
+                                        'bg-background border hover:bg-muted',
+                                        resource.language === 'fr'
+                                          ? 'border-blue-500/30 text-blue-400 hover:border-blue-500/50'
+                                          : 'border-emerald-500/30 text-emerald-400 hover:border-emerald-500/50'
+                                      )}
+                                    >
+                                      {getResourceIcon(resource.type)}
+                                      <span className="max-w-[120px] truncate">{resource.title}</span>
+                                      <Badge variant="outline" className="h-4 px-1 text-[10px] ml-1">
+                                        {resource.language.toUpperCase()}
+                                      </Badge>
+                                      <ExternalLink className="w-3 h-3 opacity-50" />
+                                    </a>
+                                  ))}
+                                </div>
+                                {skillResources.resources.length > 4 && (
+                                  <p className="text-[10px] text-muted-foreground mt-2">
+                                    +{skillResources.resources.length - 4} autres ressources disponibles
+                                  </p>
+                                )}
+                              </div>
+                            )}
                           </div>
                         );
                       })}
