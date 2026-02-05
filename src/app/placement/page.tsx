@@ -32,7 +32,7 @@ import { ExamTimer } from '@/components/quiz/ExamTimer';
 import { calculateEstimatedScore } from '@/types/placement-test';
 
 type TestPhase = 'intro' | 'generating' | 'module1' | 'transition' | 'module2' | 'results';
-type TestMode = 'dynamic' | 'static';
+type TestMode = 'real' | 'synthetic' | 'static';
 
 interface GeneratedQuestion {
   id: string;
@@ -70,7 +70,7 @@ interface ModuleResult {
 export default function PlacementTestPage() {
   const router = useRouter();
   const [phase, setPhase] = useState<TestPhase>('intro');
-  const [testMode, setTestMode] = useState<TestMode>('dynamic');
+  const [testMode, setTestMode] = useState<TestMode>('real');
   const [currentModule, setCurrentModule] = useState<GeneratedModule | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, AnswerId>>({});
@@ -81,6 +81,7 @@ export default function PlacementTestPage() {
   // Generated test data
   const [generatedModules, setGeneratedModules] = useState<GeneratedModule[]>([]);
   const [allPassages, setAllPassages] = useState<StoredPassage[]>([]);
+  const [sourcesUsed, setSourcesUsed] = useState<string[]>([]);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [testName, setTestName] = useState<string>('');
@@ -90,7 +91,7 @@ export default function PlacementTestPage() {
   const [module2Result, setModule2Result] = useState<ModuleResult | null>(null);
 
   // Generate test via API
-  const generateTest = async () => {
+  const generateTest = async (mode: 'real' | 'synthetic') => {
     setPhase('generating');
     setGenerationError(null);
     setGenerationProgress(0);
@@ -101,10 +102,18 @@ export default function PlacementTestPage() {
         setGenerationProgress(prev => Math.min(prev + 2, 90));
       }, 1000);
 
-      const response = await fetch('/api/placement/generate', {
+      // Use different endpoint based on mode
+      const endpoint = mode === 'real'
+        ? '/api/placement/generate-real'
+        : '/api/placement/generate';
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ questionsPerModule: 27 }),
+        body: JSON.stringify({
+          questionsPerModule: 27,
+          sources: mode === 'real' ? 'auto' : undefined,
+        }),
       });
 
       clearInterval(progressInterval);
@@ -117,6 +126,7 @@ export default function PlacementTestPage() {
 
       setGeneratedModules(data.test.modules);
       setAllPassages(data.test.allPassages);
+      setSourcesUsed(data.test.sources || []);
       setTestName(data.test.testName);
       setGenerationProgress(100);
 
@@ -273,14 +283,20 @@ export default function PlacementTestPage() {
         <Card className="glass-cosmic">
           <CardContent className="p-8 text-center space-y-6">
             <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-              <Sparkles className="w-10 h-10 text-white animate-pulse" />
+              {testMode === 'real' ? (
+                <BookOpen className="w-10 h-10 text-white animate-pulse" />
+              ) : (
+                <Sparkles className="w-10 h-10 text-white animate-pulse" />
+              )}
             </div>
             <div>
               <h2 className="text-xl font-bold text-foreground mb-2">
-                Génération du test en cours...
+                {testMode === 'real' ? 'Extraction des textes réels...' : 'Génération du test en cours...'}
               </h2>
               <p className="text-muted-foreground">
-                Claude génère 54 textes uniques et questions personnalisées
+                {testMode === 'real'
+                  ? 'Claude extrait 54 passages de Dickens, Austen, Wikipedia, Guardian...'
+                  : 'Claude génère 54 textes uniques et questions personnalisées'}
               </p>
             </div>
 
@@ -288,7 +304,9 @@ export default function PlacementTestPage() {
               <Progress value={generationProgress} className="h-3" />
               <p className="text-sm text-muted-foreground">
                 {generationProgress < 100
-                  ? `${Math.round(generationProgress)}% - Création des passages et questions...`
+                  ? testMode === 'real'
+                    ? `${Math.round(generationProgress)}% - Récupération et analyse des sources...`
+                    : `${Math.round(generationProgress)}% - Création des passages et questions...`
                   : 'Terminé ! Démarrage du test...'}
               </p>
             </div>
@@ -332,48 +350,80 @@ export default function PlacementTestPage() {
         <Card className="glass-cosmic">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
-              Mode de génération
+              <BookOpen className="w-5 h-5 text-primary" />
+              Source des textes
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Real texts - RECOMMENDED */}
               <button
-                onClick={() => setTestMode('dynamic')}
+                onClick={() => setTestMode('real')}
                 className={cn(
                   'p-4 rounded-xl border text-left transition-all',
-                  testMode === 'dynamic'
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border hover:border-primary/30'
+                  testMode === 'real'
+                    ? 'border-emerald-500 bg-emerald-500/10'
+                    : 'border-border hover:border-emerald-500/30'
                 )}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center',
-                    testMode === 'dynamic'
-                      ? 'bg-gradient-to-br from-amber-500 to-orange-500'
+                    testMode === 'real'
+                      ? 'bg-gradient-to-br from-emerald-500 to-green-500'
                       : 'bg-muted'
                   )}>
-                    <Sparkles className={cn('w-5 h-5', testMode === 'dynamic' ? 'text-white' : 'text-muted-foreground')} />
+                    <BookOpen className={cn('w-5 h-5', testMode === 'real' ? 'text-white' : 'text-muted-foreground')} />
                   </div>
                   <div>
-                    <p className="font-medium">Génération IA</p>
-                    <p className="text-xs text-muted-foreground">Recommandé</p>
+                    <p className="font-medium">Textes réels</p>
+                    <p className="text-xs text-emerald-500">Recommandé</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  54 textes uniques générés par Claude, adaptés au style SAT officiel.
-                  Les passages sont sauvegardés et exportables.
+                  Vrais extraits de Dickens, Austen, Wikipedia, Guardian.
+                  Claude découpe intelligemment et crée les questions.
                 </p>
               </button>
 
+              {/* Synthetic texts */}
+              <button
+                onClick={() => setTestMode('synthetic')}
+                className={cn(
+                  'p-4 rounded-xl border text-left transition-all',
+                  testMode === 'synthetic'
+                    ? 'border-amber-500 bg-amber-500/10'
+                    : 'border-border hover:border-amber-500/30'
+                )}
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center',
+                    testMode === 'synthetic'
+                      ? 'bg-gradient-to-br from-amber-500 to-orange-500'
+                      : 'bg-muted'
+                  )}>
+                    <Sparkles className={cn('w-5 h-5', testMode === 'synthetic' ? 'text-white' : 'text-muted-foreground')} />
+                  </div>
+                  <div>
+                    <p className="font-medium">Textes IA</p>
+                    <p className="text-xs text-muted-foreground">Synthétiques</p>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  54 textes générés par Claude dans le style SAT.
+                  Contenu original mais non authentique.
+                </p>
+              </button>
+
+              {/* Static test */}
               <button
                 onClick={() => setTestMode('static')}
                 className={cn(
                   'p-4 rounded-xl border text-left transition-all',
                   testMode === 'static'
-                    ? 'border-primary bg-primary/10'
-                    : 'border-border hover:border-primary/30'
+                    ? 'border-blue-500 bg-blue-500/10'
+                    : 'border-border hover:border-blue-500/30'
                 )}
               >
                 <div className="flex items-center gap-3 mb-2">
@@ -391,8 +441,8 @@ export default function PlacementTestPage() {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  54 questions prêtes avec des extraits de Dickens, Austen, Hawthorne.
-                  Démarrage immédiat sans génération.
+                  54 questions prêtes à l'emploi.
+                  Démarrage immédiat sans attente.
                 </p>
               </button>
             </div>
@@ -458,10 +508,24 @@ export default function PlacementTestPage() {
         <div className="text-center space-y-4">
           <Button
             size="lg"
-            onClick={testMode === 'dynamic' ? generateTest : () => router.push('/placement/static')}
-            className="btn-cosmic text-lg px-8 py-6"
+            onClick={
+              testMode === 'static'
+                ? () => router.push('/placement/static')
+                : () => generateTest(testMode as 'real' | 'synthetic')
+            }
+            className={cn(
+              'text-lg px-8 py-6',
+              testMode === 'real'
+                ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600'
+                : 'btn-cosmic'
+            )}
           >
-            {testMode === 'dynamic' ? (
+            {testMode === 'real' ? (
+              <>
+                <BookOpen className="w-5 h-5 mr-2" />
+                Extraire et commencer
+              </>
+            ) : testMode === 'synthetic' ? (
               <>
                 <Sparkles className="w-5 h-5 mr-2" />
                 Générer et commencer
@@ -474,7 +538,9 @@ export default function PlacementTestPage() {
             )}
           </Button>
           <p className="text-xs text-muted-foreground">
-            {testMode === 'dynamic'
+            {testMode === 'real'
+              ? 'Extraction: ~3-5 minutes • Test: 64 minutes'
+              : testMode === 'synthetic'
               ? 'Génération: ~2-3 minutes • Test: 64 minutes'
               : 'Durée totale: 64 minutes'}
           </p>
@@ -662,6 +728,30 @@ export default function PlacementTestPage() {
           )}
         </div>
 
+        {/* Sources Used (real mode) */}
+        {sourcesUsed.length > 0 && (
+          <Card className="glass-cosmic">
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-500" />
+                Sources utilisées
+              </CardTitle>
+              <CardDescription>
+                Textes réels extraits de ces œuvres
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {sourcesUsed.map((source, idx) => (
+                  <Badge key={idx} variant="outline" className="border-emerald-500/30 text-emerald-600">
+                    {source}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Export & Actions */}
         {allPassages.length > 0 && (
           <Card className="glass-cosmic">
@@ -671,7 +761,7 @@ export default function PlacementTestPage() {
                 Exporter les passages
               </CardTitle>
               <CardDescription>
-                {allPassages.length} textes générés disponibles pour export
+                {allPassages.length} {sourcesUsed.length > 0 ? 'extraits réels' : 'textes générés'} disponibles pour export
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -701,6 +791,7 @@ export default function PlacementTestPage() {
             setModule2Result(null);
             setGeneratedModules([]);
             setAllPassages([]);
+            setSourcesUsed([]);
           }} className="btn-cosmic">
             <RotateCcw className="w-4 h-4 mr-2" />
             Nouveau test
