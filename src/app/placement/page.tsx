@@ -352,9 +352,9 @@ export default function PlacementTestPage() {
     };
 
     const getGradient = () => {
-      if (testMode === 'official') return 'from-violet-500 to-purple-600';
+      if (testMode === 'official') return 'from-blue-800 to-blue-900';
       if (testMode === 'real') return 'from-emerald-500 to-green-500';
-      return 'from-amber-500 to-orange-500';
+      return 'from-yellow-500 to-amber-500';
     };
 
     const getTitle = () => {
@@ -424,7 +424,7 @@ export default function PlacementTestPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg">
             <GraduationCap className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gradient">Test de Placement SAT ERW</h1>
@@ -450,22 +450,22 @@ export default function PlacementTestPage() {
                 className={cn(
                   'p-4 rounded-xl border text-left transition-all',
                   testMode === 'official'
-                    ? 'border-violet-500 bg-violet-500/10 ring-2 ring-violet-500/20'
-                    : 'border-border hover:border-violet-500/30'
+                    ? 'border-blue-800 bg-blue-800/10 ring-2 ring-blue-800/20'
+                    : 'border-border hover:border-blue-800/30'
                 )}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center',
                     testMode === 'official'
-                      ? 'bg-gradient-to-br from-violet-500 to-purple-600'
+                      ? 'bg-gradient-to-br from-blue-800 to-blue-900'
                       : 'bg-muted'
                   )}>
                     <Award className={cn('w-5 h-5', testMode === 'official' ? 'text-white' : 'text-muted-foreground')} />
                   </div>
                   <div>
                     <p className="font-medium">Questions SAT officielles</p>
-                    <p className="text-xs text-violet-500">Recommandé • 2193 questions</p>
+                    <p className="text-xs text-blue-800">Recommandé • 2193 questions</p>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -510,15 +510,15 @@ export default function PlacementTestPage() {
                 className={cn(
                   'p-4 rounded-xl border text-left transition-all',
                   testMode === 'synthetic'
-                    ? 'border-amber-500 bg-amber-500/10'
-                    : 'border-border hover:border-amber-500/30'
+                    ? 'border-yellow-600 bg-yellow-600/10'
+                    : 'border-border hover:border-yellow-600/30'
                 )}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center',
                     testMode === 'synthetic'
-                      ? 'bg-gradient-to-br from-amber-500 to-orange-500'
+                      ? 'bg-gradient-to-br from-yellow-500 to-amber-500'
                       : 'bg-muted'
                   )}>
                     <Sparkles className={cn('w-5 h-5', testMode === 'synthetic' ? 'text-white' : 'text-muted-foreground')} />
@@ -634,7 +634,7 @@ export default function PlacementTestPage() {
             className={cn(
               'text-lg px-8 py-6',
               testMode === 'official'
-                ? 'bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700'
+                ? 'bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950'
                 : testMode === 'real'
                 ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600'
                 : 'btn-cosmic'
@@ -776,8 +776,8 @@ export default function PlacementTestPage() {
       <div className="max-w-3xl mx-auto space-y-8">
         {/* Header with Score */}
         <Card className="glass-cosmic overflow-hidden">
-          <div className="bg-gradient-to-br from-amber-500/20 to-orange-500/20 p-8 text-center">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg mb-4">
+          <div className="bg-gradient-to-br from-yellow-500/20 to-amber-500/20 p-8 text-center">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg mb-4">
               <Trophy className="w-10 h-10 text-white" />
             </div>
             <p className="text-muted-foreground mb-2">Score SAT estimé</p>
@@ -1003,7 +1003,7 @@ export default function PlacementTestPage() {
                         <div className={cn(
                           'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 font-bold text-sm',
                           isSelected
-                            ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
+                            ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white'
                             : 'bg-background border border-border text-muted-foreground'
                         )}>
                           {choiceId}
@@ -1035,7 +1035,7 @@ export default function PlacementTestPage() {
                 </div>
                 <div className="h-2 rounded-full bg-muted overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all duration-500 rounded-full"
+                    className="h-full bg-gradient-to-r from-yellow-500 to-amber-500 transition-all duration-500 rounded-full"
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
@@ -1055,7 +1055,7 @@ export default function PlacementTestPage() {
                       className={cn(
                         'w-8 h-8 rounded-lg text-xs font-medium transition-all relative',
                         isCurrent
-                          ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white'
+                          ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white'
                           : isAnswered
                           ? 'bg-success/20 text-success border border-success/30'
                           : 'bg-muted text-muted-foreground border border-border hover:border-primary/20'
@@ -1101,7 +1101,7 @@ export default function PlacementTestPage() {
                 onClick={toggleFlag}
                 className={cn(
                   'w-full mb-4',
-                  flaggedQuestions.has(currentQuestion.id) && 'border-amber-500/50 text-amber-500 bg-amber-500/10'
+                  flaggedQuestions.has(currentQuestion.id) && 'border-yellow-600/50 text-yellow-600 bg-yellow-600/10'
                 )}
               >
                 <Flag className="w-4 h-4 mr-2" />

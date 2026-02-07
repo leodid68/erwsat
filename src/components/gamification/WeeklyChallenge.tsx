@@ -15,8 +15,8 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
     return (
       <Card className="glass-cosmic">
         <CardContent className="py-6 text-center">
-          <Calendar className="w-8 h-8 mx-auto mb-2 text-slate-500" />
-          <p className="text-sm text-slate-400">
+          <Calendar className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
             Complétez un quiz pour débloquer le défi hebdomadaire
           </p>
         </CardContent>
@@ -32,7 +32,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
         'transition-all duration-300',
         challenge.completed
           ? 'glass-cosmic border-emerald-500/30'
-          : 'glass-cosmic border-amber-500/30'
+          : 'glass-cosmic border-yellow-600/30'
       )}
     >
       <CardContent className="p-5">
@@ -43,24 +43,24 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
                 'w-10 h-10 rounded-xl flex items-center justify-center',
                 challenge.completed
                   ? 'bg-emerald-500/20'
-                  : 'bg-gradient-to-br from-amber-500 to-orange-500'
+                  : 'bg-gradient-to-br from-yellow-500 to-amber-500'
               )}
             >
               {challenge.completed ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               ) : (
                 <Zap className="w-5 h-5 text-white" />
               )}
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">
                 Défi de la semaine
               </p>
-              <p className="font-medium text-slate-200">{challenge.description}</p>
+              <p className="font-medium text-foreground">{challenge.description}</p>
             </div>
           </div>
           {challenge.completed && (
-            <span className="text-xs font-medium text-emerald-400 bg-emerald-500/20 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-emerald-600 bg-emerald-500/20 px-2 py-1 rounded-full">
               Complété !
             </span>
           )}
@@ -68,10 +68,10 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-400">Progression</span>
+            <span className="text-muted-foreground">Progression</span>
             <span className={cn(
               'font-mono',
-              challenge.completed ? 'text-emerald-400' : 'text-slate-300'
+              challenge.completed ? 'text-emerald-600' : 'text-foreground'
             )}>
               {challenge.current}/{challenge.target}
             </span>
@@ -80,7 +80,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
             value={progressPercent}
             className={cn(
               'h-2',
-              challenge.completed ? '[&>div]:bg-emerald-500' : '[&>div]:bg-amber-500'
+              challenge.completed ? '[&>div]:bg-emerald-500' : '[&>div]:bg-yellow-600'
             )}
           />
         </div>

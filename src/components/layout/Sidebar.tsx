@@ -36,99 +36,99 @@ const navigation: NavItem[] = [
     name: 'Accueil',
     href: '/',
     icon: Home,
-    gradient: 'from-blue-500 to-cyan-400',
-    glowColor: 'rgba(59, 130, 246, 0.5)',
+    gradient: 'from-blue-800 to-blue-900',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Importer',
     href: '/upload',
     icon: Upload,
-    gradient: 'from-blue-500 to-slate-400',
-    glowColor: 'rgba(59, 130, 246, 0.5)',
+    gradient: 'from-blue-700 to-blue-900',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Bibliothèque',
     href: '/library',
     icon: Database,
-    gradient: 'from-emerald-500 to-green-400',
-    glowColor: 'rgba(16, 185, 129, 0.5)',
+    gradient: 'from-teal-600 to-teal-700',
+    glowColor: 'rgba(45, 138, 110, 0.5)',
   },
   {
     name: 'Générer',
     href: '/generate',
     icon: Sparkles,
-    gradient: 'from-amber-500 to-orange-400',
-    glowColor: 'rgba(245, 158, 11, 0.5)',
+    gradient: 'from-yellow-600 to-amber-600',
+    glowColor: 'rgba(201, 168, 76, 0.5)',
   },
   {
     name: 'Quiz',
     href: '/quiz',
     icon: ClipboardList,
-    gradient: 'from-purple-500 to-pink-400',
-    glowColor: 'rgba(139, 92, 246, 0.5)',
+    gradient: 'from-blue-800 to-blue-900',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Mode SAT',
     href: '/sat-mode',
     icon: GraduationCap,
-    gradient: 'from-indigo-500 to-purple-400',
-    glowColor: 'rgba(99, 102, 241, 0.5)',
+    gradient: 'from-blue-700 to-blue-900',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Test Placement',
     href: '/placement',
     icon: FileCheck,
-    gradient: 'from-cyan-500 to-blue-500',
-    glowColor: 'rgba(6, 182, 212, 0.5)',
+    gradient: 'from-sky-700 to-blue-800',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Progrès',
     href: '/progress',
     icon: BarChart3,
-    gradient: 'from-emerald-500 to-green-400',
-    glowColor: 'rgba(16, 185, 129, 0.5)',
+    gradient: 'from-teal-600 to-teal-700',
+    glowColor: 'rgba(45, 138, 110, 0.5)',
   },
   {
     name: 'Analyse',
     href: '/analytics',
     icon: PieChart,
-    gradient: 'from-violet-500 to-purple-400',
-    glowColor: 'rgba(139, 92, 246, 0.5)',
+    gradient: 'from-blue-700 to-blue-800',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Entraînement',
     href: '/practice',
     icon: Dumbbell,
-    gradient: 'from-red-500 to-orange-400',
-    glowColor: 'rgba(239, 68, 68, 0.5)',
+    gradient: 'from-amber-600 to-yellow-600',
+    glowColor: 'rgba(201, 168, 76, 0.5)',
   },
   {
     name: 'Révision',
     href: '/review',
     icon: Brain,
-    gradient: 'from-pink-500 to-rose-400',
-    glowColor: 'rgba(236, 72, 153, 0.5)',
+    gradient: 'from-blue-700 to-sky-600',
+    glowColor: 'rgba(30, 58, 95, 0.5)',
   },
   {
     name: 'Succès',
     href: '/achievements',
     icon: Trophy,
-    gradient: 'from-amber-500 to-yellow-400',
-    glowColor: 'rgba(245, 158, 11, 0.5)',
+    gradient: 'from-yellow-500 to-amber-500',
+    glowColor: 'rgba(201, 168, 76, 0.5)',
   },
   {
     name: 'Historique',
     href: '/history',
     icon: History,
-    gradient: 'from-slate-500 to-zinc-400',
-    glowColor: 'rgba(100, 116, 139, 0.5)',
+    gradient: 'from-slate-600 to-slate-700',
+    glowColor: 'rgba(98, 125, 152, 0.5)',
   },
   {
     name: 'Paramètres',
     href: '/settings',
     icon: Settings,
-    gradient: 'from-gray-500 to-slate-400',
-    glowColor: 'rgba(100, 116, 139, 0.5)',
+    gradient: 'from-slate-600 to-slate-700',
+    glowColor: 'rgba(98, 125, 152, 0.5)',
   },
 ];
 
@@ -142,8 +142,8 @@ export function Sidebar() {
         <Link href="/" className="flex items-center gap-4 group">
           <div className="relative">
             {/* Glow effect */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
-            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-lg">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-900 blur-xl opacity-30 group-hover:opacity-50 transition-opacity" />
+            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-800 via-blue-900 to-blue-950 flex items-center justify-center transition-all duration-300 group-hover:scale-105 shadow-lg">
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
           </div>
@@ -197,7 +197,7 @@ export function Sidebar() {
                 {item.name}
               </span>
               {isActive && (
-                <div className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 animate-pulse" />
+                <div className="ml-auto w-2 h-2 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 animate-pulse" />
               )}
             </Link>
           );
@@ -215,7 +215,7 @@ export function Sidebar() {
         <div className="glass-cosmic p-4">
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-sm">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center shadow-sm">
                 <Zap className="w-3.5 h-3.5 text-white" />
               </div>
               <p className="text-xs font-semibold text-primary">Astuce</p>

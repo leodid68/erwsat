@@ -1,115 +1,120 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================
-   LIGHT SLATE THEME
-   Clean glassmorphism with blue-gray tones and orange accent
+   ACADEMIC GLASSMORPHISM THEME
+   Navy (#1e3a5f) & Gold (#c9a84c) on warm ivory
    ============================================ */
 
 :root {
   --radius: 1rem;
 
-  /* Cool Light Base */
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  /* Warm Ivory Base */
+  --background: #faf8f2;
+  --foreground: #1a1a2e;
 
-  /* Slate palette */
-  --slate-50: #f8fafc;
-  --slate-100: #f1f5f9;
-  --slate-200: #e2e8f0;
-  --slate-300: #cbd5e1;
-  --slate-400: #94a3b8;
-  --slate-500: #64748b;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1e293b;
-  --slate-900: #0f172a;
+  /* Navy palette */
+  --navy-50: #f0f4f8;
+  --navy-100: #d9e2ec;
+  --navy-200: #bcccdc;
+  --navy-300: #9fb3c8;
+  --navy-400: #627d98;
+  --navy-500: #3e6086;
+  --navy-600: #2d4a6f;
+  --navy-700: #1e3a5f;
+  --navy-800: #162d4a;
+  --navy-900: #0f1f33;
 
-  /* Glass effects - for light backgrounds */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-bg-hover: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(15, 23, 42, 0.08);
-  --glass-border-hover: rgba(15, 23, 42, 0.15);
-  --glass-shadow: rgba(15, 23, 42, 0.08);
+  /* Glass effects - warm ivory tones */
+  --glass-bg: rgba(255, 255, 250, 0.7);
+  --glass-bg-hover: rgba(255, 255, 250, 0.85);
+  --glass-border: rgba(30, 58, 95, 0.08);
+  --glass-border-hover: rgba(30, 58, 95, 0.15);
+  --glass-shadow: rgba(30, 58, 95, 0.08);
 
   /* Card */
-  --card: rgba(255, 255, 255, 0.75);
-  --card-foreground: #0f172a;
-  --card-border: rgba(15, 23, 42, 0.08);
+  --card: rgba(255, 255, 250, 0.75);
+  --card-foreground: #1a1a2e;
+  --card-border: rgba(30, 58, 95, 0.08);
 
-  /* Primary - Orange */
-  --primary: #ea580c;
-  --primary-hover: #c2410c;
-  --primary-soft: rgba(234, 88, 12, 0.12);
+  /* Primary - Navy */
+  --primary: #1e3a5f;
+  --primary-hover: #162d4a;
+  --primary-soft: rgba(30, 58, 95, 0.12);
   --primary-foreground: #ffffff;
 
-  /* Secondary - Slate */
-  --secondary: rgba(71, 85, 105, 0.08);
-  --secondary-foreground: #475569;
+  /* Secondary - Muted Navy */
+  --secondary: rgba(30, 58, 95, 0.08);
+  --secondary-foreground: #2d4a6f;
 
-  /* Accent - Slate Blue */
-  --accent: #3b82f6;
-  --accent-soft: rgba(59, 130, 246, 0.12);
+  /* Accent - Gold */
+  --accent: #c9a84c;
+  --accent-soft: rgba(201, 168, 76, 0.12);
   --accent-foreground: #ffffff;
+
+  /* Tertiary - Academic Teal */
+  --tertiary: #2d8a6e;
+  --tertiary-soft: rgba(45, 138, 110, 0.12);
 
   /* Success */
   --success: #16a34a;
   --success-soft: rgba(22, 163, 74, 0.12);
 
   /* Warning */
-  --warning: #ea580c;
-  --warning-soft: rgba(234, 88, 12, 0.12);
+  --warning: #c9a84c;
+  --warning-soft: rgba(201, 168, 76, 0.12);
 
   /* Destructive */
   --destructive: #dc2626;
   --destructive-soft: rgba(220, 38, 38, 0.12);
 
   /* Muted */
-  --muted: rgba(71, 85, 105, 0.06);
-  --muted-foreground: #64748b;
+  --muted: rgba(30, 58, 95, 0.06);
+  --muted-foreground: #6b7280;
 
   /* Borders */
-  --border: rgba(15, 23, 42, 0.1);
-  --border-hover: rgba(15, 23, 42, 0.2);
-  --input: rgba(15, 23, 42, 0.08);
+  --border: rgba(30, 58, 95, 0.1);
+  --border-hover: rgba(30, 58, 95, 0.2);
+  --input: rgba(30, 58, 95, 0.08);
   --ring: var(--primary);
 
   /* Sidebar */
-  --sidebar: rgba(255, 255, 255, 0.9);
-  --sidebar-foreground: #0f172a;
-  --sidebar-muted: #64748b;
-  --sidebar-border: rgba(15, 23, 42, 0.08);
-  --sidebar-active: rgba(234, 88, 12, 0.1);
+  --sidebar: rgba(255, 255, 250, 0.9);
+  --sidebar-foreground: #1a1a2e;
+  --sidebar-muted: #6b7280;
+  --sidebar-border: rgba(30, 58, 95, 0.08);
+  --sidebar-active: rgba(30, 58, 95, 0.1);
 
-  /* Chart colors */
-  --chart-1: #ea580c;
-  --chart-2: #3b82f6;
-  --chart-3: #16a34a;
-  --chart-4: #8b5cf6;
-  --chart-5: #06b6d4;
+  /* Chart colors - Academic palette */
+  --chart-1: #1e3a5f;
+  --chart-2: #c9a84c;
+  --chart-3: #2d8a6e;
+  --chart-4: #627d98;
+  --chart-5: #b08d3a;
 
-  /* Question type colors */
-  --type-info: rgba(59, 130, 246, 0.1);
-  --type-info-text: #2563eb;
-  --type-info-border: rgba(59, 130, 246, 0.25);
+  /* Question type colors - Navy/Gold/Teal */
+  --type-info: rgba(30, 58, 95, 0.1);
+  --type-info-text: #1e3a5f;
+  --type-info-border: rgba(30, 58, 95, 0.25);
 
-  --type-craft: rgba(234, 88, 12, 0.1);
-  --type-craft-text: #c2410c;
-  --type-craft-border: rgba(234, 88, 12, 0.25);
+  --type-craft: rgba(201, 168, 76, 0.1);
+  --type-craft-text: #b08d3a;
+  --type-craft-border: rgba(201, 168, 76, 0.25);
 
-  --type-expression: rgba(139, 92, 246, 0.1);
-  --type-expression-text: #7c3aed;
-  --type-expression-border: rgba(139, 92, 246, 0.25);
+  --type-expression: rgba(45, 138, 110, 0.1);
+  --type-expression-text: #2d8a6e;
+  --type-expression-border: rgba(45, 138, 110, 0.25);
 
-  --type-conventions: rgba(100, 116, 139, 0.1);
-  --type-conventions-text: #475569;
-  --type-conventions-border: rgba(100, 116, 139, 0.25);
+  --type-conventions: rgba(98, 125, 152, 0.1);
+  --type-conventions-text: #3e6086;
+  --type-conventions-border: rgba(98, 125, 152, 0.25);
 
-  /* Font */
-  --font-display: 'Inter', system-ui, sans-serif;
+  /* Fonts */
+  --font-display: 'Crimson Pro', Georgia, serif;
+  --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
 /* ============================================
@@ -126,7 +131,7 @@
 
   body {
     @apply text-foreground;
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -140,7 +145,7 @@
     font-family: var(--font-display);
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: #0f172a;
+    color: #1e3a5f;
   }
 
   ::selection {
@@ -150,14 +155,14 @@
 }
 
 /* ============================================
-   SUBTLE GRADIENT BACKGROUND
+   WARM IVORY GRADIENT BACKGROUND
    ============================================ */
 .cosmic-bg {
   position: fixed;
   inset: 0;
   z-index: -10;
   overflow: hidden;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #faf8f2 0%, #f5f0e6 50%, #ede7d9 100%);
 }
 
 .cosmic-bg::before {
@@ -165,9 +170,9 @@
   position: absolute;
   inset: -50%;
   background:
-    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(59, 130, 246, 0.06) 0%, transparent 50%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(100, 116, 139, 0.06) 0%, transparent 45%),
-    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255, 255, 255, 0.5) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(30, 58, 95, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201, 168, 76, 0.06) 0%, transparent 45%),
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255, 255, 250, 0.5) 0%, transparent 50%);
   animation: meshMove 30s ease-in-out infinite alternate;
 }
 
@@ -183,7 +188,7 @@
   }
 }
 
-/* Subtle floating orbs - softer for light mode */
+/* Subtle floating orbs - navy/gold/teal */
 .cosmic-orb {
   position: absolute;
   border-radius: 50%;
@@ -195,7 +200,7 @@
 .cosmic-orb-1 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(30, 58, 95, 0.12) 0%, transparent 70%);
   top: -15%;
   left: -15%;
   animation: orbFloat1 25s ease-in-out infinite;
@@ -204,7 +209,7 @@
 .cosmic-orb-2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(100, 116, 139, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.1) 0%, transparent 70%);
   bottom: -15%;
   right: -15%;
   animation: orbFloat2 30s ease-in-out infinite;
@@ -213,7 +218,7 @@
 .cosmic-orb-3 {
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, rgba(71, 85, 105, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(45, 138, 110, 0.08) 0%, transparent 70%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -266,10 +271,10 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(217, 119, 6, 0.15);
+    box-shadow: 0 0 20px rgba(30, 58, 95, 0.15);
   }
   50% {
-    box-shadow: 0 0 30px rgba(217, 119, 6, 0.25);
+    box-shadow: 0 0 30px rgba(30, 58, 95, 0.25);
   }
 }
 
@@ -279,30 +284,30 @@
 }
 
 /* ============================================
-   GLASSMORPHISM COMPONENTS - LIGHT MODE
+   GLASSMORPHISM COMPONENTS - ACADEMIC THEME
    ============================================ */
 @layer components {
   /* Main Glass Card */
   .glass-cosmic {
-    background: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 250, 0.65);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 250, 0.8);
     border-radius: 16px;
     box-shadow:
-      0 4px 24px rgba(0, 0, 0, 0.06),
-      0 1px 2px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      0 4px 24px rgba(30, 58, 95, 0.06),
+      0 1px 2px rgba(30, 58, 95, 0.04),
+      inset 0 1px 0 rgba(255, 255, 250, 0.8);
     transition: all 0.2s ease;
   }
 
   .glass-cosmic:hover {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 250, 0.8);
+    border-color: rgba(255, 255, 250, 0.9);
     box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      0 2px 4px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      0 8px 32px rgba(30, 58, 95, 0.08),
+      0 2px 4px rgba(30, 58, 95, 0.04),
+      inset 0 1px 0 rgba(255, 255, 250, 0.9);
   }
 
   /* Glass with subtle accent glow */
@@ -317,7 +322,7 @@
     inset: 0;
     background: linear-gradient(
       135deg,
-      rgba(217, 119, 6, 0.05) 0%,
+      rgba(30, 58, 95, 0.05) 0%,
       transparent 50%
     );
     opacity: 0;
@@ -332,37 +337,37 @@
 
   /* Passage Card */
   .glass-passage {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 250, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 250, 0.7);
     border-left: 3px solid var(--primary);
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 12px rgba(30, 58, 95, 0.04);
   }
 
   /* Answer Choice */
   .glass-choice {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 250, 0.5);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(30, 58, 95, 0.06);
     border-radius: 12px;
     transition: all 0.2s ease;
   }
 
   .glass-choice:hover {
-    background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 250, 0.75);
+    border-color: rgba(30, 58, 95, 0.1);
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 16px rgba(30, 58, 95, 0.06);
   }
 
-  /* Selected state */
+  /* Selected state - Gold accent */
   .glass-choice-selected {
-    background: rgba(217, 119, 6, 0.08);
-    border: 2px solid rgba(217, 119, 6, 0.4);
-    box-shadow: 0 0 20px rgba(217, 119, 6, 0.1);
+    background: rgba(201, 168, 76, 0.08);
+    border: 2px solid rgba(201, 168, 76, 0.4);
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.1);
   }
 
   /* Correct state */
@@ -385,19 +390,19 @@
 
   /* Navigation pill */
   .nav-pill {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(255, 255, 250, 0.5);
+    border: 1px solid rgba(30, 58, 95, 0.06);
     border-radius: 10px;
     transition: all 0.15s ease;
   }
 
   .nav-pill:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 250, 0.8);
   }
 
   .nav-pill-active {
-    background: rgba(217, 119, 6, 0.1);
-    border-color: rgba(217, 119, 6, 0.25);
+    background: rgba(30, 58, 95, 0.1);
+    border-color: rgba(30, 58, 95, 0.25);
   }
 
   /* Question type badges */
@@ -425,21 +430,21 @@
     border: 1px solid var(--type-conventions-border);
   }
 
-  /* Primary Button */
+  /* Primary Button - Navy with Gold accent */
   .btn-cosmic {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(135deg, #1e3a5f 0%, #162d4a 100%);
     color: white;
     border: none;
     border-radius: 10px;
     font-weight: 500;
-    box-shadow: 0 2px 8px rgba(217, 119, 6, 0.3);
+    box-shadow: 0 2px 8px rgba(30, 58, 95, 0.3);
     transition: all 0.2s ease;
   }
 
   .btn-cosmic:hover {
-    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    background: linear-gradient(135deg, #162d4a 0%, #0f1f33 100%);
     transform: translateY(-1px);
-    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+    box-shadow: 0 4px 16px rgba(30, 58, 95, 0.4);
   }
 
   .btn-cosmic:active {
@@ -448,48 +453,48 @@
 
   /* Ghost button */
   .btn-ghost {
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 250, 0.5);
+    border: 1px solid rgba(30, 58, 95, 0.1);
     border-radius: 10px;
     color: var(--foreground);
     transition: all 0.15s ease;
   }
 
   .btn-ghost:hover {
-    background: rgba(255, 255, 255, 0.8);
-    border-color: rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 250, 0.8);
+    border-color: rgba(30, 58, 95, 0.15);
   }
 
-  /* Icon containers */
+  /* Icon containers - Navy */
   .icon-cosmic {
-    background: rgba(217, 119, 6, 0.1);
-    border: 1px solid rgba(217, 119, 6, 0.2);
-    color: #b45309;
+    background: rgba(30, 58, 95, 0.1);
+    border: 1px solid rgba(30, 58, 95, 0.2);
+    color: #1e3a5f;
     border-radius: 10px;
   }
 
   .icon-cosmic-pink {
-    background: rgba(100, 116, 139, 0.1);
-    border: 1px solid rgba(100, 116, 139, 0.2);
-    color: #475569;
+    background: rgba(98, 125, 152, 0.1);
+    border: 1px solid rgba(98, 125, 152, 0.2);
+    color: #3e6086;
   }
 
   .icon-cosmic-blue {
-    background: rgba(37, 99, 235, 0.1);
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    color: #1d4ed8;
+    background: rgba(30, 58, 95, 0.1);
+    border: 1px solid rgba(30, 58, 95, 0.2);
+    color: #1e3a5f;
   }
 
   .icon-cosmic-emerald {
-    background: rgba(22, 163, 74, 0.1);
-    border: 1px solid rgba(22, 163, 74, 0.2);
-    color: #15803d;
+    background: rgba(45, 138, 110, 0.1);
+    border: 1px solid rgba(45, 138, 110, 0.2);
+    color: #2d8a6e;
   }
 
   .icon-cosmic-amber {
-    background: rgba(217, 119, 6, 0.1);
-    border: 1px solid rgba(217, 119, 6, 0.2);
-    color: #b45309;
+    background: rgba(201, 168, 76, 0.1);
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    color: #b08d3a;
   }
 
   /* Legacy icon support */
@@ -503,26 +508,26 @@
 
   /* Icon with glow effect */
   .icon-glow-cyan {
-    background: rgba(59, 130, 246, 0.12);
-    color: #2563eb;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+    background: rgba(30, 58, 95, 0.12);
+    color: #1e3a5f;
+    box-shadow: 0 0 20px rgba(30, 58, 95, 0.15);
   }
 
   .icon-glow-violet {
-    background: rgba(100, 116, 139, 0.12);
-    color: #475569;
-    box-shadow: 0 0 20px rgba(100, 116, 139, 0.15);
+    background: rgba(98, 125, 152, 0.12);
+    color: #3e6086;
+    box-shadow: 0 0 20px rgba(98, 125, 152, 0.15);
   }
 
-  /* Text gradient */
+  /* Text gradient - Navy to Gold */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #ea580c 0%, #c2410c 50%, #9a3412 100%);
+    background-image: linear-gradient(135deg, #1e3a5f 0%, #2d4a6f 50%, #c9a84c 100%);
   }
 
   .text-gradient-pink {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background-image: linear-gradient(135deg, #1e3a5f 0%, #3e6086 100%);
   }
 
   /* 3D Cell */
@@ -532,7 +537,7 @@
 
   .cell-3d:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(30, 58, 95, 0.1);
   }
 
   .cell-3d:active {
@@ -541,8 +546,8 @@
 
   /* Keyboard shortcut */
   .kbd-cosmic {
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(30, 58, 95, 0.04);
+    border: 1px solid rgba(30, 58, 95, 0.1);
     border-radius: 6px;
     padding: 2px 8px;
     font-family: monospace;
@@ -566,7 +571,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 250, 0.4),
       transparent
     );
     background-size: 200% 100%;
@@ -583,20 +588,20 @@
 
   /* Modal glass */
   .glass-modal {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 250, 0.92);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 250, 0.9);
     border-radius: 16px;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 24px 80px rgba(30, 58, 95, 0.12);
   }
 
   /* Sidebar glass */
   .glass-sidebar {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 250, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(0, 0, 0, 0.06);
+    border-right: 1px solid rgba(30, 58, 95, 0.06);
   }
 
   /* Legacy glass support */
@@ -606,17 +611,17 @@
 
   .liquid-glass-blue {
     @apply glass-glow;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06) 0%, rgba(255, 255, 255, 0.6) 100%);
+    background: linear-gradient(135deg, rgba(30, 58, 95, 0.06) 0%, rgba(255, 255, 250, 0.6) 100%);
   }
 
   .liquid-glass-amber {
     @apply glass-glow;
-    background: linear-gradient(135deg, rgba(217, 119, 6, 0.06) 0%, rgba(255, 255, 255, 0.6) 100%);
+    background: linear-gradient(135deg, rgba(201, 168, 76, 0.06) 0%, rgba(255, 255, 250, 0.6) 100%);
   }
 
   .liquid-glass-emerald {
     @apply glass-glow;
-    background: linear-gradient(135deg, rgba(22, 163, 74, 0.06) 0%, rgba(255, 255, 255, 0.6) 100%);
+    background: linear-gradient(135deg, rgba(45, 138, 110, 0.06) 0%, rgba(255, 255, 250, 0.6) 100%);
   }
 
   .card-interactive {
@@ -636,28 +641,28 @@
   }
 
   .orb-cyan {
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(30, 58, 95, 0.15);
   }
 
   .orb-blue {
-    background: rgba(59, 130, 246, 0.15);
+    background: rgba(30, 58, 95, 0.15);
   }
 
   .orb-violet {
-    background: rgba(100, 116, 139, 0.15);
+    background: rgba(98, 125, 152, 0.15);
   }
 
   .orb-emerald {
-    background: rgba(22, 163, 74, 0.15);
+    background: rgba(45, 138, 110, 0.15);
   }
 
   .orb-amber {
-    background: rgba(234, 88, 12, 0.15);
+    background: rgba(201, 168, 76, 0.15);
   }
 
   /* Shadow glow */
   .shadow-glow-sm {
-    box-shadow: 0 0 15px rgba(217, 119, 6, 0.15);
+    box-shadow: 0 0 15px rgba(30, 58, 95, 0.15);
   }
 }
 
@@ -667,7 +672,7 @@
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgba(100, 116, 139, 0.25) transparent;
+    scrollbar-color: rgba(98, 125, 152, 0.25) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -679,28 +684,28 @@
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgba(100, 116, 139, 0.25);
+    background-color: rgba(98, 125, 152, 0.25);
     border-radius: 3px;
   }
 
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(100, 116, 139, 0.4);
+    background-color: rgba(98, 125, 152, 0.4);
   }
 
   .shadow-cosmic {
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 24px rgba(30, 58, 95, 0.06);
   }
 
   .shadow-cosmic-lg {
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 40px rgba(30, 58, 95, 0.1);
   }
 
   .shadow-neon {
-    box-shadow: 0 0 20px rgba(217, 119, 6, 0.2);
+    box-shadow: 0 0 20px rgba(30, 58, 95, 0.2);
   }
 
   .shadow-neon-pink {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
   }
 
   .shadow-glass { @apply shadow-cosmic; }

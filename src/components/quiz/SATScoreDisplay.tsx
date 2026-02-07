@@ -28,30 +28,30 @@ export function SATScoreDisplay({
   const estimate = estimateSATScore(correctAnswers, totalQuestions, difficultyBreakdown);
 
   return (
-    <Card className="glass-cosmic border-purple-500/20 overflow-hidden">
+    <Card className="glass-cosmic border-blue-800/20 overflow-hidden">
       <CardContent className="p-0">
         {/* Main Score Display */}
         <div className="relative p-6 text-center">
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-800/10 via-transparent to-blue-900/10" />
 
           <div className="relative">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <GraduationCap className="w-5 h-5 text-purple-400" />
-              <span className="text-sm font-medium text-purple-400">Score SAT Estimé</span>
+              <GraduationCap className="w-5 h-5 text-blue-800" />
+              <span className="text-sm font-medium text-blue-800">Score SAT Estimé</span>
             </div>
 
             <div className={cn('text-6xl font-bold mb-2', getScoreColor(estimate.scaledScore))}>
               {estimate.scaledScore}
             </div>
 
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-muted-foreground">
               sur 800 points
             </div>
 
             {/* Adjusted score if different */}
             {estimate.adjustedScore && estimate.adjustedScore !== estimate.scaledScore && (
-              <div className="mt-2 text-xs text-slate-500">
+              <div className="mt-2 text-xs text-muted-foreground">
                 Score ajusté (difficulté): {estimate.adjustedScore}
               </div>
             )}
@@ -62,9 +62,9 @@ export function SATScoreDisplay({
           <>
             {/* Score Bar */}
             <div className="px-6 pb-4">
-              <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-white/50 rounded-full overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-700 to-sky-600 rounded-full transition-all duration-500"
                   style={{ width: `${((estimate.scaledScore - 200) / 600) * 100}%` }}
                 />
                 {/* Score markers */}
@@ -78,7 +78,7 @@ export function SATScoreDisplay({
                   ))}
                 </div>
               </div>
-              <div className="flex justify-between text-xs text-slate-500 mt-1">
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>200</span>
                 <span>500</span>
                 <span>800</span>
@@ -86,35 +86,35 @@ export function SATScoreDisplay({
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-3 border-t border-white/5">
-              <div className="p-4 text-center border-r border-white/5">
+            <div className="grid grid-cols-3 border-t border-border">
+              <div className="p-4 text-center border-r border-border">
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <TrendingUp className="w-3 h-3 text-slate-500" />
+                  <TrendingUp className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <div className="text-lg font-semibold text-slate-200">
+                <div className="text-lg font-semibold text-foreground">
                   {estimate.rawScore}/{estimate.totalQuestions}
                 </div>
-                <div className="text-xs text-slate-500">Bonnes réponses</div>
+                <div className="text-xs text-muted-foreground">Bonnes réponses</div>
               </div>
 
-              <div className="p-4 text-center border-r border-white/5">
+              <div className="p-4 text-center border-r border-border">
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <Users className="w-3 h-3 text-slate-500" />
+                  <Users className="w-3 h-3 text-muted-foreground" />
                 </div>
-                <div className="text-lg font-semibold text-slate-200">
+                <div className="text-lg font-semibold text-foreground">
                   {estimate.percentile}%
                 </div>
-                <div className="text-xs text-slate-500">Percentile</div>
+                <div className="text-xs text-muted-foreground">Percentile</div>
               </div>
 
               <div className="p-4 text-center">
                 <div className="flex items-center justify-center gap-1 mb-1">
-                  <Award className="w-3 h-3 text-slate-500" />
+                  <Award className="w-3 h-3 text-muted-foreground" />
                 </div>
                 <div className={cn('text-sm font-semibold', getScoreColor(estimate.scaledScore))}>
                   {getPerformanceLevelLabel(estimate.performanceLevel)}
                 </div>
-                <div className="text-xs text-slate-500">Niveau</div>
+                <div className="text-xs text-muted-foreground">Niveau</div>
               </div>
             </div>
           </>

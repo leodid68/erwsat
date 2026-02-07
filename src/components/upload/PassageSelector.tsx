@@ -71,7 +71,7 @@ export function PassageSelector({
             ~{totalWords} mots
           </Badge>
           {passages.some(p => p.reason) && (
-            <Badge className="text-sm bg-violet-500/20 text-violet-400 border-violet-500/30">
+            <Badge className="text-sm bg-blue-800/20 text-blue-700 border-blue-800/30">
               <Sparkles className="w-3 h-3 mr-1" />
               Sélection IA
             </Badge>
@@ -126,7 +126,7 @@ export function PassageSelector({
                           Passage {index + 1}
                         </CardTitle>
                         {passage.reason && (
-                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-violet-500/10 text-violet-500 border-violet-500/20">
+                          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4 bg-blue-800/10 text-blue-800 border-blue-800/20">
                             <Sparkles className="w-2.5 h-2.5 mr-1" />
                             IA
                           </Badge>
@@ -156,9 +156,9 @@ export function PassageSelector({
                   <Separator />
                   <CardContent className="py-3 px-4 space-y-3">
                     {passage.reason && (
-                      <div className="flex items-start gap-2 p-2 rounded-lg bg-violet-500/10 border border-violet-500/20">
-                        <Sparkles className="w-4 h-4 text-violet-500 mt-0.5 shrink-0" />
-                        <p className="text-xs text-violet-400 italic">
+                      <div className="flex items-start gap-2 p-2 rounded-lg bg-blue-800/10 border border-blue-800/20">
+                        <Sparkles className="w-4 h-4 text-blue-800 mt-0.5 shrink-0" />
+                        <p className="text-xs text-blue-700 italic">
                           {passage.reason}
                         </p>
                       </div>

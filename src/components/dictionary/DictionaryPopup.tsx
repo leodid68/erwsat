@@ -127,15 +127,15 @@ export function DictionaryPopup() {
       className="w-80 glass-cosmic rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-white/10">
+      <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-700 to-sky-600 flex items-center justify-center">
             <BookOpen className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-200 capitalize">{selectedWord}</h3>
+            <h3 className="font-semibold text-foreground capitalize">{selectedWord}</h3>
             {result?.phonetic && (
-              <p className="text-xs text-slate-500">{result.phonetic}</p>
+              <p className="text-xs text-muted-foreground">{result.phonetic}</p>
             )}
           </div>
         </div>
@@ -143,7 +143,7 @@ export function DictionaryPopup() {
           {result?.audioUrl && (
             <button
               onClick={playAudio}
-              className="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-purple-400 transition-colors"
+              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-blue-800 transition-colors"
               title="Prononcer"
             >
               <Volume2 className="w-4 h-4" />
@@ -151,7 +151,7 @@ export function DictionaryPopup() {
           )}
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+            className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -162,13 +162,13 @@ export function DictionaryPopup() {
       <div className="p-4 space-y-3 max-h-64 overflow-y-auto scrollbar-thin">
         {isLoading ? (
           <div className="flex items-center justify-center py-6">
-            <Loader2 className="w-6 h-6 text-purple-400 animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue-800 animate-spin" />
           </div>
         ) : result?.found ? (
           <>
             {/* Part of Speech */}
             {result.partOfSpeech && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-blue-800/20 text-blue-800 border border-blue-800/30">
                 {result.partOfSpeech}
               </span>
             )}
@@ -176,7 +176,7 @@ export function DictionaryPopup() {
             {/* Definition */}
             {result.definition && (
               <div>
-                <p className="text-sm text-slate-300 leading-relaxed">
+                <p className="text-sm text-foreground leading-relaxed">
                   {result.definition}
                 </p>
               </div>
@@ -184,8 +184,8 @@ export function DictionaryPopup() {
 
             {/* Example */}
             {result.example && (
-              <div className="pl-3 border-l-2 border-purple-500/30">
-                <p className="text-xs text-slate-500 italic">
+              <div className="pl-3 border-l-2 border-blue-800/30">
+                <p className="text-xs text-muted-foreground italic">
                   "{result.example}"
                 </p>
               </div>
@@ -205,7 +205,7 @@ export function DictionaryPopup() {
             {/* Synonyms */}
             {result.synonyms && result.synonyms.length > 0 && (
               <div>
-                <p className="text-xs text-slate-500 mb-1.5 flex items-center gap-1">
+                <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1">
                   <Sparkles className="w-3 h-3" />
                   Synonymes
                 </p>
@@ -213,7 +213,7 @@ export function DictionaryPopup() {
                   {result.synonyms.map((syn, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 rounded-md text-xs bg-white/5 text-slate-400 border border-white/10"
+                      className="px-2 py-0.5 rounded-md text-xs bg-white/50 text-muted-foreground border border-border"
                     >
                       {syn}
                     </span>
@@ -224,7 +224,7 @@ export function DictionaryPopup() {
           </>
         ) : (
           <div className="text-center py-4">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               Aucune definition trouvee pour "{selectedWord}"
             </p>
           </div>
@@ -232,7 +232,7 @@ export function DictionaryPopup() {
       </div>
 
       {/* Footer */}
-      <div className="px-4 py-2 border-t border-white/5">
+      <div className="px-4 py-2 border-t border-border">
         <p className="text-[10px] text-slate-600 text-center">
           Selectionnez un mot pour voir sa definition
         </p>

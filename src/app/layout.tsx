@@ -6,7 +6,7 @@ import { DictionaryPopup } from '@/components/dictionary/DictionaryPopup';
 import { AuthProvider, AuthBanner, SyncProvider } from '@/components/auth';
 
 export const viewport: Viewport = {
-  themeColor: '#f59e0b',
+  themeColor: '#1e3a5f',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     'Entraînement SAT Evidence-Based Reading and Writing avec questions générées par IA',
   manifest: '/manifest.json',
-  themeColor: '#f59e0b',
+  themeColor: '#1e3a5f',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="dark">
+    <html lang="fr">
       <body className="antialiased min-h-screen">
         <AuthProvider>
           <SyncProvider>

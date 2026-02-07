@@ -78,12 +78,12 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
   };
 
   const TrendIcon = trendData.trend === 'up' ? TrendingUp : trendData.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = trendData.trend === 'up' ? 'text-emerald-500' : trendData.trend === 'down' ? 'text-rose-500' : 'text-gray-400';
+  const trendColor = trendData.trend === 'up' ? 'text-teal-600' : trendData.trend === 'down' ? 'text-red-500' : 'text-gray-400';
 
   return (
     <div className={cn('grid grid-cols-2 gap-3', className)}>
       {/* Trend indicator */}
-      <div className="p-3 rounded-xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10">
+      <div className="p-3 rounded-xl bg-white/40 border border-white/60">
         <div className="flex items-center gap-2 mb-1">
           <TrendIcon className={cn('w-4 h-4', trendColor)} />
           <span className="text-xs text-muted-foreground">Tendance</span>
@@ -103,7 +103,7 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
       </div>
 
       {/* Avg time per question */}
-      <div className="p-3 rounded-xl bg-white/40 dark:bg-white/5 border border-white/60 dark:border-white/10">
+      <div className="p-3 rounded-xl bg-white/40 border border-white/60">
         <div className="flex items-center gap-2 mb-1">
           <Clock className="w-4 h-4 text-blue-500" />
           <span className="text-xs text-muted-foreground">Temps/question</span>
@@ -115,15 +115,15 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
       </div>
 
       {/* Total study time */}
-      <div className="col-span-2 p-3 rounded-xl bg-gradient-to-r from-violet-50/80 to-indigo-50/60 dark:from-violet-950/30 dark:to-indigo-950/20 border border-violet-200/50 dark:border-violet-800/30">
+      <div className="col-span-2 p-3 rounded-xl bg-gradient-to-r from-blue-50/80 to-sky-50/60 border border-blue-200/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-violet-500/20 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+            <div className="w-8 h-8 rounded-lg bg-blue-800/20 flex items-center justify-center">
+              <Zap className="w-4 h-4 text-blue-800" />
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Temps total d'étude</p>
-              <p className="font-bold text-violet-700 dark:text-violet-300">
+              <p className="font-bold text-blue-800">
                 {formatTime(trendData.totalStudyTime)}
               </p>
             </div>

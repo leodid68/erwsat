@@ -79,7 +79,7 @@ export default function ReviewPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Brain className="w-6 h-6 text-purple-400" />
+          <Brain className="w-6 h-6 text-blue-800" />
           Révision SRS
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -120,8 +120,8 @@ export default function ReviewPage() {
         <Card>
           <CardContent className="py-4">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-slate-400">Progression du jour</span>
-              <span className="text-slate-300">{reviewedToday}/{totalDue}</span>
+              <span className="text-muted-foreground">Progression du jour</span>
+              <span className="text-foreground">{reviewedToday}/{totalDue}</span>
             </div>
             <Progress value={progressPercent} className="h-2" />
           </CardContent>
@@ -153,7 +153,7 @@ export default function ReviewPage() {
                 <p className="text-muted-foreground mb-6">
                   Revenez demain pour continuer votre apprentissage.
                 </p>
-                <div className="flex items-center justify-center gap-2 text-sm text-slate-400">
+                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
                   <span>Prochaine révision : demain</span>
                 </div>
@@ -164,7 +164,7 @@ export default function ReviewPage() {
       ) : currentQuestion ? (
         <div className="space-y-4">
           {/* Card Counter */}
-          <div className="flex items-center justify-between text-sm text-slate-400">
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
             <span>Carte {currentIndex + 1} / {dueItems.length}</span>
             <Button variant="ghost" size="sm" onClick={handleRemove}>
               Retirer de la file
@@ -199,7 +199,7 @@ export default function ReviewPage() {
             Comment ça marche ?
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-sm text-slate-400 space-y-2">
+        <CardContent className="text-sm text-muted-foreground space-y-2">
           <p>
             Le système de répétition espacée (SRS) optimise votre mémorisation en espaçant
             les révisions selon votre performance.

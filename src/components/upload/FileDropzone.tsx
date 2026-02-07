@@ -154,12 +154,12 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
   return (
     <div className="space-y-6">
       {/* Selection Mode Toggle */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-violet-500/10 to-purple-500/10 border border-violet-500/20">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-800/10 to-blue-900/10 border border-blue-800/20">
         <div className="flex items-center gap-3">
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center transition-all',
             selectionMode === 'ai'
-              ? 'bg-gradient-to-br from-violet-500 to-purple-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]'
+              ? 'bg-gradient-to-br from-blue-800 to-blue-900 text-white shadow-[0_0_15px_rgba(30,58,95,0.3)]'
               : 'bg-muted border border-border text-muted-foreground'
           )}>
             {selectionMode === 'ai' ? <Sparkles className="w-5 h-5" /> : <Brain className="w-5 h-5" />}
@@ -180,7 +180,7 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
           disabled={isProcessing}
           className={cn(
             'relative w-14 h-7 rounded-full transition-colors',
-            selectionMode === 'ai' ? 'bg-violet-500' : 'bg-muted',
+            selectionMode === 'ai' ? 'bg-blue-800' : 'bg-muted',
             isProcessing && 'opacity-50 cursor-not-allowed'
           )}
         >
@@ -265,11 +265,11 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
               <div className={cn(
                 'w-16 h-16 rounded-2xl flex items-center justify-center border',
                 selectionMode === 'ai'
-                  ? 'bg-violet-500/10 border-violet-500/20'
+                  ? 'bg-blue-800/10 border-blue-800/20'
                   : 'bg-primary/10 border-primary/20'
               )}>
                 {selectionMode === 'ai' ? (
-                  <Sparkles className="w-8 h-8 text-violet-500 animate-pulse" />
+                  <Sparkles className="w-8 h-8 text-blue-800 animate-pulse" />
                 ) : (
                   <Loader2 className="w-8 h-8 text-primary animate-spin" />
                 )}
@@ -291,7 +291,7 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
                 <div className={cn(
                   'w-16 h-16 rounded-2xl flex items-center justify-center border transition-all duration-300',
                   isDragActive
-                    ? 'bg-gradient-to-br from-amber-500 to-orange-500 border-amber-400/50 shadow-lg'
+                    ? 'bg-gradient-to-br from-yellow-500 to-amber-500 border-yellow-500/50 shadow-lg'
                     : 'bg-muted border-border'
                 )}>
                   <CloudUpload className={cn(

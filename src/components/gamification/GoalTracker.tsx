@@ -65,14 +65,14 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
-                        <Target className="w-4 h-4 text-purple-400" />
+                      <div className="w-8 h-8 rounded-lg bg-blue-800/20 flex items-center justify-center">
+                        <Target className="w-4 h-4 text-blue-800" />
                       </div>
                       <div>
-                        <p className="font-medium text-slate-200">{goal.description}</p>
+                        <p className="font-medium text-foreground">{goal.description}</p>
                         <p className={cn(
                           'text-xs flex items-center gap-1',
-                          isOverdue ? 'text-red-400' : 'text-slate-400'
+                          isOverdue ? 'text-red-400' : 'text-muted-foreground'
                         )}>
                           <Calendar className="w-3 h-3" />
                           {formatDate(goal.targetDate)}
@@ -84,19 +84,19 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
                       variant="ghost"
                       size="sm"
                       onClick={() => onRemoveGoal(goal.id)}
-                      className="text-slate-500 hover:text-red-400"
+                      className="text-muted-foreground hover:text-red-400"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span className="text-slate-400">
+                      <span className="text-muted-foreground">
                         {goal.type === 'quizzes' && 'Quiz'}
                         {goal.type === 'score' && 'Score'}
                         {goal.type === 'streak' && 'Série'}
                       </span>
-                      <span className="text-slate-300">
+                      <span className="text-foreground">
                         {goal.current}/{goal.target}
                       </span>
                     </div>
@@ -112,21 +112,21 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
       {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs text-slate-500 uppercase tracking-wide">Complétés</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">Complétés</p>
           {completedGoals.slice(0, 3).map((goal) => (
             <div
               key={goal.id}
               className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20"
             >
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm text-emerald-300">{goal.description}</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm text-emerald-700">{goal.description}</span>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => onRemoveGoal(goal.id)}
-                className="text-slate-500 hover:text-red-400"
+                className="text-muted-foreground hover:text-red-400"
               >
                 <Trash2 className="w-3 h-3" />
               </Button>
@@ -153,7 +153,7 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
-              <label className="text-sm text-slate-400 mb-1 block">Description</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Description</label>
               <Input
                 value={newGoal.description}
                 onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
@@ -162,11 +162,11 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-sm text-slate-400 mb-1 block">Type</label>
+                <label className="text-sm text-muted-foreground mb-1 block">Type</label>
                 <select
                   value={newGoal.type}
                   onChange={(e) => setNewGoal({ ...newGoal, type: e.target.value as 'quizzes' | 'score' | 'streak' })}
-                  className="w-full h-10 rounded-md border border-white/10 bg-white/5 px-3 text-sm text-slate-200"
+                  className="w-full h-10 rounded-md border border-border bg-background px-3 text-sm text-foreground"
                 >
                   <option value="quizzes">Quiz complétés</option>
                   <option value="score">Score à atteindre</option>
@@ -174,7 +174,7 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
                 </select>
               </div>
               <div>
-                <label className="text-sm text-slate-400 mb-1 block">Objectif</label>
+                <label className="text-sm text-muted-foreground mb-1 block">Objectif</label>
                 <Input
                   type="number"
                   value={newGoal.target}
@@ -184,7 +184,7 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
               </div>
             </div>
             <div>
-              <label className="text-sm text-slate-400 mb-1 block">Date limite</label>
+              <label className="text-sm text-muted-foreground mb-1 block">Date limite</label>
               <Input
                 type="date"
                 value={newGoal.targetDate}

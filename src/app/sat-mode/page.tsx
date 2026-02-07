@@ -190,7 +190,7 @@ export default function SATModePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <GraduationCap className="w-6 h-6 text-purple-400" />
+          <GraduationCap className="w-6 h-6 text-blue-800" />
           Mode SAT
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -199,36 +199,36 @@ export default function SATModePage() {
       </div>
 
       {/* Performance Summary */}
-      <Card className="glass-cosmic border-purple-500/20">
+      <Card className="glass-cosmic border-blue-800/20">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <Target className="w-5 h-5 text-purple-400" />
+              <div className="w-10 h-10 rounded-xl bg-blue-800/20 flex items-center justify-center">
+                <Target className="w-5 h-5 text-blue-800" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-200">Votre niveau actuel</p>
-                <p className="text-xs text-slate-400">
+                <p className="text-sm font-medium text-foreground">Votre niveau actuel</p>
+                <p className="text-xs text-muted-foreground">
                   {progress.totalQuestionsAnswered} questions répondues
                 </p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-purple-400">
+              <p className="text-2xl font-bold text-blue-800">
                 {Math.round(progress.overallAccuracy)}%
               </p>
-              <p className="text-xs text-slate-400">Précision globale</p>
+              <p className="text-xs text-muted-foreground">Précision globale</p>
             </div>
           </div>
 
           {/* Adaptive Distribution Preview */}
-          <div className="mt-4 pt-4 border-t border-white/5">
-            <p className="text-xs text-slate-500 mb-2">Distribution recommandée (mode adaptatif)</p>
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs text-muted-foreground mb-2">Distribution recommandée (mode adaptatif)</p>
             <div className="flex gap-2">
               <Badge variant="outline" className="text-emerald-400 border-emerald-500/30">
                 {adaptiveDistribution.easy}% Facile
               </Badge>
-              <Badge variant="outline" className="text-amber-400 border-amber-500/30">
+              <Badge variant="outline" className="text-yellow-600 border-yellow-600/30">
                 {adaptiveDistribution.medium}% Moyen
               </Badge>
               <Badge variant="outline" className="text-red-400 border-red-500/30">
@@ -242,7 +242,7 @@ export default function SATModePage() {
       {!hasEnoughQuestions ? (
         <Card className="glass-cosmic">
           <CardContent className="py-12 text-center">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-slate-500" />
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
             <h3 className="font-semibold text-foreground mb-2">Pas assez de questions</h3>
             <p className="text-muted-foreground mb-6">
               Générez au moins 10 questions pour utiliser le mode SAT.
@@ -274,8 +274,8 @@ export default function SATModePage() {
                     className={cn(
                       'w-full p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
-                        ? 'bg-purple-500/20 border-2 border-purple-500/50'
-                        : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                        ? 'bg-blue-800/20 border-2 border-blue-800/50'
+                        : 'bg-white/50 border-2 border-transparent hover:bg-white/60'
                     )}
                   >
                     <div className="flex items-start gap-4">
@@ -283,27 +283,27 @@ export default function SATModePage() {
                         className={cn(
                           'w-12 h-12 rounded-xl flex items-center justify-center',
                           isSelected
-                            ? 'bg-gradient-to-br from-purple-500 to-pink-500'
-                            : 'bg-white/10'
+                            ? 'bg-gradient-to-br from-blue-800 to-blue-900'
+                            : 'bg-white/60'
                         )}
                       >
-                        <Icon className={cn('w-6 h-6', isSelected ? 'text-white' : 'text-slate-400')} />
+                        <Icon className={cn('w-6 h-6', isSelected ? 'text-white' : 'text-muted-foreground')} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-slate-200">{mode.name}</p>
+                          <p className="font-medium text-foreground">{mode.name}</p>
                           {mode.recommended && (
-                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
+                            <Badge className="bg-blue-800/20 text-blue-800 border-blue-800/30 text-xs">
                               Recommandé
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-slate-400 mt-0.5">{mode.description}</p>
+                        <p className="text-sm text-muted-foreground mt-0.5">{mode.description}</p>
                         <div className="flex flex-wrap gap-2 mt-2">
                           {mode.features.map((feature) => (
                             <span
                               key={feature}
-                              className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-slate-400"
+                              className="text-xs px-2 py-0.5 rounded-full bg-white/50 text-muted-foreground"
                             >
                               {feature}
                             </span>
@@ -311,7 +311,7 @@ export default function SATModePage() {
                         </div>
                       </div>
                       {isSelected && (
-                        <div className="w-3 h-3 rounded-full bg-purple-500" />
+                        <div className="w-3 h-3 rounded-full bg-blue-800" />
                       )}
                     </div>
                   </button>
@@ -339,7 +339,7 @@ export default function SATModePage() {
                     </Button>
                   ))}
                 </div>
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="text-xs text-muted-foreground mt-2">
                   {allQuestions.length} questions disponibles
                 </p>
               </CardContent>
@@ -361,7 +361,7 @@ export default function SATModePage() {
             <CardContent>
               {/* Genre Distribution */}
               <div className="space-y-3">
-                <p className="text-xs text-slate-500">Répartition par genre</p>
+                <p className="text-xs text-muted-foreground">Répartition par genre</p>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(previewStats.genreDistribution)
                     .filter(([_, count]) => count > 0)
@@ -382,30 +382,30 @@ export default function SATModePage() {
                       return (
                         <div
                           key={genre}
-                          className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 border border-white/10"
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/50 border border-border"
                         >
-                          <Icon className="w-3 h-3 text-slate-400" />
-                          <span className="text-xs text-slate-300">
+                          <Icon className="w-3 h-3 text-muted-foreground" />
+                          <span className="text-xs text-foreground">
                             {TEXT_GENRE_LABELS[genre as TextGenre] || genre}
                           </span>
-                          <span className="text-xs text-slate-500">({count})</span>
+                          <span className="text-xs text-muted-foreground">({count})</span>
                         </div>
                       );
                     })}
                 </div>
 
                 {/* Diversity indicator */}
-                <div className="mt-3 pt-3 border-t border-white/5">
+                <div className="mt-3 pt-3 border-t border-border">
                   <div className="flex items-center justify-between text-xs mb-1">
-                    <span className="text-slate-500">Diversité des passages</span>
+                    <span className="text-muted-foreground">Diversité des passages</span>
                     <span className={cn(
                       previewStats.passageDiversityPercent >= 80 ? 'text-emerald-400' :
-                      previewStats.passageDiversityPercent >= 60 ? 'text-amber-400' : 'text-red-400'
+                      previewStats.passageDiversityPercent >= 60 ? 'text-yellow-600' : 'text-red-400'
                     )}>
                       {previewStats.passageDiversityPercent}%
                     </span>
                   </div>
-                  <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-white/50 rounded-full overflow-hidden">
                     <div
                       className={cn(
                         'h-full rounded-full transition-all',
@@ -415,7 +415,7 @@ export default function SATModePage() {
                       style={{ width: `${previewStats.passageDiversityPercent}%` }}
                     />
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {previewStats.passageDiversityPercent >= 80
                       ? '✓ Excellent : chaque texte utilisé 1-2 fois max'
                       : previewStats.passageDiversityPercent >= 60
@@ -432,10 +432,10 @@ export default function SATModePage() {
             <Card className="border-amber-500/20 bg-amber-500/5">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-amber-400 mt-0.5" />
+                  <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
                   <div className="text-sm">
-                    <p className="font-medium text-amber-300">Mode Simulation SAT</p>
-                    <p className="text-slate-400 mt-1">
+                    <p className="font-medium text-yellow-600">Mode Simulation SAT</p>
+                    <p className="text-muted-foreground mt-1">
                       Ce mode simule les conditions réelles du SAT ERW : 64 minutes pour
                       {Math.min(54, allQuestions.length)} questions. Le quiz sera soumis
                       automatiquement à la fin du temps.
@@ -453,7 +453,7 @@ export default function SATModePage() {
             </Button>
             <Button
               onClick={handleStart}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+              className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
             >
               Commencer
               <ArrowRight className="w-4 h-4 ml-2" />

@@ -41,7 +41,7 @@ export function WeakAreaSelector({
   );
 
   const getStatusColor = (accuracy: number | null) => {
-    if (accuracy === null) return 'text-slate-500';
+    if (accuracy === null) return 'text-muted-foreground';
     if (accuracy >= 80) return 'text-emerald-400';
     if (accuracy >= threshold) return 'text-amber-400';
     return 'text-red-400';
@@ -87,34 +87,34 @@ export function WeakAreaSelector({
               className={cn(
                 'w-full p-4 rounded-xl text-left transition-all duration-200',
                 total === 0
-                  ? 'bg-white/5 opacity-50 cursor-not-allowed'
+                  ? 'bg-white/50 opacity-50 cursor-not-allowed'
                   : isSelected
-                  ? 'bg-white/10 border-2 border-purple-500/50'
+                  ? 'bg-white/60 border-2 border-blue-800/50'
                   : isWeak
                   ? 'bg-red-500/10 border-2 border-red-500/20 hover:border-red-500/40'
-                  : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                  : 'bg-white/50 border-2 border-transparent hover:bg-white/60'
               )}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-slate-200">{label}</p>
+                    <p className="font-medium text-foreground">{label}</p>
                     {isWeak && <AlertTriangle className="w-3 h-3 text-red-400" />}
                   </div>
-                  <p className="text-xs text-slate-400 mt-0.5">{description}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
                 </div>
                 <div className="text-right">
                   <p className={cn('font-mono text-lg', getStatusColor(accuracy))}>
                     {accuracy !== null ? `${accuracy}%` : '—'}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     {total > 0 ? `${correct}/${total}` : 'Non essayé'}
                   </p>
                 </div>
               </div>
               {total > 0 && (
                 <div className="mt-3">
-                  <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-white/60 rounded-full overflow-hidden">
                     <div
                       className={cn('h-full rounded-full transition-all', getProgressColor(accuracy))}
                       style={{ width: `${accuracy}%` }}

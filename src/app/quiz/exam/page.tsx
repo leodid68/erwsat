@@ -44,7 +44,7 @@ const timerModes: TimerMode[] = [
     description: '64 minutes pour 54 questions (conditions réelles).',
     icon: Timer,
     timeLimit: SAT_EXAM_TIME,
-    gradient: 'from-purple-500 to-pink-400',
+    gradient: 'from-blue-800 to-blue-900',
   },
   {
     id: 'quick',
@@ -52,7 +52,7 @@ const timerModes: TimerMode[] = [
     description: '1 minute 30 par question. Entraînez votre rapidité.',
     icon: Zap,
     timeLimit: 90, // Per question, will be multiplied
-    gradient: 'from-amber-500 to-orange-400',
+    gradient: 'from-yellow-500 to-amber-500',
   },
 ];
 
@@ -96,7 +96,7 @@ export default function ExamModePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Timer className="w-6 h-6 text-purple-400" />
+          <Timer className="w-6 h-6 text-blue-800" />
           Mode Examen
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -124,8 +124,8 @@ export default function ExamModePage() {
                 className={cn(
                   'w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200',
                   isSelected
-                    ? 'bg-white/10 border-2 border-purple-500/50'
-                    : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                    ? 'bg-white/60 border-2 border-blue-800/50'
+                    : 'bg-white/50 border-2 border-transparent hover:bg-muted'
                 )}
               >
                 <div
@@ -137,11 +137,11 @@ export default function ExamModePage() {
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-slate-200">{mode.name}</p>
-                  <p className="text-sm text-slate-400">{mode.description}</p>
+                  <p className="font-medium text-foreground">{mode.name}</p>
+                  <p className="text-sm text-muted-foreground">{mode.description}</p>
                 </div>
                 {isSelected && (
-                  <div className="w-3 h-3 rounded-full bg-purple-500" />
+                  <div className="w-3 h-3 rounded-full bg-blue-800" />
                 )}
               </button>
             );
@@ -161,7 +161,7 @@ export default function ExamModePage() {
           {availableQuizzes.length === 0 ? (
             <div className="text-center py-8">
               <AlertCircle className="w-12 h-12 mx-auto mb-4 text-slate-500" />
-              <p className="text-slate-400 mb-4">Aucun quiz disponible</p>
+              <p className="text-muted-foreground mb-4">Aucun quiz disponible</p>
               <Button asChild>
                 <Link href="/generate">Générer un quiz</Link>
               </Button>
@@ -188,20 +188,20 @@ export default function ExamModePage() {
                     className={cn(
                       'w-full flex items-center justify-between p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
-                        ? 'bg-white/10 border-2 border-purple-500/50'
-                        : 'bg-white/5 border-2 border-transparent hover:bg-white/10'
+                        ? 'bg-white/60 border-2 border-blue-800/50'
+                        : 'bg-white/50 border-2 border-transparent hover:bg-muted'
                     )}
                   >
                     <div>
-                      <p className="font-medium text-slate-200">{quiz.title}</p>
-                      <p className="text-sm text-slate-400">
+                      <p className="font-medium text-foreground">{quiz.title}</p>
+                      <p className="text-sm text-muted-foreground">
                         {quiz.questions.length} questions
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-mono text-slate-300">{estimatedTime}</p>
+                      <p className="text-sm font-mono text-foreground">{estimatedTime}</p>
                       {isSelected && (
-                        <div className="w-3 h-3 rounded-full bg-purple-500 ml-auto mt-1" />
+                        <div className="w-3 h-3 rounded-full bg-blue-800 ml-auto mt-1" />
                       )}
                     </div>
                   </button>
@@ -220,7 +220,7 @@ export default function ExamModePage() {
         <Button
           onClick={handleStartQuiz}
           disabled={!selectedQuizId}
-          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+          className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
         >
           Commencer
           <ArrowRight className="w-4 h-4 ml-2" />

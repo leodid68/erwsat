@@ -108,8 +108,8 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
       className={cn(
         'flex items-center gap-1 text-xs font-medium transition-colors',
         sortField === field
-          ? 'text-purple-400'
-          : 'text-slate-400 hover:text-slate-200'
+          ? 'text-blue-800'
+          : 'text-muted-foreground hover:text-foreground'
       )}
     >
       {children}
@@ -138,8 +138,8 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
     return (
       <Card className="glass-cosmic">
         <CardContent className="py-12 text-center">
-          <Calendar className="w-12 h-12 mx-auto mb-4 text-slate-500" />
-          <p className="text-slate-400">Aucun quiz complété</p>
+          <Calendar className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-muted-foreground">Aucun quiz complété</p>
         </CardContent>
       </Card>
     );
@@ -173,7 +173,7 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
       </div>
 
       {/* Table Header */}
-      <div className="hidden md:grid md:grid-cols-5 gap-4 px-4 py-2 text-slate-400">
+      <div className="hidden md:grid md:grid-cols-5 gap-4 px-4 py-2 text-muted-foreground">
         <SortButton field="date">
           <Calendar className="w-3 h-3" />
           Date
@@ -198,25 +198,25 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
           );
 
           return (
-            <Card key={attempt.id} className="glass-cosmic hover:bg-white/5 transition-colors">
+            <Card key={attempt.id} className="glass-cosmic hover:bg-muted transition-colors">
               <CardContent className="p-4">
                 {/* Desktop layout */}
                 <div className="hidden md:grid md:grid-cols-5 gap-4 items-center">
-                  <span className="text-sm text-slate-300">
+                  <span className="text-sm text-foreground">
                     {formatDate(attempt.completedAt)}
                   </span>
-                  <span className="text-sm font-medium text-slate-200 truncate">
+                  <span className="text-sm font-medium text-foreground truncate">
                     {getQuizTitle(attempt.quizId)}
                   </span>
                   <div className="flex items-center gap-2">
                     <Badge variant={getScoreBadgeVariant(scorePercent)}>
                       {scorePercent}%
                     </Badge>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-muted-foreground">
                       {attempt.score}/{attempt.totalQuestions}
                     </span>
                   </div>
-                  <span className="text-sm text-slate-300">
+                  <span className="text-sm text-foreground">
                     {formatTime(attempt.timeSpent)}
                   </span>
                   <div className="text-right">
@@ -233,10 +233,10 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
                 <div className="md:hidden space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-slate-200">
+                      <p className="font-medium text-foreground">
                         {getQuizTitle(attempt.quizId)}
                       </p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-muted-foreground">
                         {formatDate(attempt.completedAt)}
                       </p>
                     </div>
@@ -248,7 +248,7 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-xs text-slate-400">
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Target className="w-3 h-3" />
                         {attempt.score}/{attempt.totalQuestions}
@@ -272,7 +272,7 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
       </div>
 
       {/* Summary */}
-      <p className="text-xs text-slate-500 text-center">
+      <p className="text-xs text-muted-foreground text-center">
         {sortedHistory.length} quiz{sortedHistory.length !== 1 ? 's' : ''} affichés
         {filterMinScore !== null && ` (filtrés: ${filterMinScore}%+)`}
       </p>

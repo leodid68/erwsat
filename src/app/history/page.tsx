@@ -37,7 +37,7 @@ export default function HistoryPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-            <History className="w-6 h-6 text-purple-400" />
+            <History className="w-6 h-6 text-blue-800" />
             Historique
           </h1>
           <p className="text-muted-foreground mt-1">

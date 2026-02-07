@@ -249,8 +249,8 @@ export default function LibraryPage() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-violet-500/20 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-violet-400" />
+              <div className="w-11 h-11 rounded-xl bg-blue-800/20 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-blue-700" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">~{stats.potentialQuestions}</p>
@@ -263,8 +263,8 @@ export default function LibraryPage() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <RefreshCw className="w-5 h-5 text-amber-400" />
+              <div className="w-11 h-11 rounded-xl bg-yellow-600/20 flex items-center justify-center">
+                <RefreshCw className="w-5 h-5 text-yellow-600" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.unusedCount}</p>
@@ -309,10 +309,10 @@ export default function LibraryPage() {
                 return (
                   <div key={genre} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-300">
+                      <span className="text-foreground">
                         {TEXT_GENRE_LABELS[genre as TextGenre] || genre}
                       </span>
-                      <span className="text-slate-500">
+                      <span className="text-muted-foreground">
                         {count} ({percent}%)
                       </span>
                     </div>
@@ -328,14 +328,14 @@ export default function LibraryPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Filter className="w-4 h-4 text-violet-500" />
+            <Filter className="w-4 h-4 text-blue-800" />
             Filtres
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Rechercher un texte..."
               value={searchQuery}
@@ -354,8 +354,8 @@ export default function LibraryPage() {
                 className={cn(
                   'px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
                   selectedGenre === genre
-                    ? 'bg-violet-500 text-white'
-                    : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                    ? 'bg-blue-800 text-white'
+                    : 'bg-white/50 text-muted-foreground hover:bg-muted'
                 )}
               >
                 {TEXT_GENRE_LABELS[genre] || genre}
@@ -364,7 +364,7 @@ export default function LibraryPage() {
 
             {/* Divider */}
             {availableGenres.length > 0 && availableProviders.length > 0 && (
-              <div className="w-px h-6 bg-white/10" />
+              <div className="w-px h-6 bg-white/60" />
             )}
 
             {/* Provider filters */}
@@ -380,7 +380,7 @@ export default function LibraryPage() {
                     'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5',
                     selectedProvider === provider
                       ? 'bg-emerald-500 text-white'
-                      : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                      : 'bg-white/50 text-muted-foreground hover:bg-muted'
                   )}
                 >
                   <Icon className="w-3 h-3" />
@@ -390,7 +390,7 @@ export default function LibraryPage() {
             })}
 
             {/* Divider */}
-            <div className="w-px h-6 bg-white/10" />
+            <div className="w-px h-6 bg-white/60" />
 
             {/* Unused only toggle */}
             <button
@@ -399,7 +399,7 @@ export default function LibraryPage() {
                 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5',
                 showUnusedOnly
                   ? 'bg-amber-500 text-white'
-                  : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                  : 'bg-white/50 text-muted-foreground hover:bg-muted'
               )}
             >
               <Clock className="w-3 h-3" />
@@ -443,34 +443,34 @@ export default function LibraryPage() {
                 return (
                   <div
                     key={passage.id}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+                    className="p-4 rounded-xl bg-white/50 border border-border hover:bg-muted transition-all"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <Icon className="w-4 h-4 text-slate-500" />
+                          <Icon className="w-4 h-4 text-muted-foreground" />
                           <Badge
                             variant="outline"
-                            className="text-xs border-white/20 text-slate-400"
+                            className="text-xs border-border text-muted-foreground"
                           >
                             {TEXT_GENRE_LABELS[passage.genre] || passage.genre}
                           </Badge>
                           {passage.timesUsed === 0 && (
-                            <Badge className="text-xs bg-amber-500/20 text-amber-400 border-amber-500/30">
+                            <Badge className="text-xs bg-yellow-600/20 text-yellow-600 border-yellow-600/30">
                               Nouveau
                             </Badge>
                           )}
                         </div>
-                        <p className="font-medium text-slate-200 text-sm line-clamp-1">
+                        <p className="font-medium text-foreground text-sm line-clamp-1">
                           {passage.title}
                         </p>
                         {passage.author && (
-                          <p className="text-xs text-slate-500">{passage.author}</p>
+                          <p className="text-xs text-muted-foreground">{passage.author}</p>
                         )}
-                        <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+                        <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                           {passage.text}
                         </p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <span>{passage.wordCount} mots</span>
                           <span>Utilisé {passage.timesUsed}x</span>
                           {passage.questionsGenerated.length > 0 && (
@@ -493,7 +493,7 @@ export default function LibraryPage() {
 
               {filteredPassages.length === 0 && (
                 <div className="text-center py-8">
-                  <p className="text-slate-500">Aucun passage ne correspond aux filtres</p>
+                  <p className="text-muted-foreground">Aucun passage ne correspond aux filtres</p>
                 </div>
               )}
             </div>

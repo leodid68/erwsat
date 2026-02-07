@@ -206,8 +206,8 @@ export default function QuizPage() {
             className={cn(
               "p-2 rounded-lg transition-all duration-200",
               showKeyboardHelp
-                ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                : "text-slate-400 hover:bg-white/5 hover:text-slate-200 border border-transparent"
+                ? "bg-blue-800/20 text-blue-800 border border-blue-800/30"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
             )}
             title="Raccourcis clavier (?)"
           >
@@ -224,9 +224,9 @@ export default function QuizPage() {
 
       {/* Keyboard Shortcuts Help */}
       {showKeyboardHelp && (
-        <Card className="glass-cosmic border-purple-500/20">
+        <Card className="glass-cosmic border-blue-800/20">
           <CardContent className="py-3 px-4">
-            <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-400">
+            <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
               <span><kbd className="kbd-cosmic">←</kbd> <kbd className="kbd-cosmic">→</kbd> Navigation</span>
               <span><kbd className="kbd-cosmic">A</kbd>-<kbd className="kbd-cosmic">D</kbd> ou <kbd className="kbd-cosmic">1</kbd>-<kbd className="kbd-cosmic">4</kbd> Répondre</span>
               <span><kbd className="kbd-cosmic">F</kbd> Marquer</span>

@@ -95,7 +95,7 @@ export function SRSCard({ question, onGrade, onSkip }: SRSCardProps) {
           <div className="flex justify-center">
             <Button
               onClick={() => setShowAnswer(true)}
-              className="bg-gradient-to-r from-amber-500 to-orange-500"
+              className="bg-gradient-to-r from-yellow-500 to-amber-500"
             >
               <Eye className="w-4 h-4 mr-2" />
               Voir la réponse

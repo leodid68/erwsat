@@ -211,26 +211,26 @@ export default function ResultsPage() {
       {/* Performance Feedback */}
       <Card className={cn(
         'border-2',
-        performanceAnalysis.feedback.type === 'excellent' && 'border-emerald-300 bg-emerald-50/50 dark:bg-emerald-950/20',
-        performanceAnalysis.feedback.type === 'good' && 'border-blue-300 bg-blue-50/50 dark:bg-blue-950/20',
-        performanceAnalysis.feedback.type === 'average' && 'border-amber-300 bg-amber-50/50 dark:bg-amber-950/20',
-        performanceAnalysis.feedback.type === 'needsWork' && 'border-rose-300 bg-rose-50/50 dark:bg-rose-950/20',
+        performanceAnalysis.feedback.type === 'excellent' && 'border-emerald-300 bg-emerald-50/50',
+        performanceAnalysis.feedback.type === 'good' && 'border-blue-300 bg-blue-50/50',
+        performanceAnalysis.feedback.type === 'average' && 'border-amber-300 bg-amber-50/50',
+        performanceAnalysis.feedback.type === 'needsWork' && 'border-rose-300 bg-rose-50/50',
       )}>
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
             <div className={cn(
               'p-3 rounded-xl',
-              performanceAnalysis.feedback.type === 'excellent' && 'bg-emerald-100 dark:bg-emerald-900/50',
-              performanceAnalysis.feedback.type === 'good' && 'bg-blue-100 dark:bg-blue-900/50',
-              performanceAnalysis.feedback.type === 'average' && 'bg-amber-100 dark:bg-amber-900/50',
-              performanceAnalysis.feedback.type === 'needsWork' && 'bg-rose-100 dark:bg-rose-900/50',
+              performanceAnalysis.feedback.type === 'excellent' && 'bg-emerald-100',
+              performanceAnalysis.feedback.type === 'good' && 'bg-blue-100',
+              performanceAnalysis.feedback.type === 'average' && 'bg-amber-100',
+              performanceAnalysis.feedback.type === 'needsWork' && 'bg-rose-100',
             )}>
               {performanceAnalysis.feedback.type === 'excellent' ? (
-                <Award className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <Award className="h-6 w-6 text-emerald-600" />
               ) : performanceAnalysis.feedback.type === 'good' ? (
-                <TrendingUp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <TrendingUp className="h-6 w-6 text-blue-600" />
               ) : (
-                <Sparkles className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                <Sparkles className="h-6 w-6 text-amber-600" />
               )}
             </div>
             <div className="flex-1">
@@ -239,7 +239,7 @@ export default function ResultsPage() {
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
                 {performanceAnalysis.isPersonalBest && (
-                  <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0">
                     <Trophy className="w-3 h-3 mr-1" />
                     Record personnel !
                   </Badge>

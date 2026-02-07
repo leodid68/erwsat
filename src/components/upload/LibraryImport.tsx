@@ -234,14 +234,14 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       )}
 
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-500/20">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-blue-800/10 to-blue-900/10 border border-blue-800/20">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center shrink-0">
             <Library className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-violet-300">Importation SAT</p>
-            <p className="text-sm text-violet-400/70 mt-1">
+            <p className="font-medium text-blue-700">Importation SAT</p>
+            <p className="text-sm text-blue-700/70 mt-1">
               Importez des textes variés correspondant aux standards SAT officiels.
               Chaque texte peut générer ~3 questions différentes.
             </p>
@@ -252,8 +252,8 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       {/* Text Count Slider */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-slate-300">Nombre de textes</p>
-          <Badge variant="secondary" className="bg-violet-500/20 text-violet-300">
+          <p className="text-sm font-medium text-foreground">Nombre de textes</p>
+          <Badge variant="secondary" className="bg-blue-800/20 text-blue-700">
             {textCount} textes → ~{textCount * 3} questions
           </Badge>
         </div>
@@ -265,7 +265,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           step={5}
           className="w-full"
         />
-        <div className="flex justify-between text-xs text-slate-500">
+        <div className="flex justify-between text-xs text-muted-foreground">
           <span>5 textes</span>
           <span>25</span>
           <span>50 textes</span>
@@ -274,7 +274,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
 
       {/* Categories */}
       <div className="space-y-3">
-        <p className="text-sm font-medium text-slate-300">Catégories</p>
+        <p className="text-sm font-medium text-foreground">Catégories</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {ALL_CATEGORIES.map((category) => {
             const satWeight = SAT_RECOMMENDED_CATEGORIES.find(
@@ -288,17 +288,17 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                 className={cn(
                   'p-3 rounded-xl text-left transition-all duration-200 border relative',
                   selectedCategories.includes(category)
-                    ? 'border-violet-400 bg-violet-500/20'
-                    : 'border-white/10 bg-white/5 hover:bg-white/10'
+                    ? 'border-blue-700 bg-blue-800/20'
+                    : 'border-border bg-white/50 hover:bg-white/60'
                 )}
               >
                 <span className="text-lg">{CATEGORY_ICONS[category]}</span>
-                <p className="text-xs font-medium mt-1 text-slate-300">
+                <p className="text-xs font-medium mt-1 text-foreground">
                   {CATEGORY_LABELS[category]}
                 </p>
                 {satWeight && satWeight >= 15 && (
                   <div className="absolute top-1 right-1">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-600/20 text-yellow-600">
                       SAT {satWeight}%
                     </span>
                   </div>
@@ -310,23 +310,23 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       </div>
 
       {/* Save to Library Toggle */}
-      <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+      <div className="flex items-center justify-between p-3 rounded-xl bg-white/50 border border-border">
         <div className="flex items-center gap-3">
           <div
             className={cn(
               'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
               saveToLibrary
                 ? 'bg-gradient-to-br from-emerald-500 to-green-500 text-white'
-                : 'bg-white/5 border border-white/10 text-slate-500'
+                : 'bg-white/50 border border-border text-muted-foreground'
             )}
           >
             <Save className="w-4 h-4" />
           </div>
           <div>
-            <p className="text-sm font-medium text-slate-200">
+            <p className="text-sm font-medium text-foreground">
               Sauvegarder dans la bibliothèque
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               Réutilisez les textes pour générer plus de questions
             </p>
           </div>
@@ -335,7 +335,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           onClick={() => setSaveToLibrary(!saveToLibrary)}
           className={cn(
             'relative w-12 h-6 rounded-full transition-colors',
-            saveToLibrary ? 'bg-emerald-500' : 'bg-white/10'
+            saveToLibrary ? 'bg-emerald-500' : 'bg-white/60'
           )}
         >
           <div
@@ -352,7 +352,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
         <Button
           onClick={() => handleFetchRandom('sat')}
           disabled={isLoading}
-          className="bg-gradient-to-br from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+          className="bg-gradient-to-br from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -364,7 +364,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
         <Button
           onClick={() => handleFetchRandom('categories')}
           disabled={isLoading || selectedCategories.length === 0}
-          className="bg-gradient-to-br from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600"
+          className="bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -399,11 +399,11 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       {items.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-300">
+            <p className="text-sm font-medium text-foreground">
               {items.length} textes trouvés
             </p>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-violet-400 border-violet-500/30">
+              <Badge variant="outline" className="text-blue-700 border-blue-800/30">
                 {selectedItems.size} sélectionné(s)
               </Badge>
               <Badge variant="outline" className="text-emerald-400 border-emerald-500/30">
@@ -424,8 +424,8 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                     className={cn(
                       'w-full p-3 rounded-xl text-left transition-all duration-200 flex items-start gap-3',
                       isSelected
-                        ? 'bg-violet-500/20 border-2 border-violet-400'
-                        : 'bg-white/5 border border-white/10 hover:bg-white/10'
+                        ? 'bg-blue-800/20 border-2 border-blue-700'
+                        : 'bg-white/50 border border-border hover:bg-white/60'
                     )}
                   >
                     {/* Checkbox */}
@@ -433,8 +433,8 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                       className={cn(
                         'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all',
                         isSelected
-                          ? 'bg-violet-500 text-white'
-                          : 'bg-white/10 border border-white/20'
+                          ? 'bg-blue-800 text-white'
+                          : 'bg-white/60 border border-border'
                       )}
                     >
                       {isSelected && <Check className="w-4 h-4" />}
@@ -443,19 +443,19 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <Icon className="w-4 h-4 text-slate-500" />
+                        <Icon className="w-4 h-4 text-muted-foreground" />
                         <Badge
                           variant="outline"
-                          className="text-xs border-white/20 text-slate-400"
+                          className="text-xs border-border text-muted-foreground"
                         >
                           {CATEGORY_LABELS[item.category]}
                         </Badge>
                       </div>
-                      <p className="font-medium text-slate-200 text-sm line-clamp-1">
+                      <p className="font-medium text-foreground text-sm line-clamp-1">
                         {item.title}
                       </p>
                       {item.author && (
-                        <p className="text-xs text-slate-500">{item.author}</p>
+                        <p className="text-xs text-muted-foreground">{item.author}</p>
                       )}
                       <p className="text-xs text-slate-600 mt-1 line-clamp-1">
                         {item.preview}
@@ -471,7 +471,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           <Button
             onClick={handleContinue}
             disabled={selectedItems.size === 0}
-            className="w-full bg-gradient-to-br from-indigo-500 to-violet-500 hover:from-indigo-600 hover:to-violet-600"
+            className="w-full bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950"
           >
             <Check className="w-4 h-4 mr-2" />
             Importer {selectedItems.size} texte(s)
