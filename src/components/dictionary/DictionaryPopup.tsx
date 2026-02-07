@@ -129,7 +129,7 @@ export function DictionaryPopup() {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-700 to-sky-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
             <BookOpen className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -143,7 +143,7 @@ export function DictionaryPopup() {
           {result?.audioUrl && (
             <button
               onClick={playAudio}
-              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-blue-800 transition-colors"
+              className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-primary transition-colors"
               title="Prononcer"
             >
               <Volume2 className="w-4 h-4" />
@@ -162,13 +162,13 @@ export function DictionaryPopup() {
       <div className="p-4 space-y-3 max-h-64 overflow-y-auto scrollbar-thin">
         {isLoading ? (
           <div className="flex items-center justify-center py-6">
-            <Loader2 className="w-6 h-6 text-blue-800 animate-spin" />
+            <Loader2 className="w-6 h-6 text-primary animate-spin" />
           </div>
         ) : result?.found ? (
           <>
             {/* Part of Speech */}
             {result.partOfSpeech && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-blue-800/20 text-blue-800 border border-blue-800/30">
+              <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/30">
                 {result.partOfSpeech}
               </span>
             )}
@@ -184,7 +184,7 @@ export function DictionaryPopup() {
 
             {/* Example */}
             {result.example && (
-              <div className="pl-3 border-l-2 border-blue-800/30">
+              <div className="pl-3 border-l-2 border-primary/30">
                 <p className="text-xs text-muted-foreground italic">
                   "{result.example}"
                 </p>

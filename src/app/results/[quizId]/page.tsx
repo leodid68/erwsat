@@ -239,7 +239,7 @@ export default function ResultsPage() {
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
                 {performanceAnalysis.isPersonalBest && (
-                  <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white border-0">
+                  <Badge className="bg-gradient-to-r from-amber-400 to-amber-500 text-white border-0">
                     <Trophy className="w-3 h-3 mr-1" />
                     Record personnel !
                   </Badge>

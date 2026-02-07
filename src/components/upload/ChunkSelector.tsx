@@ -135,7 +135,7 @@ export function ChunkSelector({
         <Button
           onClick={handleContinue}
           disabled={selectedIds.size === 0}
-          className="bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950 text-white shadow-lg shadow-blue-900/25"
+          className="bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-lg shadow-blue-800/25"
         >
           Continuer
           <ArrowRight className="w-4 h-4 ml-2" />

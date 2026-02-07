@@ -249,7 +249,7 @@ export default function LibraryPage() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-blue-800/20 flex items-center justify-center">
+              <div className="w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-blue-700" />
               </div>
               <div>
@@ -263,8 +263,8 @@ export default function LibraryPage() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-yellow-600/20 flex items-center justify-center">
-                <RefreshCw className="w-5 h-5 text-yellow-600" />
+              <div className="w-11 h-11 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                <RefreshCw className="w-5 h-5 text-amber-500" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{stats.unusedCount}</p>
@@ -328,7 +328,7 @@ export default function LibraryPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Filter className="w-4 h-4 text-blue-800" />
+            <Filter className="w-4 h-4 text-primary" />
             Filtres
           </CardTitle>
         </CardHeader>
@@ -456,7 +456,7 @@ export default function LibraryPage() {
                             {TEXT_GENRE_LABELS[passage.genre] || passage.genre}
                           </Badge>
                           {passage.timesUsed === 0 && (
-                            <Badge className="text-xs bg-yellow-600/20 text-yellow-600 border-yellow-600/30">
+                            <Badge className="text-xs bg-amber-500/20 text-amber-500 border-amber-500/30">
                               Nouveau
                             </Badge>
                           )}

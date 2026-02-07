@@ -63,9 +63,9 @@ const DOMAINS = {
 } as const;
 
 const DOMAIN_COLORS: Record<string, string> = {
-  'Information & Ideas': '#1e3a5f',
-  'Craft & Structure': '#c9a84c',
-  'Expression of Ideas': '#2d8a6e',
+  'Information & Ideas': '#1E40AF',
+  'Craft & Structure': '#F59E0B',
+  'Expression of Ideas': '#10B981',
   'Standard English Conventions': '#627d98',
 };
 
@@ -398,7 +398,7 @@ export default function AnalyticsPage() {
         <Card className="stat-card">
           <CardContent className="pt-4 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-900/20 text-blue-900 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
                 <Activity className="w-5 h-5" />
               </div>
               <div>
@@ -412,7 +412,7 @@ export default function AnalyticsPage() {
         <Card className="stat-card">
           <CardContent className="pt-4 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-teal-600/20 text-teal-700 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-700 flex items-center justify-center">
                 <Target className="w-5 h-5" />
               </div>
               <div>
@@ -433,7 +433,7 @@ export default function AnalyticsPage() {
         <Card className="stat-card">
           <CardContent className="pt-4 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-yellow-600/20 text-yellow-700 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-600 flex items-center justify-center">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
@@ -449,7 +449,7 @@ export default function AnalyticsPage() {
         <Card className="stat-card">
           <CardContent className="pt-4 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-800/20 text-blue-800 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
                 <Brain className="w-5 h-5" />
               </div>
               <div>
@@ -524,7 +524,7 @@ export default function AnalyticsPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <PieChart className="w-4 h-4 text-yellow-600" />
+              <PieChart className="w-4 h-4 text-amber-500" />
               Distribution des scores
             </CardTitle>
             <CardDescription>Répartition par tranches</CardDescription>
@@ -733,7 +733,7 @@ export default function AnalyticsPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
-              <Clock className="w-4 h-4 text-yellow-600" />
+              <Clock className="w-4 h-4 text-amber-500" />
               Analyse du temps
             </CardTitle>
             <CardDescription>Statistiques temporelles détaillées</CardDescription>

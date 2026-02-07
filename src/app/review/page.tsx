@@ -79,7 +79,7 @@ export default function ReviewPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Brain className="w-6 h-6 text-blue-800" />
+          <Brain className="w-6 h-6 text-primary" />
           Révision SRS
         </h1>
         <p className="text-muted-foreground mt-1">

@@ -84,10 +84,9 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)',
       },
       fontFamily: {
-        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-display)', 'Georgia', 'serif'],
+        sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
         mono: ['var(--font-geist-mono)'],
-        display: ['var(--font-display)'],
+        display: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
     },
   },

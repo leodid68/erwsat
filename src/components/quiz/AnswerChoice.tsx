@@ -68,8 +68,8 @@ export function AnswerChoice({
 
           // Selected - Primary gradient
           status === 'selected' && [
-            'bg-gradient-to-br from-blue-700 to-blue-900 border-blue-700/50 text-white',
-            'shadow-[0_0_20px_rgba(30,58,95,0.4)]',
+            'bg-gradient-to-br from-blue-600 to-blue-800 border-blue-600/50 text-white',
+            'shadow-[0_0_20px_rgba(30,64,175,0.4)]',
           ],
 
           // Correct - Success gradient
@@ -111,7 +111,7 @@ export function AnswerChoice({
 
       {/* Selected indicator line */}
       {status === 'selected' && (
-        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-700 animate-pulse" />
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-600 via-blue-700 to-blue-600 animate-pulse" />
       )}
     </button>
   );

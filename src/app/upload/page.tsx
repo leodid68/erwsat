@@ -393,7 +393,7 @@ function UploadPageContent() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'file'
-              ? 'bg-gradient-to-r from-blue-800/20 to-blue-900/20 border border-blue-800/30 text-blue-800 shadow-[0_0_15px_rgba(30,58,95,0.2)]'
+              ? 'bg-gradient-to-r from-primary/20 to-blue-800/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(30,64,175,0.2)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -435,7 +435,7 @@ function UploadPageContent() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'guardian'
-              ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-600/30 text-yellow-600 shadow-[0_0_20px_rgba(201,168,76,0.3)]'
+              ? 'bg-gradient-to-r from-amber-400/20 to-amber-500/20 border border-amber-500/30 text-amber-500 shadow-[0_0_20px_rgba(245,158,11,0.3)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -449,7 +449,7 @@ function UploadPageContent() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'library'
-              ? 'bg-gradient-to-r from-blue-800/20 to-blue-900/20 border border-blue-800/30 text-blue-700 shadow-[0_0_15px_rgba(30,58,95,0.2)]'
+              ? 'bg-gradient-to-r from-primary/20 to-blue-800/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(30,64,175,0.2)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -465,7 +465,7 @@ function UploadPageContent() {
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300',
             step === 'upload'
-              ? 'bg-gradient-to-br from-primary to-violet-500 text-white shadow-glow-sm'
+              ? 'bg-gradient-to-br from-primary to-blue-400 text-white shadow-glow-sm'
               : 'bg-success/20 text-success border border-success/30'
           )}>
             {step === 'select' ? <Check className="w-5 h-5" /> : (
@@ -490,7 +490,7 @@ function UploadPageContent() {
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300',
             step === 'select'
-              ? 'bg-gradient-to-br from-primary to-violet-500 text-white shadow-glow-sm'
+              ? 'bg-gradient-to-br from-primary to-blue-400 text-white shadow-glow-sm'
               : 'bg-white/500 text-muted-foreground border border-border'
           )}>
             <Sparkles className="w-5 h-5" />
@@ -727,7 +727,7 @@ function UploadPageContent() {
               <div className="absolute -right-10 -top-10 w-40 h-40 orb orb-violet opacity-30" />
               <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-blue-900 flex items-center justify-center shadow-lg shadow-blue-800/25">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/25">
                     <Library className="w-5 h-5 text-white" />
                   </div>
                   Bibliothèque aléatoire
@@ -739,7 +739,7 @@ function UploadPageContent() {
               <CardContent className="relative">
                 {isLoadingLibrary ? (
                   <div className="flex flex-col items-center justify-center py-12 gap-4">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-800" />
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
                     <p className="text-sm text-muted-foreground">
                       {useSmartSelection ? 'Analyse IA des passages...' : 'Chargement des textes...'}
                     </p>
@@ -747,12 +747,12 @@ function UploadPageContent() {
                 ) : (
                   <div className="space-y-4">
                     {/* AI Selection Toggle */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-blue-800/10 to-blue-900/10 border border-blue-800/20">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary/10 to-blue-800/10 border border-primary/20">
                       <div className="flex items-center gap-3">
                         <div className={cn(
                           'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
                           useSmartSelection
-                            ? 'bg-gradient-to-br from-blue-800 to-blue-900 text-white shadow-[0_0_15px_rgba(30,58,95,0.3)]'
+                            ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-[0_0_15px_rgba(30,64,175,0.3)]'
                             : 'bg-white/50 border border-border text-muted-foreground'
                         )}>
                           <Sparkles className="w-4 h-4" />
@@ -766,7 +766,7 @@ function UploadPageContent() {
                         onClick={() => setUseSmartSelection(!useSmartSelection)}
                         className={cn(
                           'relative w-12 h-6 rounded-full transition-colors',
-                          useSmartSelection ? 'bg-blue-800' : 'bg-white/60'
+                          useSmartSelection ? 'bg-primary' : 'bg-white/60'
                         )}
                       >
                         <div className={cn(
@@ -821,7 +821,7 @@ export default function UploadPage() {
   return (
     <Suspense fallback={
       <div className="max-w-3xl mx-auto flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-800" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     }>
       <UploadPageContent />

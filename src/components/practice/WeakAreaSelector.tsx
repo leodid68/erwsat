@@ -89,7 +89,7 @@ export function WeakAreaSelector({
                 total === 0
                   ? 'bg-white/50 opacity-50 cursor-not-allowed'
                   : isSelected
-                  ? 'bg-white/60 border-2 border-blue-800/50'
+                  ? 'bg-white/60 border-2 border-primary/50'
                   : isWeak
                   ? 'bg-red-500/10 border-2 border-red-500/20 hover:border-red-500/40'
                   : 'bg-white/50 border-2 border-transparent hover:bg-white/60'

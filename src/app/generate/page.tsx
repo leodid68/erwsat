@@ -68,7 +68,7 @@ type Difficulty = 'easy' | 'medium' | 'hard';
 
 const DIFFICULTY_OPTIONS: { value: Difficulty; label: string; icon: typeof Zap; color: string; bgSelected: string; borderSelected: string; glowColor: string }[] = [
   { value: 'easy', label: 'Facile', icon: Zap, color: 'text-emerald-400', bgSelected: 'bg-emerald-500/15', borderSelected: 'border-emerald-500/50', glowColor: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]' },
-  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-yellow-600', bgSelected: 'bg-yellow-600/15', borderSelected: 'border-yellow-600/50', glowColor: 'shadow-[0_0_20px_rgba(201,168,76,0.3)]' },
+  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-amber-500', bgSelected: 'bg-amber-500/15', borderSelected: 'border-amber-500/50', glowColor: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
   { value: 'hard', label: 'Difficile', icon: Brain, color: 'text-rose-400', bgSelected: 'bg-rose-500/15', borderSelected: 'border-rose-500/50', glowColor: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]' },
 ];
 
@@ -422,7 +422,7 @@ export default function GeneratePage() {
                           <div className={cn(
                             'w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300',
                             selectedDocId === doc.id
-                              ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white'
+                              ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-white'
                               : 'bg-muted border border-border text-muted-foreground'
                           )}>
                             <FileText className="w-5 h-5" />
@@ -574,7 +574,7 @@ export default function GeneratePage() {
                             <div className={cn(
                               'w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300',
                               isSelected
-                                ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white'
+                                ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-white'
                                 : 'bg-muted border border-border text-muted-foreground'
                             )}>
                               {isSelected ? <Check className="w-4 h-4" /> : <span className="text-[9px] font-bold">{QUESTION_TYPE_LABELS[type].slice(0, 2).toUpperCase()}</span>}
@@ -617,7 +617,7 @@ export default function GeneratePage() {
                         <div className={cn(
                           'w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-all duration-300',
                           isSelected
-                            ? `bg-gradient-to-br ${option.value === 'easy' ? 'from-emerald-500 to-green-500' : option.value === 'medium' ? 'from-yellow-500 to-amber-500' : 'from-blue-700 to-sky-600'}`
+                            ? `bg-gradient-to-br ${option.value === 'easy' ? 'from-emerald-500 to-green-500' : option.value === 'medium' ? 'from-amber-400 to-amber-500' : 'from-blue-500 to-blue-700'}`
                             : 'bg-muted border border-border'
                         )}>
                           <Icon className={cn('w-5 h-5', isSelected ? 'text-white' : 'text-muted-foreground')} />
@@ -691,15 +691,15 @@ export default function GeneratePage() {
                       className={cn(
                         'w-full flex items-center justify-between px-3 py-3 rounded-xl border bg-background transition-all',
                         isProviderDropdownOpen && 'border-primary ring-2 ring-primary/20',
-                        !hasApiKey && 'border-yellow-600/50'
+                        !hasApiKey && 'border-amber-500/50'
                       )}
                     >
                       <div className="flex items-center gap-3">
                         <div className={cn(
                           'w-10 h-10 rounded-xl flex items-center justify-center',
                           hasApiKey
-                            ? 'bg-gradient-to-br from-blue-800 to-blue-900 text-white'
-                            : 'bg-yellow-600/20 text-yellow-600'
+                            ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white'
+                            : 'bg-amber-500/20 text-amber-500'
                         )}>
                           {hasApiKey ? <Cloud className="w-5 h-5" /> : <Key className="w-5 h-5" />}
                         </div>
@@ -747,7 +747,7 @@ export default function GeneratePage() {
                                 <p className="text-xs text-muted-foreground">{provider.inputPrice} / {provider.outputPrice}</p>
                               </div>
                               {!providerConfigured && (
-                                <Badge variant="outline" className="text-[10px] border-yellow-600/30 text-yellow-600">
+                                <Badge variant="outline" className="text-[10px] border-amber-500/30 text-amber-500">
                                   Non configuré
                                 </Badge>
                               )}
@@ -771,7 +771,7 @@ export default function GeneratePage() {
                     {!hasApiKey && (
                       <Link
                         href="/settings"
-                        className="mt-2 flex items-center gap-2 p-2 rounded-lg bg-yellow-600/10 border border-yellow-600/20 text-xs text-yellow-600 hover:bg-yellow-600/15 transition-colors"
+                        className="mt-2 flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-500 hover:bg-amber-500/15 transition-colors"
                       >
                         <AlertTriangle className="w-4 h-4 shrink-0" />
                         <span>Configurez votre clé API {activeProvider.name} dans les paramètres</span>
@@ -861,7 +861,7 @@ export default function GeneratePage() {
               )}
 
               {warning && !error && (
-                <Alert className="border-yellow-600/50 bg-amber-50">
+                <Alert className="border-amber-500/50 bg-amber-50">
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
                   <AlertDescription className="text-sm text-amber-800">{warning}</AlertDescription>
                 </Alert>

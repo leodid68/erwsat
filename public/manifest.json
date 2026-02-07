@@ -4,8 +4,8 @@
   "description": "Entraînement SAT Evidence-Based Reading and Writing avec questions générées par IA",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#faf8f2",
-  "theme_color": "#1e3a5f",
+  "background_color": "#F8FAFC",
+  "theme_color": "#1E40AF",
   "orientation": "portrait-primary",
   "icons": [
     {

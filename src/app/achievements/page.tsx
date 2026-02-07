@@ -28,7 +28,7 @@ export default function AchievementsPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-yellow-600" />
+          <Trophy className="w-6 h-6 text-amber-500" />
           Succès
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -102,7 +102,7 @@ export default function AchievementsPage() {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Target className="w-4 h-4 text-blue-800" />
+            <Target className="w-4 h-4 text-primary" />
             Objectifs personnels
           </CardTitle>
           <CardDescription>
@@ -136,7 +136,7 @@ export default function AchievementsPage() {
 
       {/* CTA if no badges */}
       {unlockedCount === 0 && (
-        <Card className="glass-cosmic border-blue-800/20">
+        <Card className="glass-cosmic border-primary/20">
           <CardContent className="py-8 text-center">
             <Trophy className="w-12 h-12 mx-auto mb-4 text-slate-500" />
             <h3 className="font-semibold text-foreground mb-2">

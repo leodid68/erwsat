@@ -65,8 +65,8 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-800/20 flex items-center justify-center">
-                        <Target className="w-4 h-4 text-blue-800" />
+                      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                        <Target className="w-4 h-4 text-primary" />
                       </div>
                       <div>
                         <p className="font-medium text-foreground">{goal.description}</p>

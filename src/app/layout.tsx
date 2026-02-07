@@ -6,7 +6,7 @@ import { DictionaryPopup } from '@/components/dictionary/DictionaryPopup';
 import { AuthProvider, AuthBanner, SyncProvider } from '@/components/auth';
 
 export const viewport: Viewport = {
-  themeColor: '#1e3a5f',
+  themeColor: '#1E40AF',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     'Entraînement SAT Evidence-Based Reading and Writing avec questions générées par IA',
   manifest: '/manifest.json',
-  themeColor: '#1e3a5f',
+  themeColor: '#1E40AF',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

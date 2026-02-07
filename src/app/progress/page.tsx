@@ -180,7 +180,7 @@ export default function ProgressPage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-lg">
                   <GraduationCap className="w-7 h-7 text-white" />
                 </div>
                 <div>
@@ -201,7 +201,7 @@ export default function ProgressPage() {
             <div className="mt-4 pt-4 border-t border-border">
               <div className="relative h-2 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full"
                   style={{ width: `${((satEstimate.scaledScore - 200) / 600) * 100}%` }}
                 />
               </div>

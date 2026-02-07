@@ -387,7 +387,7 @@ export default function PracticePage() {
       <div className="max-w-2xl mx-auto">
         <Card className="glass-cosmic">
           <CardContent className="p-8 text-center space-y-6">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
             </div>
             <div>
@@ -413,7 +413,7 @@ export default function PracticePage() {
         {/* Progress Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="border-blue-800/30 text-blue-800">
+            <Badge variant="outline" className="border-primary/30 text-primary">
               Question {currentIndex + 1} / {officialQuestions.length}
             </Badge>
             <Badge variant="outline">
@@ -484,7 +484,7 @@ export default function PracticePage() {
                         : showExplanation && wasSelected && !isThisCorrect
                         ? 'bg-destructive text-white'
                         : isSelected
-                        ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white'
+                        ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-white'
                         : 'bg-background border border-border text-muted-foreground'
                     )}>
                       {showExplanation && isThisCorrect ? (
@@ -564,8 +564,8 @@ export default function PracticePage() {
     return (
       <div className="max-w-2xl mx-auto space-y-8">
         <Card className="glass-cosmic overflow-hidden">
-          <div className="bg-gradient-to-br from-blue-800/20 to-blue-900/20 p-8 text-center">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center shadow-lg mb-4">
+          <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-8 text-center">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg mb-4">
               <Award className="w-10 h-10 text-white" />
             </div>
             <p className="text-muted-foreground mb-2">Résultat</p>
@@ -601,7 +601,7 @@ export default function PracticePage() {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="text-center space-y-4">
-        <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-600 to-yellow-600 flex items-center justify-center shadow-lg">
+        <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-lg">
           <Dumbbell className="w-10 h-10 text-white" />
         </div>
         <h1 className="text-3xl font-bold text-gradient">Entraînement SAT</h1>
@@ -626,20 +626,20 @@ export default function PracticePage() {
               className={cn(
                 'p-4 rounded-xl border text-left transition-all',
                 mode === 'official'
-                  ? 'border-blue-800 bg-blue-800/10 ring-2 ring-blue-800/20'
-                  : 'border-border hover:border-blue-800/30'
+                  ? 'border-primary bg-primary/10 ring-2 ring-primary/20'
+                  : 'border-border hover:border-primary/30'
               )}
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className={cn(
                   'w-10 h-10 rounded-lg flex items-center justify-center',
-                  mode === 'official' ? 'bg-gradient-to-br from-blue-800 to-blue-900' : 'bg-muted'
+                  mode === 'official' ? 'bg-gradient-to-br from-blue-600 to-blue-800' : 'bg-muted'
                 )}>
                   <Award className={cn('w-5 h-5', mode === 'official' ? 'text-white' : 'text-muted-foreground')} />
                 </div>
                 <div>
                   <p className="font-medium">Questions officielles SAT</p>
-                  <p className="text-xs text-blue-800">Recommandé • {officialStats?.totalQuestions?.toLocaleString() || '2000+'} questions</p>
+                  <p className="text-xs text-primary">Recommandé • {officialStats?.totalQuestions?.toLocaleString() || '2000+'} questions</p>
                 </div>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -653,13 +653,13 @@ export default function PracticePage() {
                 'p-4 rounded-xl border text-left transition-all',
                 mode === 'custom'
                   ? 'border-amber-500 bg-amber-500/10'
-                  : 'border-border hover:border-yellow-600/30'
+                  : 'border-border hover:border-amber-500/30'
               )}
             >
               <div className="flex items-center gap-3 mb-2">
                 <div className={cn(
                   'w-10 h-10 rounded-lg flex items-center justify-center',
-                  mode === 'custom' ? 'bg-gradient-to-br from-yellow-500 to-amber-500' : 'bg-muted'
+                  mode === 'custom' ? 'bg-gradient-to-br from-amber-400 to-amber-500' : 'bg-muted'
                 )}>
                   <Sparkles className={cn('w-5 h-5', mode === 'custom' ? 'text-white' : 'text-muted-foreground')} />
                 </div>
@@ -711,16 +711,16 @@ export default function PracticePage() {
                     hover: 'hover:border-blue-500/50',
                   },
                   purple: {
-                    bg: 'bg-blue-800/10',
-                    border: 'border-blue-800/30',
-                    text: 'text-blue-800',
-                    hover: 'hover:border-blue-800/50',
+                    bg: 'bg-primary/10',
+                    border: 'border-primary/30',
+                    text: 'text-primary',
+                    hover: 'hover:border-primary/50',
                   },
                   amber: {
-                    bg: 'bg-yellow-600/10',
-                    border: 'border-yellow-600/30',
-                    text: 'text-yellow-600',
-                    hover: 'hover:border-yellow-600/50',
+                    bg: 'bg-amber-500/10',
+                    border: 'border-amber-500/30',
+                    text: 'text-amber-500',
+                    hover: 'hover:border-amber-500/50',
                   },
                 }[domain.color] || { bg: 'bg-muted', border: 'border-border', text: 'text-foreground', hover: '' };
 
@@ -900,7 +900,7 @@ export default function PracticePage() {
             <Button
               size="lg"
               onClick={handleStartOfficialPractice}
-              className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950 text-lg px-8 py-6"
+              className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-lg px-8 py-6"
             >
               <Award className="w-5 h-5 mr-2" />
               Commencer ({questionCount} questions)
@@ -984,7 +984,7 @@ export default function PracticePage() {
                 <Button
                   onClick={handleStartCustomPractice}
                   disabled={selectedTypes.length === 0 || filteredQuestions.length === 0}
-                  className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600"
+                  className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600"
                 >
                   Commencer ({Math.min(questionCount, filteredQuestions.length)} questions)
                   <ArrowRight className="w-4 h-4 ml-2" />

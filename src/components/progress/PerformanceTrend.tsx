@@ -78,7 +78,7 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
   };
 
   const TrendIcon = trendData.trend === 'up' ? TrendingUp : trendData.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = trendData.trend === 'up' ? 'text-teal-600' : trendData.trend === 'down' ? 'text-red-500' : 'text-gray-400';
+  const trendColor = trendData.trend === 'up' ? 'text-emerald-600' : trendData.trend === 'down' ? 'text-red-500' : 'text-gray-400';
 
   return (
     <div className={cn('grid grid-cols-2 gap-3', className)}>
@@ -118,12 +118,12 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
       <div className="col-span-2 p-3 rounded-xl bg-gradient-to-r from-blue-50/80 to-sky-50/60 border border-blue-200/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-800/20 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-blue-800" />
+            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+              <Zap className="w-4 h-4 text-primary" />
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Temps total d'étude</p>
-              <p className="font-bold text-blue-800">
+              <p className="font-bold text-primary">
                 {formatTime(trendData.totalStudyTime)}
               </p>
             </div>

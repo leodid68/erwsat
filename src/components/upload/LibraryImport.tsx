@@ -234,9 +234,9 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       )}
 
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-blue-800/10 to-blue-900/10 border border-blue-800/20">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-blue-600/10 to-blue-800/10 border border-primary/20">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shrink-0">
             <Library className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -253,7 +253,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-medium text-foreground">Nombre de textes</p>
-          <Badge variant="secondary" className="bg-blue-800/20 text-blue-700">
+          <Badge variant="secondary" className="bg-primary/20 text-primary">
             {textCount} textes → ~{textCount * 3} questions
           </Badge>
         </div>
@@ -288,7 +288,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                 className={cn(
                   'p-3 rounded-xl text-left transition-all duration-200 border relative',
                   selectedCategories.includes(category)
-                    ? 'border-blue-700 bg-blue-800/20'
+                    ? 'border-primary bg-primary/20'
                     : 'border-border bg-white/50 hover:bg-white/60'
                 )}
               >
@@ -298,7 +298,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                 </p>
                 {satWeight && satWeight >= 15 && (
                   <div className="absolute top-1 right-1">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-yellow-600/20 text-yellow-600">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-500">
                       SAT {satWeight}%
                     </span>
                   </div>
@@ -352,7 +352,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
         <Button
           onClick={() => handleFetchRandom('sat')}
           disabled={isLoading}
-          className="bg-gradient-to-br from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600"
+          className="bg-gradient-to-br from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -364,7 +364,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
         <Button
           onClick={() => handleFetchRandom('categories')}
           disabled={isLoading || selectedCategories.length === 0}
-          className="bg-gradient-to-br from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
+          className="bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -403,7 +403,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
               {items.length} textes trouvés
             </p>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="text-blue-700 border-blue-800/30">
+              <Badge variant="outline" className="text-primary border-primary/30">
                 {selectedItems.size} sélectionné(s)
               </Badge>
               <Badge variant="outline" className="text-emerald-400 border-emerald-500/30">
@@ -424,7 +424,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                     className={cn(
                       'w-full p-3 rounded-xl text-left transition-all duration-200 flex items-start gap-3',
                       isSelected
-                        ? 'bg-blue-800/20 border-2 border-blue-700'
+                        ? 'bg-primary/20 border-2 border-primary'
                         : 'bg-white/50 border border-border hover:bg-white/60'
                     )}
                   >
@@ -433,7 +433,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                       className={cn(
                         'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all',
                         isSelected
-                          ? 'bg-blue-800 text-white'
+                          ? 'bg-primary text-white'
                           : 'bg-white/60 border border-border'
                       )}
                     >
@@ -471,7 +471,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           <Button
             onClick={handleContinue}
             disabled={selectedItems.size === 0}
-            className="w-full bg-gradient-to-br from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-950"
+            className="w-full bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
           >
             <Check className="w-4 h-4 mr-2" />
             Importer {selectedItems.size} texte(s)

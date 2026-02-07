@@ -28,17 +28,17 @@ export function SATScoreDisplay({
   const estimate = estimateSATScore(correctAnswers, totalQuestions, difficultyBreakdown);
 
   return (
-    <Card className="glass-cosmic border-blue-800/20 overflow-hidden">
+    <Card className="glass-cosmic border-primary/20 overflow-hidden">
       <CardContent className="p-0">
         {/* Main Score Display */}
         <div className="relative p-6 text-center">
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-800/10 via-transparent to-blue-900/10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-blue-800/10" />
 
           <div className="relative">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <GraduationCap className="w-5 h-5 text-blue-800" />
-              <span className="text-sm font-medium text-blue-800">Score SAT Estimé</span>
+              <GraduationCap className="w-5 h-5 text-primary" />
+              <span className="text-sm font-medium text-primary">Score SAT Estimé</span>
             </div>
 
             <div className={cn('text-6xl font-bold mb-2', getScoreColor(estimate.scaledScore))}>
@@ -64,7 +64,7 @@ export function SATScoreDisplay({
             <div className="px-6 pb-4">
               <div className="relative h-3 bg-white/50 rounded-full overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-700 to-sky-600 rounded-full transition-all duration-500"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full transition-all duration-500"
                   style={{ width: `${((estimate.scaledScore - 200) / 600) * 100}%` }}
                 />
                 {/* Score markers */}

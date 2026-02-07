@@ -30,7 +30,7 @@ export function AuthButton() {
               className="h-8 w-8 rounded-full flex-shrink-0"
             />
           ) : (
-            <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
               {(session.user.name || session.user.email || "U")[0].toUpperCase()}
             </div>
           )}
@@ -76,7 +76,7 @@ export function AuthButton() {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="flex items-center gap-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors px-4 py-2 text-white text-sm font-medium"
+        className="flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-hover transition-colors px-4 py-2 text-white text-sm font-medium"
       >
         <User className="h-4 w-4" />
         <span className="hidden sm:inline">Se connecter</span>

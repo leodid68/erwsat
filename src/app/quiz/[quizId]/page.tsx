@@ -206,7 +206,7 @@ export default function QuizPage() {
             className={cn(
               "p-2 rounded-lg transition-all duration-200",
               showKeyboardHelp
-                ? "bg-blue-800/20 text-blue-800 border border-blue-800/30"
+                ? "bg-primary/20 text-primary border border-primary/30"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
             )}
             title="Raccourcis clavier (?)"
@@ -224,7 +224,7 @@ export default function QuizPage() {
 
       {/* Keyboard Shortcuts Help */}
       {showKeyboardHelp && (
-        <Card className="glass-cosmic border-blue-800/20">
+        <Card className="glass-cosmic border-primary/20">
           <CardContent className="py-3 px-4">
             <div className="flex flex-wrap gap-x-6 gap-y-1 text-xs text-muted-foreground">
               <span><kbd className="kbd-cosmic">←</kbd> <kbd className="kbd-cosmic">→</kbd> Navigation</span>

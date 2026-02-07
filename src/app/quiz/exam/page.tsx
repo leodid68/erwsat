@@ -44,7 +44,7 @@ const timerModes: TimerMode[] = [
     description: '64 minutes pour 54 questions (conditions réelles).',
     icon: Timer,
     timeLimit: SAT_EXAM_TIME,
-    gradient: 'from-blue-800 to-blue-900',
+    gradient: 'from-blue-600 to-blue-800',
   },
   {
     id: 'quick',
@@ -52,7 +52,7 @@ const timerModes: TimerMode[] = [
     description: '1 minute 30 par question. Entraînez votre rapidité.',
     icon: Zap,
     timeLimit: 90, // Per question, will be multiplied
-    gradient: 'from-yellow-500 to-amber-500',
+    gradient: 'from-amber-400 to-amber-500',
   },
 ];
 
@@ -96,7 +96,7 @@ export default function ExamModePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <Timer className="w-6 h-6 text-blue-800" />
+          <Timer className="w-6 h-6 text-primary" />
           Mode Examen
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -124,7 +124,7 @@ export default function ExamModePage() {
                 className={cn(
                   'w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200',
                   isSelected
-                    ? 'bg-white/60 border-2 border-blue-800/50'
+                    ? 'bg-white/60 border-2 border-primary/50'
                     : 'bg-white/50 border-2 border-transparent hover:bg-muted'
                 )}
               >
@@ -141,7 +141,7 @@ export default function ExamModePage() {
                   <p className="text-sm text-muted-foreground">{mode.description}</p>
                 </div>
                 {isSelected && (
-                  <div className="w-3 h-3 rounded-full bg-blue-800" />
+                  <div className="w-3 h-3 rounded-full bg-primary" />
                 )}
               </button>
             );
@@ -188,7 +188,7 @@ export default function ExamModePage() {
                     className={cn(
                       'w-full flex items-center justify-between p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
-                        ? 'bg-white/60 border-2 border-blue-800/50'
+                        ? 'bg-white/60 border-2 border-primary/50'
                         : 'bg-white/50 border-2 border-transparent hover:bg-muted'
                     )}
                   >
@@ -201,7 +201,7 @@ export default function ExamModePage() {
                     <div className="text-right">
                       <p className="text-sm font-mono text-foreground">{estimatedTime}</p>
                       {isSelected && (
-                        <div className="w-3 h-3 rounded-full bg-blue-800 ml-auto mt-1" />
+                        <div className="w-3 h-3 rounded-full bg-primary ml-auto mt-1" />
                       )}
                     </div>
                   </button>
@@ -220,7 +220,7 @@ export default function ExamModePage() {
         <Button
           onClick={handleStartQuiz}
           disabled={!selectedQuizId}
-          className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
+          className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
         >
           Commencer
           <ArrowRight className="w-4 h-4 ml-2" />

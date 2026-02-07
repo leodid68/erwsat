@@ -43,7 +43,7 @@ export function ExamTimer({ startTime, timeLimit, onTimeUp }: ExamTimerProps) {
     <div className={cn(
       'flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg',
       isCritical && 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse',
-      isWarning && !isCritical && 'bg-yellow-600/20 text-yellow-700 border border-yellow-600/30',
+      isWarning && !isCritical && 'bg-amber-400/20 text-amber-600 border border-amber-400/30',
       !isWarning && 'bg-white/50 text-foreground border border-border'
     )}>
       {isCritical ? <AlertTriangle className="w-5 h-5" /> : <Timer className="w-5 h-5" />}

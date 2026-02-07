@@ -108,7 +108,7 @@ export function QuizHistoryTable({ history, quizzes }: QuizHistoryTableProps) {
       className={cn(
         'flex items-center gap-1 text-xs font-medium transition-colors',
         sortField === field
-          ? 'text-blue-800'
+          ? 'text-primary'
           : 'text-muted-foreground hover:text-foreground'
       )}
     >

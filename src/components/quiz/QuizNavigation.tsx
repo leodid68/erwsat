@@ -53,7 +53,7 @@ export function QuizNavigation({
         </div>
         <div className="h-2 rounded-full bg-muted overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-yellow-500 to-amber-500 transition-all duration-500 ease-out rounded-full"
+            className="h-full bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-500 ease-out rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -74,7 +74,7 @@ export function QuizNavigation({
                 'w-8 h-8 rounded-xl text-xs font-semibold transition-all duration-200 relative',
                 'border flex items-center justify-center',
                 isCurrent
-                  ? 'bg-gradient-to-br from-yellow-500 to-amber-500 text-white border-yellow-500/50 shadow-md'
+                  ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-white border-amber-400/50 shadow-md'
                   : isAnswered
                   ? 'bg-success/10 text-success border-success/30 hover:border-success/50'
                   : 'bg-muted text-muted-foreground border-border hover:bg-muted hover:border-primary/20 hover:text-foreground'

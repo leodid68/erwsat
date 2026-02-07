@@ -140,7 +140,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-violet-500" />
+            <Sparkles className="w-5 h-5 text-blue-500" />
             Fournisseur IA
           </CardTitle>
           <CardDescription>Choisissez votre fournisseur et configurez votre clé API</CardDescription>

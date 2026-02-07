@@ -142,7 +142,7 @@ export function WeakAreasCard({ accuracyByType, className }: WeakAreasCardProps)
       {/* Improving Areas */}
       {improvingAreas.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-blue-800">
+          <div className="flex items-center gap-2 text-primary">
             <TrendingUp className="w-4 h-4" />
             <span className="text-sm font-medium">En progression</span>
           </div>

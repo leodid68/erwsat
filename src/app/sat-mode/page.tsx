@@ -190,7 +190,7 @@ export default function SATModePage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <GraduationCap className="w-6 h-6 text-blue-800" />
+          <GraduationCap className="w-6 h-6 text-primary" />
           Mode SAT
         </h1>
         <p className="text-muted-foreground mt-1">
@@ -199,12 +199,12 @@ export default function SATModePage() {
       </div>
 
       {/* Performance Summary */}
-      <Card className="glass-cosmic border-blue-800/20">
+      <Card className="glass-cosmic border-primary/20">
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-800/20 flex items-center justify-center">
-                <Target className="w-5 h-5 text-blue-800" />
+              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
+                <Target className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-sm font-medium text-foreground">Votre niveau actuel</p>
@@ -214,7 +214,7 @@ export default function SATModePage() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-blue-800">
+              <p className="text-2xl font-bold text-primary">
                 {Math.round(progress.overallAccuracy)}%
               </p>
               <p className="text-xs text-muted-foreground">Précision globale</p>
@@ -228,7 +228,7 @@ export default function SATModePage() {
               <Badge variant="outline" className="text-emerald-400 border-emerald-500/30">
                 {adaptiveDistribution.easy}% Facile
               </Badge>
-              <Badge variant="outline" className="text-yellow-600 border-yellow-600/30">
+              <Badge variant="outline" className="text-amber-500 border-amber-500/30">
                 {adaptiveDistribution.medium}% Moyen
               </Badge>
               <Badge variant="outline" className="text-red-400 border-red-500/30">
@@ -274,7 +274,7 @@ export default function SATModePage() {
                     className={cn(
                       'w-full p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
-                        ? 'bg-blue-800/20 border-2 border-blue-800/50'
+                        ? 'bg-primary/20 border-2 border-primary/50'
                         : 'bg-white/50 border-2 border-transparent hover:bg-white/60'
                     )}
                   >
@@ -283,7 +283,7 @@ export default function SATModePage() {
                         className={cn(
                           'w-12 h-12 rounded-xl flex items-center justify-center',
                           isSelected
-                            ? 'bg-gradient-to-br from-blue-800 to-blue-900'
+                            ? 'bg-gradient-to-br from-blue-600 to-blue-800'
                             : 'bg-white/60'
                         )}
                       >
@@ -293,7 +293,7 @@ export default function SATModePage() {
                         <div className="flex items-center gap-2">
                           <p className="font-medium text-foreground">{mode.name}</p>
                           {mode.recommended && (
-                            <Badge className="bg-blue-800/20 text-blue-800 border-blue-800/30 text-xs">
+                            <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
                               Recommandé
                             </Badge>
                           )}
@@ -311,7 +311,7 @@ export default function SATModePage() {
                         </div>
                       </div>
                       {isSelected && (
-                        <div className="w-3 h-3 rounded-full bg-blue-800" />
+                        <div className="w-3 h-3 rounded-full bg-primary" />
                       )}
                     </div>
                   </button>
@@ -400,7 +400,7 @@ export default function SATModePage() {
                     <span className="text-muted-foreground">Diversité des passages</span>
                     <span className={cn(
                       previewStats.passageDiversityPercent >= 80 ? 'text-emerald-400' :
-                      previewStats.passageDiversityPercent >= 60 ? 'text-yellow-600' : 'text-red-400'
+                      previewStats.passageDiversityPercent >= 60 ? 'text-amber-500' : 'text-red-400'
                     )}>
                       {previewStats.passageDiversityPercent}%
                     </span>
@@ -432,9 +432,9 @@ export default function SATModePage() {
             <Card className="border-amber-500/20 bg-amber-500/5">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
-                  <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+                  <Info className="w-5 h-5 text-amber-500 mt-0.5" />
                   <div className="text-sm">
-                    <p className="font-medium text-yellow-600">Mode Simulation SAT</p>
+                    <p className="font-medium text-amber-500">Mode Simulation SAT</p>
                     <p className="text-muted-foreground mt-1">
                       Ce mode simule les conditions réelles du SAT ERW : 64 minutes pour
                       {Math.min(54, allQuestions.length)} questions. Le quiz sera soumis
@@ -453,7 +453,7 @@ export default function SATModePage() {
             </Button>
             <Button
               onClick={handleStart}
-              className="bg-gradient-to-r from-blue-800 to-blue-900 hover:from-blue-900 hover:to-blue-950"
+              className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
             >
               Commencer
               <ArrowRight className="w-4 h-4 ml-2" />

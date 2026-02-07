@@ -32,7 +32,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
         'transition-all duration-300',
         challenge.completed
           ? 'glass-cosmic border-emerald-500/30'
-          : 'glass-cosmic border-yellow-600/30'
+          : 'glass-cosmic border-amber-400/30'
       )}
     >
       <CardContent className="p-5">
@@ -43,7 +43,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
                 'w-10 h-10 rounded-xl flex items-center justify-center',
                 challenge.completed
                   ? 'bg-emerald-500/20'
-                  : 'bg-gradient-to-br from-yellow-500 to-amber-500'
+                  : 'bg-gradient-to-br from-amber-400 to-amber-500'
               )}
             >
               {challenge.completed ? (
@@ -80,7 +80,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
             value={progressPercent}
             className={cn(
               'h-2',
-              challenge.completed ? '[&>div]:bg-emerald-500' : '[&>div]:bg-yellow-600'
+              challenge.completed ? '[&>div]:bg-emerald-500' : '[&>div]:bg-amber-500'
             )}
           />
         </div>

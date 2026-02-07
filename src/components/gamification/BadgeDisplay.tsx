@@ -88,7 +88,7 @@ export function BadgeDisplay({ unlockedBadges, showLocked = true }: BadgeDisplay
                 className={cn(
                   'w-12 h-12 mx-auto rounded-xl flex items-center justify-center mb-2',
                   isUnlocked
-                    ? 'bg-gradient-to-br from-yellow-500 to-amber-500 shadow-lg'
+                    ? 'bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg'
                     : 'bg-muted'
                 )}
               >

@@ -56,7 +56,7 @@ export default function Home() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-700 to-blue-900 flex items-center justify-center shadow-lg shadow-blue-900/20">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/20">
                 <ClipboardList className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -72,7 +72,7 @@ export default function Home() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center shadow-lg shadow-teal-700/20">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-700/20">
                 <Target className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -88,7 +88,7 @@ export default function Home() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center shadow-lg shadow-blue-900/20">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/20">
                 <BookOpen className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -106,7 +106,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
                 progress.studyStreak > 0
-                  ? 'bg-gradient-to-br from-yellow-500 to-amber-600 shadow-lg shadow-amber-600/20'
+                  ? 'bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg shadow-amber-500/20'
                   : 'bg-gray-200 text-gray-400'
               }`}>
                 <Flame className={`w-6 h-6 ${progress.studyStreak > 0 ? 'text-white streak-pulse' : ''}`} />
@@ -132,7 +132,7 @@ export default function Home() {
           <Link href="/upload" className="block">
             <div className="liquid-glass-blue h-full cursor-pointer p-5">
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-700 to-blue-900 flex items-center justify-center mb-3 shadow-lg shadow-blue-900/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-3 shadow-lg shadow-blue-800/25">
                   <Upload className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1">Importer</h3>
@@ -144,9 +144,9 @@ export default function Home() {
           </Link>
 
           <Link href="/upload?tab=library" className="block">
-            <div className="liquid-glass h-full cursor-pointer p-5" style={{ background: 'linear-gradient(135deg, rgba(30, 58, 95, 0.1), rgba(30, 58, 95, 0.05))' }}>
+            <div className="liquid-glass h-full cursor-pointer p-5" style={{ background: 'linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(30, 64, 175, 0.05))' }}>
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center mb-3 shadow-lg shadow-blue-900/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center mb-3 shadow-lg shadow-blue-800/25">
                   <Library className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1">Bibliothèque</h3>
@@ -160,7 +160,7 @@ export default function Home() {
           <Link href="/generate" className="block">
             <div className="liquid-glass-amber h-full cursor-pointer p-5">
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center mb-3 shadow-lg shadow-amber-600/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center mb-3 shadow-lg shadow-amber-500/25">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1">Générer</h3>
@@ -174,7 +174,7 @@ export default function Home() {
           <Link href="/quiz" className="block">
             <div className="liquid-glass-emerald h-full cursor-pointer p-5">
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center mb-3 shadow-lg shadow-teal-700/25">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center mb-3 shadow-lg shadow-emerald-700/25">
                   <Play className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-1">S'entraîner</h3>
@@ -194,7 +194,7 @@ export default function Home() {
         <Link href="/progress" className="block">
           <div className="liquid-glass cursor-pointer p-5 flex items-center justify-between">
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-700 to-blue-900 flex items-center justify-center shadow-lg shadow-blue-900/25">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/25">
                 <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -225,7 +225,7 @@ export default function Home() {
               <Link key={quiz.id} href={`/quiz/${quiz.id}`} className="block">
                 <div className="liquid-glass cursor-pointer p-5 flex items-center justify-between">
                   <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-800 to-blue-900 flex items-center justify-center shadow-lg shadow-blue-900/25">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/25">
                       <ClipboardList className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -249,14 +249,14 @@ export default function Home() {
       {!hasProgress && quizzes.length === 0 && (
         <Card className="relative overflow-hidden border-dashed border-primary/30">
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-800/5 to-teal-600/5" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-600/5 to-emerald-600/5" />
 
           {/* Decorative orbs */}
           <div className="absolute -right-10 -bottom-10 w-40 h-40 orb orb-blue opacity-50" />
           <div className="absolute -left-10 -top-10 w-32 h-32 orb orb-amber opacity-30" />
 
           <CardContent className="py-16 text-center relative">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary via-blue-800 to-teal-600 flex items-center justify-center mx-auto mb-6 animate-float">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary via-blue-600 to-emerald-600 flex items-center justify-center mx-auto mb-6 animate-float">
               <Trophy className="w-10 h-10 text-white" />
             </div>
             <h3 className="font-bold text-2xl text-foreground mb-3">Prêt à réussir le SAT ?</h3>
