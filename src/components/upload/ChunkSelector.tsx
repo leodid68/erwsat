@@ -58,10 +58,10 @@ export function ChunkSelector({
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-violet-50/80 to-purple-50/60 border border-violet-200/50 backdrop-blur-sm">
-        <h3 className="font-semibold text-gray-900">{title}</h3>
+      <div className="p-4 rounded-xl bg-gradient-to-br from-violet-500/10 to-purple-500/10 border border-violet-200/50 backdrop-blur-sm">
+        <h3 className="font-semibold text-white/90">{title}</h3>
         {subtitle && (
-          <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+          <p className="text-sm text-white/60 mt-1">{subtitle}</p>
         )}
       </div>
 
@@ -93,8 +93,8 @@ export function ChunkSelector({
                 className={cn(
                   'w-full flex items-start gap-3 p-4 rounded-xl text-left transition-all duration-200 backdrop-blur-sm',
                   isSelected
-                    ? 'bg-indigo-100/60 border-2 border-indigo-400'
-                    : 'bg-white/40 border border-white/60 hover:bg-white/60 hover:border-white/80'
+                    ? 'bg-indigo-500/10 border-2 border-indigo-400'
+                    : 'bg-white/4 border border-white/4 hover:bg-white/4 hover:border-white/6'
                 )}
               >
                 {/* Checkbox */}
@@ -103,7 +103,7 @@ export function ChunkSelector({
                     'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 mt-0.5',
                     isSelected
                       ? 'bg-indigo-500 text-white'
-                      : 'bg-white/80 border border-gray-300'
+                      : 'bg-white/6 border border-white/10'
                   )}
                 >
                   {isSelected && <Check className="w-4 h-4" />}
@@ -112,12 +112,12 @@ export function ChunkSelector({
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-medium text-gray-900 text-sm">{chunk.name}</span>
+                    <span className="font-medium text-white/90 text-sm">{chunk.name}</span>
                     <span className="text-xs text-muted-foreground">
                       {chunk.wordCount} mots
                     </span>
                   </div>
-                  <p className="text-xs text-gray-600 line-clamp-2">
+                  <p className="text-xs text-white/60 line-clamp-2">
                     {chunk.text.slice(0, 150)}...
                   </p>
                 </div>
@@ -135,7 +135,7 @@ export function ChunkSelector({
         <Button
           onClick={handleContinue}
           disabled={selectedIds.size === 0}
-          className="bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white shadow-lg shadow-blue-800/25"
+          className="bg-gradient-to-br from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800 text-white shadow-lg shadow-violet-700/25"
         >
           Continuer
           <ArrowRight className="w-4 h-4 ml-2" />

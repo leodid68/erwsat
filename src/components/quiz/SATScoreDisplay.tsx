@@ -33,7 +33,7 @@ export function SATScoreDisplay({
         {/* Main Score Display */}
         <div className="relative p-6 text-center">
           {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-transparent to-blue-800/10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-violet-700/10" />
 
           <div className="relative">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -62,9 +62,9 @@ export function SATScoreDisplay({
           <>
             {/* Score Bar */}
             <div className="px-6 pb-4">
-              <div className="relative h-3 bg-white/50 rounded-full overflow-hidden">
+              <div className="relative h-3 bg-white/4 rounded-full overflow-hidden">
                 <div
-                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full transition-all duration-500"
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-400 to-violet-600 rounded-full transition-all duration-500"
                   style={{ width: `${((estimate.scaledScore - 200) / 600) * 100}%` }}
                 />
                 {/* Score markers */}

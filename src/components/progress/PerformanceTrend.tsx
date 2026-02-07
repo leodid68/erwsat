@@ -78,12 +78,12 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
   };
 
   const TrendIcon = trendData.trend === 'up' ? TrendingUp : trendData.trend === 'down' ? TrendingDown : Minus;
-  const trendColor = trendData.trend === 'up' ? 'text-emerald-600' : trendData.trend === 'down' ? 'text-red-500' : 'text-gray-400';
+  const trendColor = trendData.trend === 'up' ? 'text-emerald-400' : trendData.trend === 'down' ? 'text-red-500' : 'text-white/40';
 
   return (
     <div className={cn('grid grid-cols-2 gap-3', className)}>
       {/* Trend indicator */}
-      <div className="p-3 rounded-xl bg-white/40 border border-white/60">
+      <div className="p-3 rounded-xl bg-white/4 border border-white/4">
         <div className="flex items-center gap-2 mb-1">
           <TrendIcon className={cn('w-4 h-4', trendColor)} />
           <span className="text-xs text-muted-foreground">Tendance</span>
@@ -103,9 +103,9 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
       </div>
 
       {/* Avg time per question */}
-      <div className="p-3 rounded-xl bg-white/40 border border-white/60">
+      <div className="p-3 rounded-xl bg-white/4 border border-white/4">
         <div className="flex items-center gap-2 mb-1">
-          <Clock className="w-4 h-4 text-blue-500" />
+          <Clock className="w-4 h-4 text-violet-400" />
           <span className="text-xs text-muted-foreground">Temps/question</span>
         </div>
         <div className="text-lg font-bold">{trendData.avgTimePerQuestion}s</div>
@@ -115,7 +115,7 @@ export function PerformanceTrend({ quizHistory, className }: PerformanceTrendPro
       </div>
 
       {/* Total study time */}
-      <div className="col-span-2 p-3 rounded-xl bg-gradient-to-r from-blue-50/80 to-sky-50/60 border border-blue-200/50">
+      <div className="col-span-2 p-3 rounded-xl bg-gradient-to-r from-violet-500/5 to-sky-500/10 border border-violet-200/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">

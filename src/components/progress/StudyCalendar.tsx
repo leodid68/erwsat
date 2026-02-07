@@ -54,7 +54,7 @@ export function StudyCalendar({ quizHistory, className }: StudyCalendarProps) {
   }, [quizHistory]);
 
   const getIntensity = (count: number): string => {
-    if (count === 0) return 'bg-gray-100 dark:bg-gray-800';
+    if (count === 0) return 'bg-white/5 dark:bg-white/10';
     if (count === 1) return 'bg-emerald-200 dark:bg-emerald-900';
     if (count === 2) return 'bg-emerald-300 dark:bg-emerald-700';
     if (count <= 4) return 'bg-emerald-400 dark:bg-emerald-600';
@@ -100,7 +100,7 @@ export function StudyCalendar({ quizHistory, className }: StudyCalendarProps) {
       {/* Legend */}
       <div className="flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
         <span>Moins</span>
-        <div className="w-3 h-3 rounded-sm bg-gray-100 dark:bg-gray-800" />
+        <div className="w-3 h-3 rounded-sm bg-white/5 dark:bg-white/10" />
         <div className="w-3 h-3 rounded-sm bg-emerald-200 dark:bg-emerald-900" />
         <div className="w-3 h-3 rounded-sm bg-emerald-300 dark:bg-emerald-700" />
         <div className="w-3 h-3 rounded-sm bg-emerald-400 dark:bg-emerald-600" />

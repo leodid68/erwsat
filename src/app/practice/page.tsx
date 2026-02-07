@@ -387,7 +387,7 @@ export default function PracticePage() {
       <div className="max-w-2xl mx-auto">
         <Card className="glass-cosmic">
           <CardContent className="p-8 text-center space-y-6">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center">
               <Loader2 className="w-10 h-10 text-white animate-spin" />
             </div>
             <div>
@@ -564,8 +564,8 @@ export default function PracticePage() {
     return (
       <div className="max-w-2xl mx-auto space-y-8">
         <Card className="glass-cosmic overflow-hidden">
-          <div className="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-8 text-center">
-            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg mb-4">
+          <div className="bg-gradient-to-br from-violet-500/20 to-violet-700/20 p-8 text-center">
+            <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center shadow-lg mb-4">
               <Award className="w-10 h-10 text-white" />
             </div>
             <p className="text-muted-foreground mb-2">Résultat</p>
@@ -633,7 +633,7 @@ export default function PracticePage() {
               <div className="flex items-center gap-3 mb-2">
                 <div className={cn(
                   'w-10 h-10 rounded-lg flex items-center justify-center',
-                  mode === 'official' ? 'bg-gradient-to-br from-blue-600 to-blue-800' : 'bg-muted'
+                  mode === 'official' ? 'bg-gradient-to-br from-violet-500 to-violet-700' : 'bg-muted'
                 )}>
                   <Award className={cn('w-5 h-5', mode === 'official' ? 'text-white' : 'text-muted-foreground')} />
                 </div>
@@ -705,10 +705,10 @@ export default function PracticePage() {
                     hover: 'hover:border-emerald-500/50',
                   },
                   blue: {
-                    bg: 'bg-blue-500/10',
-                    border: 'border-blue-500/30',
-                    text: 'text-blue-500',
-                    hover: 'hover:border-blue-500/50',
+                    bg: 'bg-violet-400/10',
+                    border: 'border-violet-400/30',
+                    text: 'text-violet-400',
+                    hover: 'hover:border-violet-400/50',
                   },
                   purple: {
                     bg: 'bg-primary/10',
@@ -900,7 +900,7 @@ export default function PracticePage() {
             <Button
               size="lg"
               onClick={handleStartOfficialPractice}
-              className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-lg px-8 py-6"
+              className="bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800 text-lg px-8 py-6"
             >
               <Award className="w-5 h-5 mr-2" />
               Commencer ({questionCount} questions)

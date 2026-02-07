@@ -234,14 +234,14 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       )}
 
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-blue-600/10 to-blue-800/10 border border-primary/20">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-violet-500/10 to-violet-700/10 border border-primary/20">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center shrink-0">
             <Library className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-blue-700">Importation SAT</p>
-            <p className="text-sm text-blue-700/70 mt-1">
+            <p className="font-medium text-violet-400">Importation SAT</p>
+            <p className="text-sm text-violet-400/70 mt-1">
               Importez des textes variés correspondant aux standards SAT officiels.
               Chaque texte peut générer ~3 questions différentes.
             </p>
@@ -289,7 +289,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                   'p-3 rounded-xl text-left transition-all duration-200 border relative',
                   selectedCategories.includes(category)
                     ? 'border-primary bg-primary/20'
-                    : 'border-border bg-white/50 hover:bg-white/60'
+                    : 'border-border bg-white/4 hover:bg-white/4'
                 )}
               >
                 <span className="text-lg">{CATEGORY_ICONS[category]}</span>
@@ -310,14 +310,14 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
       </div>
 
       {/* Save to Library Toggle */}
-      <div className="flex items-center justify-between p-3 rounded-xl bg-white/50 border border-border">
+      <div className="flex items-center justify-between p-3 rounded-xl bg-white/4 border border-border">
         <div className="flex items-center gap-3">
           <div
             className={cn(
               'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
               saveToLibrary
                 ? 'bg-gradient-to-br from-emerald-500 to-green-500 text-white'
-                : 'bg-white/50 border border-border text-muted-foreground'
+                : 'bg-white/4 border border-border text-muted-foreground'
             )}
           >
             <Save className="w-4 h-4" />
@@ -335,7 +335,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           onClick={() => setSaveToLibrary(!saveToLibrary)}
           className={cn(
             'relative w-12 h-6 rounded-full transition-colors',
-            saveToLibrary ? 'bg-emerald-500' : 'bg-white/60'
+            saveToLibrary ? 'bg-emerald-500' : 'bg-white/4'
           )}
         >
           <div
@@ -364,7 +364,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
         <Button
           onClick={() => handleFetchRandom('categories')}
           disabled={isLoading || selectedCategories.length === 0}
-          className="bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
+          className="bg-gradient-to-br from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800"
         >
           {isLoading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -425,7 +425,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                       'w-full p-3 rounded-xl text-left transition-all duration-200 flex items-start gap-3',
                       isSelected
                         ? 'bg-primary/20 border-2 border-primary'
-                        : 'bg-white/50 border border-border hover:bg-white/60'
+                        : 'bg-white/4 border border-border hover:bg-white/4'
                     )}
                   >
                     {/* Checkbox */}
@@ -434,7 +434,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
                         'w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-all',
                         isSelected
                           ? 'bg-primary text-white'
-                          : 'bg-white/60 border border-border'
+                          : 'bg-white/4 border border-border'
                       )}
                     >
                       {isSelected && <Check className="w-4 h-4" />}
@@ -471,7 +471,7 @@ export function LibraryImport({ onItemsSelected }: LibraryImportProps) {
           <Button
             onClick={handleContinue}
             disabled={selectedItems.size === 0}
-            className="w-full bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
+            className="w-full bg-gradient-to-br from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800"
           >
             <Check className="w-4 h-4 mr-2" />
             Importer {selectedItems.size} texte(s)

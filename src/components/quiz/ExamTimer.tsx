@@ -28,8 +28,9 @@ export function ExamTimer({ startTime, timeLimit, onTimeUp }: ExamTimerProps) {
   }, [startTime, timeLimit, onTimeUp]);
 
   const remaining = timeLimit ? Math.max(0, timeLimit - elapsed) : null;
-  const isWarning = remaining !== null && remaining < 300; // 5 min warning
-  const isCritical = remaining !== null && remaining < 60; // 1 min critical
+  const percentRemaining = remaining !== null && timeLimit ? (remaining / timeLimit) * 100 : 100;
+  const isCritical = remaining !== null && remaining < 60; // 1 min
+  const isWarning = remaining !== null && remaining < 300; // 5 min
 
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
@@ -39,18 +40,41 @@ export function ExamTimer({ startTime, timeLimit, onTimeUp }: ExamTimerProps) {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
+  const displayTime = remaining !== null ? formatTime(remaining) : formatTime(elapsed);
+  const ariaLabel = remaining !== null
+    ? `Temps restant : ${displayTime}${isCritical ? ' — temps presque écoulé !' : ''}`
+    : `Temps écoulé : ${displayTime}`;
+
   return (
-    <div className={cn(
-      'flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg',
-      isCritical && 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse',
-      isWarning && !isCritical && 'bg-amber-400/20 text-amber-600 border border-amber-400/30',
-      !isWarning && 'bg-white/50 text-foreground border border-border'
-    )}>
-      {isCritical ? <AlertTriangle className="w-5 h-5" /> : <Timer className="w-5 h-5" />}
-      {remaining !== null ? (
-        <span>{formatTime(remaining)}</span>
+    <div
+      role="timer"
+      aria-label={ariaLabel}
+      aria-live={isCritical ? 'assertive' : 'polite'}
+      className={cn(
+        'flex items-center gap-2 px-4 py-2 rounded-xl font-mono text-lg transition-colors duration-500',
+        isCritical && 'bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse',
+        isWarning && !isCritical && 'bg-amber-400/20 text-amber-500 border border-amber-400/30',
+        !isWarning && 'bg-white/4 text-foreground border border-border'
+      )}
+    >
+      {isCritical ? (
+        <AlertTriangle className="w-5 h-5" aria-hidden="true" />
       ) : (
-        <span>{formatTime(elapsed)}</span>
+        <Timer className="w-5 h-5" aria-hidden="true" />
+      )}
+      <span>{displayTime}</span>
+      {remaining !== null && timeLimit && (
+        <div className="w-16 h-1.5 rounded-full bg-white/10 overflow-hidden ml-1">
+          <div
+            className={cn(
+              'h-full rounded-full transition-all duration-1000',
+              isCritical && 'bg-red-400',
+              isWarning && !isCritical && 'bg-amber-400',
+              !isWarning && 'bg-violet-400'
+            )}
+            style={{ width: `${percentRemaining}%` }}
+          />
+        </div>
       )}
     </div>
   );

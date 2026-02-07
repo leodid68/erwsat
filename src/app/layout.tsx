@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { TopNavbar } from '@/components/layout/TopNavbar';
 import { CosmicBackground } from '@/components/ui/CosmicBackground';
 import { DictionaryPopup } from '@/components/dictionary/DictionaryPopup';
 import { AuthProvider, AuthBanner, SyncProvider } from '@/components/auth';
+import { KeyboardShortcuts } from '@/components/layout/KeyboardShortcuts';
+import { Toaster } from 'sonner';
 
 export const viewport: Viewport = {
-  themeColor: '#1E40AF',
+  themeColor: '#8B5CF6',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
   description:
     'Entraînement SAT Evidence-Based Reading and Writing avec questions générées par IA',
   manifest: '/manifest.json',
-  themeColor: '#1E40AF',
+  themeColor: '#8B5CF6',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -41,8 +43,8 @@ export default function RootLayout({
             {/* Animated cosmic background with mesh gradients */}
             <CosmicBackground />
 
-            <Sidebar />
-            <main className="pl-72 min-h-screen relative">
+            <TopNavbar />
+            <main className="pt-16 min-h-screen relative">
               <AuthBanner />
               <div className="p-8 max-w-5xl mx-auto">
                 {children}
@@ -51,6 +53,23 @@ export default function RootLayout({
 
             {/* Dictionary popup - appears when selecting text */}
             <DictionaryPopup />
+
+            {/* Global keyboard shortcuts (press ? for help) */}
+            <KeyboardShortcuts />
+
+            {/* Toast notifications */}
+            <Toaster
+              theme="dark"
+              position="bottom-right"
+              toastOptions={{
+                style: {
+                  background: 'rgba(26, 22, 37, 0.95)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#FAFAFA',
+                },
+              }}
+            />
           </SyncProvider>
         </AuthProvider>
       </body>

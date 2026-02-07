@@ -97,23 +97,23 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-white/5 rounded-2xl shadow-2xl w-full max-w-md mx-4 p-6 animate-in fade-in zoom-in-95 duration-200">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/5 transition-colors"
         >
-          <X className="h-5 w-5 text-gray-500" />
+          <X className="h-5 w-5 text-white/50" />
         </button>
 
         {/* Header */}
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-white/90">
             {mode === "signin" && "Se connecter"}
             {mode === "signup" && "Créer un compte"}
             {mode === "forgot" && "Mot de passe oublié"}
           </h2>
-          <p className="text-gray-500 mt-1">
+          <p className="text-white/50 mt-1">
             {mode === "signin" && "Retrouvez votre progression sur tous vos appareils"}
             {mode === "signup" && "Sauvegardez votre progression dans le cloud"}
             {mode === "forgot" && "Entrez votre email pour réinitialiser"}
@@ -125,7 +125,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <>
             <button
               onClick={handleGoogleSignIn}
-              className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-3 text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white/70 font-medium hover:bg-white/3 transition-colors"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24">
                 <path
@@ -150,10 +150,10 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
+                <div className="w-full border-t border-white/8" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">ou</span>
+                <span className="px-4 bg-white/5 text-white/50">ou</span>
               </div>
             </div>
           </>
@@ -161,14 +161,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
         {/* Error message */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mb-4 p-3 bg-red-500/10 border border-red-200 rounded-lg text-red-400 text-sm">
             {error}
           </div>
         )}
 
         {/* Success message */}
         {success && (
-          <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+          <div className="mb-4 p-3 bg-green-500/10 border border-green-200 rounded-lg text-green-400 text-sm">
             {success}
           </div>
         )}
@@ -177,46 +177,46 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
         <form onSubmit={handleCredentialsSubmit} className="space-y-4">
           {mode === "signup" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-white/70 mb-1">
                 Nom
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Votre nom"
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 border border-white/10 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-white/70 mb-1">
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="vous@exemple.com"
                 required
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 border border-white/10 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
               />
             </div>
           </div>
 
           {mode !== "forgot" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-white/70 mb-1">
                 Mot de passe
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
                 <input
                   type="password"
                   value={password}
@@ -224,11 +224,11 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                   placeholder={mode === "signup" ? "Créez un mot de passe" : "Votre mot de passe"}
                   required
                   minLength={mode === "signup" ? 8 : undefined}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 border border-white/10 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
                 />
               </div>
               {mode === "signup" && (
-                <p className="text-xs text-gray-500 mt-1">Minimum 8 caractères</p>
+                <p className="text-xs text-white/50 mt-1">Minimum 8 caractères</p>
               )}
             </div>
           )}
@@ -236,7 +236,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary-hover disabled:bg-blue-400 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-primary hover:bg-primary-hover disabled:bg-violet-300 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {mode === "signin" && "Se connecter"}
@@ -258,7 +258,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
               >
                 Mot de passe oublié ?
               </button>
-              <div className="mt-2 text-gray-500">
+              <div className="mt-2 text-white/50">
                 Pas encore de compte ?{" "}
                 <button
                   onClick={() => {
@@ -274,7 +274,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
           )}
 
           {mode === "signup" && (
-            <div className="text-gray-500">
+            <div className="text-white/50">
               Déjà un compte ?{" "}
               <button
                 onClick={() => {

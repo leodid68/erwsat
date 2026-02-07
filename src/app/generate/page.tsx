@@ -45,6 +45,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 // All question types organized by domain (official SAT order)
 const ALL_QUESTION_TYPES: QuestionType[] = [
@@ -68,7 +69,7 @@ type Difficulty = 'easy' | 'medium' | 'hard';
 
 const DIFFICULTY_OPTIONS: { value: Difficulty; label: string; icon: typeof Zap; color: string; bgSelected: string; borderSelected: string; glowColor: string }[] = [
   { value: 'easy', label: 'Facile', icon: Zap, color: 'text-emerald-400', bgSelected: 'bg-emerald-500/15', borderSelected: 'border-emerald-500/50', glowColor: 'shadow-[0_0_20px_rgba(16,185,129,0.3)]' },
-  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-amber-500', bgSelected: 'bg-amber-500/15', borderSelected: 'border-amber-500/50', glowColor: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
+  { value: 'medium', label: 'Moyen', icon: GraduationCap, color: 'text-amber-500', bgSelected: 'bg-amber-500/100/15', borderSelected: 'border-amber-500/50', glowColor: 'shadow-[0_0_20px_rgba(245,158,11,0.3)]' },
   { value: 'hard', label: 'Difficile', icon: Brain, color: 'text-rose-400', bgSelected: 'bg-rose-500/15', borderSelected: 'border-rose-500/50', glowColor: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]' },
 ];
 
@@ -254,9 +255,14 @@ export default function GeneratePage() {
         const expected = selectedPassages.length * questionsPerPassage;
         const generated = data.questions.length;
         setWarning(`${generated}/${expected} questions générées. ${data.stats.errors} erreur(s) ignorée(s).`);
+        toast.warning(`${generated}/${expected} questions générées`);
+      } else {
+        toast.success(`${data.questions.length} questions générées`);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erreur lors de la génération');
+      const message = err instanceof Error ? err.message : 'Erreur lors de la génération';
+      setError(message);
+      toast.error(message);
     } finally {
       setIsGenerating(false);
     }
@@ -275,6 +281,7 @@ export default function GeneratePage() {
     };
 
     addQuiz(quiz);
+    toast.success('Quiz créé — bonne chance !');
     router.push(`/quiz/${quiz.id}`);
   };
 
@@ -617,7 +624,7 @@ export default function GeneratePage() {
                         <div className={cn(
                           'w-10 h-10 mx-auto mb-2 rounded-xl flex items-center justify-center transition-all duration-300',
                           isSelected
-                            ? `bg-gradient-to-br ${option.value === 'easy' ? 'from-emerald-500 to-green-500' : option.value === 'medium' ? 'from-amber-400 to-amber-500' : 'from-blue-500 to-blue-700'}`
+                            ? `bg-gradient-to-br ${option.value === 'easy' ? 'from-emerald-500 to-green-500' : option.value === 'medium' ? 'from-amber-400 to-amber-500' : 'from-violet-400 to-violet-600'}`
                             : 'bg-muted border border-border'
                         )}>
                           <Icon className={cn('w-5 h-5', isSelected ? 'text-white' : 'text-muted-foreground')} />
@@ -698,8 +705,8 @@ export default function GeneratePage() {
                         <div className={cn(
                           'w-10 h-10 rounded-xl flex items-center justify-center',
                           hasApiKey
-                            ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white'
-                            : 'bg-amber-500/20 text-amber-500'
+                            ? 'bg-gradient-to-br from-violet-500 to-violet-700 text-white'
+                            : 'bg-amber-500/100/20 text-amber-500'
                         )}>
                           {hasApiKey ? <Cloud className="w-5 h-5" /> : <Key className="w-5 h-5" />}
                         </div>
@@ -771,7 +778,7 @@ export default function GeneratePage() {
                     {!hasApiKey && (
                       <Link
                         href="/settings"
-                        className="mt-2 flex items-center gap-2 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-500 hover:bg-amber-500/15 transition-colors"
+                        className="mt-2 flex items-center gap-2 p-2 rounded-lg bg-amber-500/100/10 border border-amber-500/20 text-xs text-amber-500 hover:bg-amber-500/100/15 transition-colors"
                       >
                         <AlertTriangle className="w-4 h-4 shrink-0" />
                         <span>Configurez votre clé API {activeProvider.name} dans les paramètres</span>
@@ -861,9 +868,9 @@ export default function GeneratePage() {
               )}
 
               {warning && !error && (
-                <Alert className="border-amber-500/50 bg-amber-50">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <AlertDescription className="text-sm text-amber-800">{warning}</AlertDescription>
+                <Alert className="border-amber-500/50 bg-amber-500/10">
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  <AlertDescription className="text-sm text-amber-500">{warning}</AlertDescription>
                 </Alert>
               )}
 
@@ -927,8 +934,8 @@ export default function GeneratePage() {
                             variant="outline"
                             className={cn(
                               'text-[10px] px-1.5 py-0',
-                              q.difficulty === 'easy' && 'border-emerald-400 text-emerald-600',
-                              q.difficulty === 'medium' && 'border-amber-400 text-amber-600',
+                              q.difficulty === 'easy' && 'border-emerald-400 text-emerald-400',
+                              q.difficulty === 'medium' && 'border-amber-400 text-amber-500',
                               q.difficulty === 'hard' && 'border-rose-400 text-rose-600'
                             )}
                           >

@@ -63,7 +63,7 @@ const DOMAINS = {
 } as const;
 
 const DOMAIN_COLORS: Record<string, string> = {
-  'Information & Ideas': '#1E40AF',
+  'Information & Ideas': '#8B5CF6',
   'Craft & Structure': '#F59E0B',
   'Expression of Ideas': '#10B981',
   'Standard English Conventions': '#627d98',
@@ -412,7 +412,7 @@ export default function AnalyticsPage() {
         <Card className="stat-card">
           <CardContent className="pt-4 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600/20 text-emerald-700 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                 <Target className="w-5 h-5" />
               </div>
               <div>
@@ -680,8 +680,8 @@ export default function AnalyticsPage() {
                             />
                             {/* Learning resources for weak skills */}
                             {showResources && (
-                              <div className="mt-3 p-3 rounded-lg bg-blue-500/5 border border-blue-500/20">
-                                <p className="text-xs font-medium text-blue-400 mb-2 flex items-center gap-1.5">
+                              <div className="mt-3 p-3 rounded-lg bg-violet-500/5 border border-violet-500/20">
+                                <p className="text-xs font-medium text-violet-400 mb-2 flex items-center gap-1.5">
                                   <BookOpen className="w-3.5 h-3.5" />
                                   Ressources pour progresser
                                 </p>
@@ -696,7 +696,7 @@ export default function AnalyticsPage() {
                                         'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors',
                                         'bg-background border hover:bg-muted',
                                         resource.language === 'fr'
-                                          ? 'border-blue-500/30 text-blue-400 hover:border-blue-500/50'
+                                          ? 'border-violet-500/30 text-violet-400 hover:border-violet-500/50'
                                           : 'border-emerald-500/30 text-emerald-400 hover:border-emerald-500/50'
                                       )}
                                     >

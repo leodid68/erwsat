@@ -23,6 +23,7 @@ import {
   Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function SettingsPage() {
   const {
@@ -39,7 +40,6 @@ export default function SettingsPage() {
 
   const [inputKey, setInputKey] = useState('');
   const [showKey, setShowKey] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const activeProvider = getActiveProvider();
@@ -57,17 +57,18 @@ export default function SettingsPage() {
     if (trimmedKey) {
       // Validate prefix if defined
       if (activeProvider.keyPrefix && !trimmedKey.startsWith(activeProvider.keyPrefix)) {
+        toast.error(`La clé doit commencer par "${activeProvider.keyPrefix}"`);
         return;
       }
       setApiKey(selectedProvider, trimmedKey);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+      toast.success(`Clé ${activeProvider.name} enregistrée`);
     }
   };
 
   const handleClear = () => {
     setInputKey('');
     setApiKey(selectedProvider, null);
+    toast.success(`Clé ${activeProvider.name} supprimée`);
   };
 
   const isValidFormat = () => {
@@ -140,7 +141,7 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-blue-500" />
+            <Sparkles className="w-5 h-5 text-violet-400" />
             Fournisseur IA
           </CardTitle>
           <CardDescription>Choisissez votre fournisseur et configurez votre clé API</CardDescription>
@@ -296,23 +297,14 @@ export default function SettingsPage() {
           {/* Actions */}
           <div className="flex gap-3">
             <Button onClick={handleSave} disabled={!inputKey || !isValidFormat()} className="flex-1">
-              {saved ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
-                  Enregistré !
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Enregistrer
-                </>
-              )}
+              <Save className="w-4 h-4 mr-2" />
+              Enregistrer
             </Button>
             {hasActiveKey && (
               <Button
                 variant="outline"
                 onClick={handleClear}
-                className="text-red-500 hover:text-red-600"
+                className="text-red-500 hover:text-red-400"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Supprimer
@@ -388,10 +380,10 @@ export default function SettingsPage() {
       </Card>
 
       {/* Security Info */}
-      <Card className="border-blue-500/20 bg-blue-500/5">
+      <Card className="border-violet-400/20 bg-violet-500/5">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Shield className="w-4 h-4 text-blue-500" />
+            <Shield className="w-4 h-4 text-violet-400" />
             Sécurité
           </CardTitle>
         </CardHeader>
@@ -426,8 +418,12 @@ export default function SettingsPage() {
         <div className="text-center">
           <Button
             variant="ghost"
-            onClick={clearAllKeys}
-            className="text-red-500 hover:text-red-600 hover:bg-red-500/10"
+            onClick={() => {
+              clearAllKeys();
+              setInputKey('');
+              toast.success('Toutes les clés API supprimées');
+            }}
+            className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Supprimer toutes les clés API

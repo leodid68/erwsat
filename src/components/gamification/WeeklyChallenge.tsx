@@ -47,7 +47,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
               )}
             >
               {challenge.completed ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               ) : (
                 <Zap className="w-5 h-5 text-white" />
               )}
@@ -60,7 +60,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
             </div>
           </div>
           {challenge.completed && (
-            <span className="text-xs font-medium text-emerald-600 bg-emerald-500/20 px-2 py-1 rounded-full">
+            <span className="text-xs font-medium text-emerald-400 bg-emerald-500/20 px-2 py-1 rounded-full">
               Complété !
             </span>
           )}
@@ -71,7 +71,7 @@ export function WeeklyChallenge({ challenge }: WeeklyChallengeProps) {
             <span className="text-muted-foreground">Progression</span>
             <span className={cn(
               'font-mono',
-              challenge.completed ? 'text-emerald-600' : 'text-foreground'
+              challenge.completed ? 'text-emerald-400' : 'text-foreground'
             )}>
               {challenge.current}/{challenge.target}
             </span>

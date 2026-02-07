@@ -138,7 +138,7 @@ export default function AchievementsPage() {
       {unlockedCount === 0 && (
         <Card className="glass-cosmic border-primary/20">
           <CardContent className="py-8 text-center">
-            <Trophy className="w-12 h-12 mx-auto mb-4 text-slate-500" />
+            <Trophy className="w-12 h-12 mx-auto mb-4 text-white/50" />
             <h3 className="font-semibold text-foreground mb-2">
               Commencez votre collection
             </h3>

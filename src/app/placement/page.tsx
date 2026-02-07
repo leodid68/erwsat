@@ -352,7 +352,7 @@ export default function PlacementTestPage() {
     };
 
     const getGradient = () => {
-      if (testMode === 'official') return 'from-blue-600 to-blue-800';
+      if (testMode === 'official') return 'from-violet-500 to-violet-700';
       if (testMode === 'real') return 'from-emerald-500 to-green-500';
       return 'from-amber-400 to-amber-500';
     };
@@ -458,7 +458,7 @@ export default function PlacementTestPage() {
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center',
                     testMode === 'official'
-                      ? 'bg-gradient-to-br from-blue-600 to-blue-800'
+                      ? 'bg-gradient-to-br from-violet-500 to-violet-700'
                       : 'bg-muted'
                   )}>
                     <Award className={cn('w-5 h-5', testMode === 'official' ? 'text-white' : 'text-muted-foreground')} />
@@ -540,15 +540,15 @@ export default function PlacementTestPage() {
                 className={cn(
                   'p-4 rounded-xl border text-left transition-all',
                   testMode === 'static'
-                    ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-border hover:border-blue-500/30'
+                    ? 'border-violet-400 bg-violet-400/10'
+                    : 'border-border hover:border-violet-400/30'
                 )}
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center',
                     testMode === 'static'
-                      ? 'bg-gradient-to-br from-blue-500 to-cyan-500'
+                      ? 'bg-gradient-to-br from-violet-400 to-cyan-500'
                       : 'bg-muted'
                   )}>
                     <FileText className={cn('w-5 h-5', testMode === 'static' ? 'text-white' : 'text-muted-foreground')} />
@@ -572,8 +572,8 @@ export default function PlacementTestPage() {
           <Card className="glass-cosmic">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-                  <span className="text-blue-500 font-bold">1</span>
+                <div className="w-8 h-8 rounded-lg bg-violet-400/20 flex items-center justify-center">
+                  <span className="text-violet-400 font-bold">1</span>
                 </div>
                 Module 1 : Le Filtre
               </CardTitle>
@@ -634,7 +634,7 @@ export default function PlacementTestPage() {
             className={cn(
               'text-lg px-8 py-6',
               testMode === 'official'
-                ? 'bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900'
+                ? 'bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800'
                 : testMode === 'real'
                 ? 'bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600'
                 : 'btn-cosmic'
@@ -689,7 +689,7 @@ export default function PlacementTestPage() {
       <div className="max-w-2xl mx-auto space-y-8">
         <Card className="glass-cosmic">
           <CardHeader className="text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-violet-400 to-cyan-500 flex items-center justify-center mb-4">
               <CheckCircle2 className="w-8 h-8 text-white" />
             </div>
             <CardTitle>Module 1 terminé !</CardTitle>
@@ -717,7 +717,7 @@ export default function PlacementTestPage() {
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-amber-600">Module 2 : Difficulté accrue</p>
+                  <p className="font-medium text-amber-500">Module 2 : Difficulté accrue</p>
                   <p className="text-sm text-muted-foreground mt-1">
                     Les textes sont plus denses et les distracteurs plus subtils.
                     Méfiez-vous des réponses "vraies mais hors-sujet".
@@ -760,7 +760,7 @@ export default function PlacementTestPage() {
       tierColor = 'text-emerald-500';
     } else if (estimatedScore >= 650) {
       scoreTier = 'Très bon';
-      tierColor = 'text-blue-500';
+      tierColor = 'text-violet-400';
     } else if (estimatedScore >= 550) {
       scoreTier = 'Bon';
       tierColor = 'text-amber-500';
@@ -807,8 +807,8 @@ export default function PlacementTestPage() {
           <Card className="glass-cosmic">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <div className="w-6 h-6 rounded bg-blue-500/20 flex items-center justify-center">
-                  <span className="text-blue-500 text-sm font-bold">1</span>
+                <div className="w-6 h-6 rounded bg-violet-400/20 flex items-center justify-center">
+                  <span className="text-violet-400 text-sm font-bold">1</span>
                 </div>
                 Module 1 (Medium)
               </CardTitle>
@@ -936,7 +936,7 @@ export default function PlacementTestPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Badge variant="outline" className={cn(
-              phase === 'module1' ? 'border-blue-500/30 text-blue-500' : 'border-red-500/30 text-red-500'
+              phase === 'module1' ? 'border-violet-400/30 text-violet-400' : 'border-red-500/30 text-red-500'
             )}>
               Module {currentModule.moduleId} - {currentModule.difficulty}
             </Badge>

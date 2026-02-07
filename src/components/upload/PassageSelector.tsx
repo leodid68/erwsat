@@ -158,7 +158,7 @@ export function PassageSelector({
                     {passage.reason && (
                       <div className="flex items-start gap-2 p-2 rounded-lg bg-primary/10 border border-primary/20">
                         <Sparkles className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                        <p className="text-xs text-blue-700 italic">
+                        <p className="text-xs text-violet-400 italic">
                           {passage.reason}
                         </p>
                       </div>

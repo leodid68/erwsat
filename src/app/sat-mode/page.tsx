@@ -275,7 +275,7 @@ export default function SATModePage() {
                       'w-full p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
                         ? 'bg-primary/20 border-2 border-primary/50'
-                        : 'bg-white/50 border-2 border-transparent hover:bg-white/60'
+                        : 'bg-white/4 border-2 border-transparent hover:bg-white/5'
                     )}
                   >
                     <div className="flex items-start gap-4">
@@ -283,8 +283,8 @@ export default function SATModePage() {
                         className={cn(
                           'w-12 h-12 rounded-xl flex items-center justify-center',
                           isSelected
-                            ? 'bg-gradient-to-br from-blue-600 to-blue-800'
-                            : 'bg-white/60'
+                            ? 'bg-gradient-to-br from-violet-500 to-violet-700'
+                            : 'bg-white/5'
                         )}
                       >
                         <Icon className={cn('w-6 h-6', isSelected ? 'text-white' : 'text-muted-foreground')} />
@@ -303,7 +303,7 @@ export default function SATModePage() {
                           {mode.features.map((feature) => (
                             <span
                               key={feature}
-                              className="text-xs px-2 py-0.5 rounded-full bg-white/50 text-muted-foreground"
+                              className="text-xs px-2 py-0.5 rounded-full bg-white/4 text-muted-foreground"
                             >
                               {feature}
                             </span>
@@ -382,7 +382,7 @@ export default function SATModePage() {
                       return (
                         <div
                           key={genre}
-                          className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/50 border border-border"
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/4 border border-border"
                         >
                           <Icon className="w-3 h-3 text-muted-foreground" />
                           <span className="text-xs text-foreground">
@@ -405,7 +405,7 @@ export default function SATModePage() {
                       {previewStats.passageDiversityPercent}%
                     </span>
                   </div>
-                  <div className="h-1.5 bg-white/50 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-white/4 rounded-full overflow-hidden">
                     <div
                       className={cn(
                         'h-full rounded-full transition-all',
@@ -453,7 +453,7 @@ export default function SATModePage() {
             </Button>
             <Button
               onClick={handleStart}
-              className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
+              className="bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800"
             >
               Commencer
               <ArrowRight className="w-4 h-4 ml-2" />

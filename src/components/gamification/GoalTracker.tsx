@@ -119,8 +119,8 @@ export function GoalTracker({ goals, onAddGoal, onRemoveGoal }: GoalTrackerProps
               className="flex items-center justify-between p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20"
             >
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span className="text-sm text-emerald-700">{goal.description}</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                <span className="text-sm text-emerald-400">{goal.description}</span>
               </div>
               <Button
                 variant="ghost"

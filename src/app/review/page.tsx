@@ -134,7 +134,7 @@ export default function ReviewPage() {
           <CardContent className="py-12 text-center">
             {progress.srsQueue.length === 0 ? (
               <>
-                <Brain className="w-12 h-12 mx-auto mb-4 text-slate-500" />
+                <Brain className="w-12 h-12 mx-auto mb-4 text-white/50" />
                 <h3 className="font-semibold text-foreground mb-2">File de révision vide</h3>
                 <p className="text-muted-foreground mb-6">
                   Les questions ratées seront automatiquement ajoutées ici.

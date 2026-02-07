@@ -154,12 +154,12 @@ export function FileDropzone({ onFileProcessed }: FileDropzoneProps) {
   return (
     <div className="space-y-6">
       {/* Selection Mode Toggle */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-blue-600/10 to-blue-800/10 border border-primary/20">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-violet-500/10 to-violet-700/10 border border-primary/20">
         <div className="flex items-center gap-3">
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center transition-all',
             selectionMode === 'ai'
-              ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-[0_0_15px_rgba(30,64,175,0.3)]'
+              ? 'bg-gradient-to-br from-violet-500 to-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]'
               : 'bg-muted border border-border text-muted-foreground'
           )}>
             {selectionMode === 'ai' ? <Sparkles className="w-5 h-5" /> : <Brain className="w-5 h-5" />}

@@ -87,12 +87,12 @@ export function WeakAreaSelector({
               className={cn(
                 'w-full p-4 rounded-xl text-left transition-all duration-200',
                 total === 0
-                  ? 'bg-white/50 opacity-50 cursor-not-allowed'
+                  ? 'bg-white/4 opacity-50 cursor-not-allowed'
                   : isSelected
-                  ? 'bg-white/60 border-2 border-primary/50'
+                  ? 'bg-white/4 border-2 border-primary/50'
                   : isWeak
                   ? 'bg-red-500/10 border-2 border-red-500/20 hover:border-red-500/40'
-                  : 'bg-white/50 border-2 border-transparent hover:bg-white/60'
+                  : 'bg-white/4 border-2 border-transparent hover:bg-white/4'
               )}
             >
               <div className="flex items-start justify-between gap-4">
@@ -114,7 +114,7 @@ export function WeakAreaSelector({
               </div>
               {total > 0 && (
                 <div className="mt-3">
-                  <div className="h-1.5 bg-white/60 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-white/4 rounded-full overflow-hidden">
                     <div
                       className={cn('h-full rounded-full transition-all', getProgressColor(accuracy))}
                       style={{ width: `${accuracy}%` }}

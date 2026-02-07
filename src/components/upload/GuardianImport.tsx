@@ -92,14 +92,14 @@ export function GuardianImport({ onArticleFetched }: GuardianImportProps) {
   return (
     <div className="space-y-5">
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-orange-50/80 to-amber-50/60 border border-orange-200/50 backdrop-blur-sm">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 border border-orange-200/50 backdrop-blur-sm">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shrink-0">
             <Newspaper className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-orange-900">The Guardian</p>
-            <p className="text-sm text-orange-700 mt-1">
+            <p className="font-medium text-orange-400">The Guardian</p>
+            <p className="text-sm text-orange-400 mt-1">
               Cherchez des actualités : politique, culture, science, opinion...
             </p>
           </div>
@@ -114,7 +114,7 @@ export function GuardianImport({ onArticleFetched }: GuardianImportProps) {
           onKeyDown={handleKeyDown}
           placeholder="Rechercher des articles..."
           disabled={isSearching || isFetching}
-          className="h-11 bg-white/60 border-white/60"
+          className="h-11 bg-white/4 border-white/4"
         />
         <Button
           onClick={handleSearch}
@@ -144,12 +144,12 @@ export function GuardianImport({ onArticleFetched }: GuardianImportProps) {
                 disabled={isFetching}
                 className={cn(
                   'w-full p-4 rounded-xl text-left transition-all duration-200 backdrop-blur-sm',
-                  'bg-white/40 border border-white/60 hover:bg-white/60 hover:border-orange-300',
-                  isFetching && selectedId === article.id && 'border-orange-400 bg-orange-50/50'
+                  'bg-white/4 border border-white/4 hover:bg-white/4 hover:border-orange-300',
+                  isFetching && selectedId === article.id && 'border-orange-400 bg-orange-500/10'
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center shrink-0">
                     {isFetching && selectedId === article.id ? (
                       <Loader2 className="w-5 h-5 text-orange-600 animate-spin" />
                     ) : (
@@ -157,8 +157,8 @@ export function GuardianImport({ onArticleFetched }: GuardianImportProps) {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 line-clamp-2">{article.title}</p>
-                    <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500">
+                    <p className="font-medium text-white/90 line-clamp-2">{article.title}</p>
+                    <div className="flex items-center gap-3 mt-1.5 text-xs text-white/50">
                       <span className="flex items-center gap-1">
                         <Tag className="w-3 h-3" />
                         {article.section}

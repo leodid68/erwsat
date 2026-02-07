@@ -173,8 +173,8 @@ export default function ResultsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-100 rounded-full">
-                <Target className="h-8 w-8 text-green-600" />
+              <div className="p-3 bg-green-500/10 rounded-full">
+                <Target className="h-8 w-8 text-green-400" />
               </div>
               <div>
                 <p className="text-3xl font-bold">{attempt.score}</p>
@@ -187,8 +187,8 @@ export default function ResultsPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Clock className="h-8 w-8 text-blue-600" />
+              <div className="p-3 bg-violet-500/10 rounded-full">
+                <Clock className="h-8 w-8 text-violet-400" />
               </div>
               <div>
                 <p className="text-3xl font-bold">
@@ -211,26 +211,26 @@ export default function ResultsPage() {
       {/* Performance Feedback */}
       <Card className={cn(
         'border-2',
-        performanceAnalysis.feedback.type === 'excellent' && 'border-emerald-300 bg-emerald-50/50',
-        performanceAnalysis.feedback.type === 'good' && 'border-blue-300 bg-blue-50/50',
-        performanceAnalysis.feedback.type === 'average' && 'border-amber-300 bg-amber-50/50',
-        performanceAnalysis.feedback.type === 'needsWork' && 'border-rose-300 bg-rose-50/50',
+        performanceAnalysis.feedback.type === 'excellent' && 'border-emerald-300 bg-emerald-500/10',
+        performanceAnalysis.feedback.type === 'good' && 'border-violet-300 bg-violet-500/10',
+        performanceAnalysis.feedback.type === 'average' && 'border-amber-300 bg-amber-500/10',
+        performanceAnalysis.feedback.type === 'needsWork' && 'border-rose-300 bg-rose-500/10',
       )}>
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
             <div className={cn(
               'p-3 rounded-xl',
-              performanceAnalysis.feedback.type === 'excellent' && 'bg-emerald-100',
-              performanceAnalysis.feedback.type === 'good' && 'bg-blue-100',
-              performanceAnalysis.feedback.type === 'average' && 'bg-amber-100',
-              performanceAnalysis.feedback.type === 'needsWork' && 'bg-rose-100',
+              performanceAnalysis.feedback.type === 'excellent' && 'bg-emerald-500/10',
+              performanceAnalysis.feedback.type === 'good' && 'bg-violet-500/10',
+              performanceAnalysis.feedback.type === 'average' && 'bg-amber-500/10',
+              performanceAnalysis.feedback.type === 'needsWork' && 'bg-rose-500/10',
             )}>
               {performanceAnalysis.feedback.type === 'excellent' ? (
-                <Award className="h-6 w-6 text-emerald-600" />
+                <Award className="h-6 w-6 text-emerald-400" />
               ) : performanceAnalysis.feedback.type === 'good' ? (
-                <TrendingUp className="h-6 w-6 text-blue-600" />
+                <TrendingUp className="h-6 w-6 text-violet-400" />
               ) : (
-                <Sparkles className="h-6 w-6 text-amber-600" />
+                <Sparkles className="h-6 w-6 text-amber-500" />
               )}
             </div>
             <div className="flex-1">

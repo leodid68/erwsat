@@ -19,6 +19,7 @@ import { CATEGORY_TO_GENRE } from '@/types/passage-library';
 import { detectGenre } from '@/lib/question-selection';
 import { FileText, Check, Upload, Sparkles, BookOpen, Globe, Newspaper, Library, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 type Tab = 'file' | 'gutenberg' | 'wikipedia' | 'guardian' | 'library';
 type Step = 'upload' | 'select';
@@ -112,6 +113,7 @@ function UploadPageContent() {
         uploadedAt: new Date(),
       };
       addDocument(doc);
+      toast.success(`${documentData.passages.length} passages importés`);
       router.push('/generate');
     }
   };
@@ -386,14 +388,14 @@ function UploadPageContent() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1.5 rounded-xl bg-white/500 border border-border backdrop-blur-sm w-fit">
+      <div className="flex gap-2 p-1.5 rounded-xl bg-white/5 border border-border backdrop-blur-sm w-fit">
         <button
           onClick={() => handleTabChange('file')}
           disabled={isSelectStep}
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'file'
-              ? 'bg-gradient-to-r from-primary/20 to-blue-800/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(30,64,175,0.2)]'
+              ? 'bg-gradient-to-r from-primary/20 to-violet-700/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -421,7 +423,7 @@ function UploadPageContent() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'wikipedia'
-              ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+              ? 'bg-gradient-to-r from-violet-400/20 to-cyan-500/20 border border-violet-400/30 text-violet-300 shadow-[0_0_15px_rgba(167,139,250,0.2)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -449,7 +451,7 @@ function UploadPageContent() {
           className={cn(
             'flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
             tab === 'library'
-              ? 'bg-gradient-to-r from-primary/20 to-blue-800/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(30,64,175,0.2)]'
+              ? 'bg-gradient-to-r from-primary/20 to-violet-700/20 border border-primary/30 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]'
               : 'text-muted-foreground hover:text-foreground hover:bg-muted',
             isSelectStep && 'opacity-50 cursor-not-allowed'
           )}
@@ -465,7 +467,7 @@ function UploadPageContent() {
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300',
             step === 'upload'
-              ? 'bg-gradient-to-br from-primary to-blue-400 text-white shadow-glow-sm'
+              ? 'bg-gradient-to-br from-primary to-violet-300 text-white shadow-glow-sm'
               : 'bg-success/20 text-success border border-success/30'
           )}>
             {step === 'select' ? <Check className="w-5 h-5" /> : (
@@ -490,8 +492,8 @@ function UploadPageContent() {
           <div className={cn(
             'w-10 h-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all duration-300',
             step === 'select'
-              ? 'bg-gradient-to-br from-primary to-blue-400 text-white shadow-glow-sm'
-              : 'bg-white/500 text-muted-foreground border border-border'
+              ? 'bg-gradient-to-br from-primary to-violet-300 text-white shadow-glow-sm'
+              : 'bg-white/5 text-muted-foreground border border-border'
           )}>
             <Sparkles className="w-5 h-5" />
           </div>
@@ -544,7 +546,7 @@ function UploadPageContent() {
               <CardContent className="relative">
                 <div className="mb-6 p-4 rounded-xl glass border border-border">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-white/50 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-white/4 flex items-center justify-center">
                       <FileText className="w-5 h-5 text-muted-foreground" />
                     </div>
                     <div>
@@ -625,7 +627,7 @@ function UploadPageContent() {
               <div className="absolute -right-10 -top-10 w-40 h-40 orb orb-blue opacity-30" />
               <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-400/25">
                     <Globe className="w-5 h-5 text-white" />
                   </div>
                   Wikipedia
@@ -727,7 +729,7 @@ function UploadPageContent() {
               <div className="absolute -right-10 -top-10 w-40 h-40 orb orb-violet opacity-30" />
               <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-3 text-xl">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-lg shadow-blue-800/25">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center shadow-lg shadow-violet-700/25">
                     <Library className="w-5 h-5 text-white" />
                   </div>
                   Bibliothèque aléatoire
@@ -747,13 +749,13 @@ function UploadPageContent() {
                 ) : (
                   <div className="space-y-4">
                     {/* AI Selection Toggle */}
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary/10 to-blue-800/10 border border-primary/20">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-primary/10 to-violet-700/10 border border-primary/20">
                       <div className="flex items-center gap-3">
                         <div className={cn(
                           'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
                           useSmartSelection
-                            ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-[0_0_15px_rgba(30,64,175,0.3)]'
-                            : 'bg-white/50 border border-border text-muted-foreground'
+                            ? 'bg-gradient-to-br from-violet-500 to-violet-700 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]'
+                            : 'bg-white/4 border border-border text-muted-foreground'
                         )}>
                           <Sparkles className="w-4 h-4" />
                         </div>

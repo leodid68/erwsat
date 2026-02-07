@@ -97,14 +97,14 @@ export function WikipediaImport({ onArticleFetched }: WikipediaImportProps) {
   return (
     <div className="space-y-5">
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-blue-50/80 to-indigo-50/60 border border-blue-200/50 backdrop-blur-sm">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-violet-500/5 to-indigo-500/10 border border-violet-200/50 backdrop-blur-sm">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-300 to-indigo-500 flex items-center justify-center shrink-0">
             <Globe className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-blue-900">Wikipedia</p>
-            <p className="text-sm text-blue-700 mt-1">
+            <p className="font-medium text-violet-400">Wikipedia</p>
+            <p className="text-sm text-violet-400 mt-1">
               Cherchez des articles historiques, scientifiques, des biographies et plus encore.
             </p>
           </div>
@@ -119,12 +119,12 @@ export function WikipediaImport({ onArticleFetched }: WikipediaImportProps) {
           onKeyDown={handleKeyDown}
           placeholder="Rechercher un sujet..."
           disabled={isSearching || isFetching}
-          className="h-11 bg-white/60 border-white/60"
+          className="h-11 bg-white/4 border-white/4"
         />
         <Button
           onClick={handleSearch}
           disabled={isSearching || isFetching || query.trim().length < 2}
-          className="h-11 px-5 bg-gradient-to-br from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+          className="h-11 px-5 bg-gradient-to-br from-violet-400 to-indigo-500 hover:from-violet-500 hover:to-indigo-600"
         >
           {isSearching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
         </Button>
@@ -149,21 +149,21 @@ export function WikipediaImport({ onArticleFetched }: WikipediaImportProps) {
                 disabled={isFetching}
                 className={cn(
                   'w-full p-4 rounded-xl text-left transition-all duration-200 backdrop-blur-sm',
-                  'bg-white/40 border border-white/60 hover:bg-white/60 hover:border-blue-300',
-                  isFetching && selectedTitle === result.title && 'border-blue-400 bg-blue-50/50'
+                  'bg-white/4 border border-white/4 hover:bg-white/4 hover:border-violet-300',
+                  isFetching && selectedTitle === result.title && 'border-violet-300 bg-violet-500/5'
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
                     {isFetching && selectedTitle === result.title ? (
-                      <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                      <Loader2 className="w-5 h-5 text-violet-400 animate-spin" />
                     ) : (
-                      <Globe className="w-5 h-5 text-blue-600" />
+                      <Globe className="w-5 h-5 text-violet-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900">{result.title}</p>
-                    <p className="text-sm text-gray-600 line-clamp-2 mt-0.5">
+                    <p className="font-medium text-white/90">{result.title}</p>
+                    <p className="text-sm text-white/60 line-clamp-2 mt-0.5">
                       {result.snippet}
                     </p>
                   </div>

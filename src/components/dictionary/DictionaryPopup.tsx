@@ -129,7 +129,7 @@ export function DictionaryPopup() {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center">
             <BookOpen className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -213,7 +213,7 @@ export function DictionaryPopup() {
                   {result.synonyms.map((syn, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 rounded-md text-xs bg-white/50 text-muted-foreground border border-border"
+                      className="px-2 py-0.5 rounded-md text-xs bg-white/4 text-muted-foreground border border-border"
                     >
                       {syn}
                     </span>

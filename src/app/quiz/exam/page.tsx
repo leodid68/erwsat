@@ -36,7 +36,7 @@ const timerModes: TimerMode[] = [
     description: 'Pas de limite de temps. Prenez le temps nécessaire.',
     icon: Infinity,
     timeLimit: null,
-    gradient: 'from-blue-500 to-cyan-400',
+    gradient: 'from-violet-400 to-cyan-400',
   },
   {
     id: 'sat',
@@ -44,7 +44,7 @@ const timerModes: TimerMode[] = [
     description: '64 minutes pour 54 questions (conditions réelles).',
     icon: Timer,
     timeLimit: SAT_EXAM_TIME,
-    gradient: 'from-blue-600 to-blue-800',
+    gradient: 'from-violet-500 to-violet-700',
   },
   {
     id: 'quick',
@@ -124,8 +124,8 @@ export default function ExamModePage() {
                 className={cn(
                   'w-full flex items-center gap-4 p-4 rounded-xl text-left transition-all duration-200',
                   isSelected
-                    ? 'bg-white/60 border-2 border-primary/50'
-                    : 'bg-white/50 border-2 border-transparent hover:bg-muted'
+                    ? 'bg-white/5 border-2 border-primary/50'
+                    : 'bg-white/4 border-2 border-transparent hover:bg-muted'
                 )}
               >
                 <div
@@ -160,7 +160,7 @@ export default function ExamModePage() {
         <CardContent>
           {availableQuizzes.length === 0 ? (
             <div className="text-center py-8">
-              <AlertCircle className="w-12 h-12 mx-auto mb-4 text-slate-500" />
+              <AlertCircle className="w-12 h-12 mx-auto mb-4 text-white/50" />
               <p className="text-muted-foreground mb-4">Aucun quiz disponible</p>
               <Button asChild>
                 <Link href="/generate">Générer un quiz</Link>
@@ -188,8 +188,8 @@ export default function ExamModePage() {
                     className={cn(
                       'w-full flex items-center justify-between p-4 rounded-xl text-left transition-all duration-200',
                       isSelected
-                        ? 'bg-white/60 border-2 border-primary/50'
-                        : 'bg-white/50 border-2 border-transparent hover:bg-muted'
+                        ? 'bg-white/5 border-2 border-primary/50'
+                        : 'bg-white/4 border-2 border-transparent hover:bg-muted'
                     )}
                   >
                     <div>
@@ -220,7 +220,7 @@ export default function ExamModePage() {
         <Button
           onClick={handleStartQuiz}
           disabled={!selectedQuizId}
-          className="bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900"
+          className="bg-gradient-to-r from-violet-500 to-violet-700 hover:from-violet-600 hover:to-violet-800"
         >
           Commencer
           <ArrowRight className="w-4 h-4 ml-2" />

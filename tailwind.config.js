@@ -77,6 +77,13 @@ module.exports = {
           border: 'var(--sidebar-border)',
           active: 'var(--sidebar-active)',
         },
+        navbar: {
+          DEFAULT: 'var(--navbar)',
+          foreground: 'var(--navbar-foreground)',
+          muted: 'var(--navbar-muted)',
+          border: 'var(--navbar-border)',
+          active: 'var(--navbar-active)',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

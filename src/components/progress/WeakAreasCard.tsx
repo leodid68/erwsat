@@ -113,24 +113,24 @@ export function WeakAreasCard({ accuracyByType, className }: WeakAreasCardProps)
       {/* Weak Areas */}
       {weakAreas.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-yellow-700">
+          <div className="flex items-center gap-2 text-yellow-400">
             <AlertTriangle className="w-4 h-4" />
             <span className="text-sm font-medium">À améliorer</span>
           </div>
           {weakAreas.map((area) => (
             <div
               key={area.type}
-              className="p-3 rounded-xl bg-yellow-50/80 border border-yellow-200/50"
+              className="p-3 rounded-xl bg-yellow-500/10 border border-yellow-200/50"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-sm text-yellow-900">
+                <span className="font-medium text-sm text-yellow-300">
                   {area.label}
                 </span>
-                <span className="text-sm font-bold text-yellow-700">
+                <span className="text-sm font-bold text-yellow-400">
                   {area.accuracy}%
                 </span>
               </div>
-              <p className="text-xs text-yellow-700/80">
+              <p className="text-xs text-yellow-400/80">
                 <Lightbulb className="w-3 h-3 inline mr-1" />
                 {area.recommendation}
               </p>
@@ -149,17 +149,17 @@ export function WeakAreasCard({ accuracyByType, className }: WeakAreasCardProps)
           {improvingAreas.map((area) => (
             <div
               key={area.type}
-              className="p-3 rounded-xl bg-blue-50/80 border border-blue-200/50"
+              className="p-3 rounded-xl bg-violet-500/5 border border-violet-200/50"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-sm text-blue-900">
+                <span className="font-medium text-sm text-violet-400">
                   {area.label}
                 </span>
-                <span className="text-sm font-bold text-blue-700">
+                <span className="text-sm font-bold text-violet-400">
                   {area.accuracy}%
                 </span>
               </div>
-              <p className="text-xs text-blue-700/80">
+              <p className="text-xs text-violet-400/80">
                 <Lightbulb className="w-3 h-3 inline mr-1" />
                 {area.recommendation}
               </p>
@@ -170,12 +170,12 @@ export function WeakAreasCard({ accuracyByType, className }: WeakAreasCardProps)
 
       {/* Strong Areas */}
       {weakAreas.length === 0 && improvingAreas.length === 0 && (
-        <div className="p-4 rounded-xl bg-emerald-50/80 border border-emerald-200/50">
-          <div className="flex items-center gap-2 text-emerald-600 mb-2">
+        <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-200/50">
+          <div className="flex items-center gap-2 text-emerald-400 mb-2">
             <Target className="w-4 h-4" />
             <span className="font-medium">Excellent niveau !</span>
           </div>
-          <p className="text-sm text-emerald-700/80">
+          <p className="text-sm text-emerald-400/80">
             Vous maîtrisez bien toutes les catégories. Continuez à pratiquer pour maintenir ce niveau.
           </p>
         </div>

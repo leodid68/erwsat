@@ -250,7 +250,7 @@ export default function LibraryPage() {
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-primary/20 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-blue-700" />
+                <Sparkles className="w-5 h-5 text-violet-400" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">~{stats.potentialQuestions}</p>
@@ -277,8 +277,8 @@ export default function LibraryPage() {
         <Card className="stat-card">
           <CardContent className="pt-5 pb-5">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-blue-400" />
+              <div className="w-11 h-11 rounded-xl bg-violet-400/20 flex items-center justify-center">
+                <BarChart3 className="w-5 h-5 text-violet-400" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">
@@ -354,8 +354,8 @@ export default function LibraryPage() {
                 className={cn(
                   'px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
                   selectedGenre === genre
-                    ? 'bg-blue-800 text-white'
-                    : 'bg-white/50 text-muted-foreground hover:bg-muted'
+                    ? 'bg-violet-700 text-white'
+                    : 'bg-white/4 text-muted-foreground hover:bg-muted'
                 )}
               >
                 {TEXT_GENRE_LABELS[genre] || genre}
@@ -380,7 +380,7 @@ export default function LibraryPage() {
                     'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5',
                     selectedProvider === provider
                       ? 'bg-emerald-500 text-white'
-                      : 'bg-white/50 text-muted-foreground hover:bg-muted'
+                      : 'bg-white/4 text-muted-foreground hover:bg-muted'
                   )}
                 >
                   <Icon className="w-3 h-3" />
@@ -399,7 +399,7 @@ export default function LibraryPage() {
                 'px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5',
                 showUnusedOnly
                   ? 'bg-amber-500 text-white'
-                  : 'bg-white/50 text-muted-foreground hover:bg-muted'
+                  : 'bg-white/4 text-muted-foreground hover:bg-muted'
               )}
             >
               <Clock className="w-3 h-3" />
@@ -443,7 +443,7 @@ export default function LibraryPage() {
                 return (
                   <div
                     key={passage.id}
-                    className="p-4 rounded-xl bg-white/50 border border-border hover:bg-muted transition-all"
+                    className="p-4 rounded-xl bg-white/4 border border-border hover:bg-muted transition-all"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">

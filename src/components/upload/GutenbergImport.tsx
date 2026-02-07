@@ -92,14 +92,14 @@ export function GutenbergImport({ onBookFetched }: GutenbergImportProps) {
   return (
     <div className="space-y-5">
       {/* Info */}
-      <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-50/80 to-green-50/60 border border-emerald-200/50 backdrop-blur-sm">
+      <div className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/10 to-green-500/10 border border-emerald-200/50 backdrop-blur-sm">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shrink-0">
             <BookOpen className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="font-medium text-emerald-900">Project Gutenberg</p>
-            <p className="text-sm text-emerald-700 mt-1">
+            <p className="font-medium text-emerald-400">Project Gutenberg</p>
+            <p className="text-sm text-emerald-400 mt-1">
               Cherchez des romans classiques : Austen, Dickens, Brontë et plus encore.
             </p>
           </div>
@@ -114,7 +114,7 @@ export function GutenbergImport({ onBookFetched }: GutenbergImportProps) {
           onKeyDown={handleKeyDown}
           placeholder="Rechercher par titre ou auteur..."
           disabled={isSearching || isFetching}
-          className="h-11 bg-white/60 border-white/60"
+          className="h-11 bg-white/4 border-white/4"
         />
         <Button
           onClick={handleSearch}
@@ -144,22 +144,22 @@ export function GutenbergImport({ onBookFetched }: GutenbergImportProps) {
                 disabled={isFetching}
                 className={cn(
                   'w-full p-4 rounded-xl text-left transition-all duration-200 backdrop-blur-sm',
-                  'bg-white/40 border border-white/60 hover:bg-white/60 hover:border-emerald-300',
-                  isFetching && selectedBookId === book.id && 'border-emerald-400 bg-emerald-50/50'
+                  'bg-white/4 border border-white/4 hover:bg-white/4 hover:border-emerald-300',
+                  isFetching && selectedBookId === book.id && 'border-emerald-400 bg-emerald-500/10'
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
                     {isFetching && selectedBookId === book.id ? (
-                      <Loader2 className="w-5 h-5 text-emerald-600 animate-spin" />
+                      <Loader2 className="w-5 h-5 text-emerald-400 animate-spin" />
                     ) : (
-                      <BookOpen className="w-5 h-5 text-emerald-600" />
+                      <BookOpen className="w-5 h-5 text-emerald-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{book.title}</p>
+                    <p className="font-medium text-white/90 truncate">{book.title}</p>
                     {book.authors.length > 0 && (
-                      <p className="text-sm text-gray-600 flex items-center gap-1 mt-0.5">
+                      <p className="text-sm text-white/60 flex items-center gap-1 mt-0.5">
                         <User className="w-3 h-3" />
                         {book.authors.join(', ')}
                       </p>
